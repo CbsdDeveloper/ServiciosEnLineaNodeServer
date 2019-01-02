@@ -29,10 +29,17 @@ module.exports = function(app) {
      */
     app.get('/api/tthh/staff', tthh.findAllStaff);
     app.get('/api/tthh/drivers', tthh.findAllDrivers);
+    app.get('/api/tthh/platoons', tthh.findAllPlatoons);
+    app.get('/api/tthh/filtersWaterfall', tthh.findAllFiltersWaterfall);
     
     /*
      * RESOURCES
      */
+    app.get('/api/resources/countries', resources.findAllCountries);
+    app.get('/api/resources/states/:countryId', resources.findStates);
+    app.get('/api/resources/towns/:stateId', resources.findTowns);
+    app.get('/api/resources/parishes/:townId', resources.findParishes);
     app.get('/api/resources/institutionalcodes', resources.findAllCodes);
     app.get('/api/resources/institutionalcodes/:option', resources.findCodesByType);
+
 }

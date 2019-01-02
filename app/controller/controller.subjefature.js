@@ -12,7 +12,7 @@ exports.findCodesByNature = (req, res) => {
             if(!codesList[v.codigo_tipo]) codesList[v.codigo_tipo]=[]; 
             codesList[v.codigo_tipo].push(v); 
         });
-        sql.query("SELECT * FROM subjefatura.tb_tipospartes_claves WHERE fk_naturaleza_id = :natureId", { replacements: req.body, type: sql.QueryTypes.SELECT }).then(function (selected) {
+        sql.query("SELECT * FROM subjefatura.tb_naturaleza_claves WHERE fk_naturaleza_id = :natureId", { replacements: req.body, type: sql.QueryTypes.SELECT }).then(function (selected) {
             selected.forEach((v, k) => {
                 selectedList.push(v.fk_clave_id); 
             });
