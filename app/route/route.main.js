@@ -2,6 +2,7 @@ module.exports = function(app) {
     const profiles = require('../controller/controller.profiles.js');
     const users = require('../controller/controller.users.js');
     const tthh = require('../controller/controller.tthh.js');
+    const permits = require('../controller/controller.permits.js');
     const subjefature = require('../controller/controller.subjefature.js');
     const resources = require('../controller/controller.resources.js');
     const stations = require('../controller/controller.stations.js');
@@ -18,6 +19,12 @@ module.exports = function(app) {
     // Listado de usuarios
     app.get('/api/users', users.findAll);
     app.get('/api/users/:usuario', users.findById);
+
+    /*
+     * PERMISOS
+     */
+    app.get('/api/permits/commercialActivities', permits.findCommercialActivities);
+    app.post('/api/permits/ciiu', permits.findCiiuByActivity);
 
     /*
      * SUBJEFATURA

@@ -35,8 +35,8 @@ require('./app/route/route.main.js')(app);
 // INICIALIZACIÓN DE SERVIDOR
 var server = app.listen(8081, function () {
  
-  var host = server.address().address
-  var port = server.address().port
+  var host = server.address().address;
+  var port = server.address().port;
  
   console.log("App listening at http://%s:%s", host, port)
 });
