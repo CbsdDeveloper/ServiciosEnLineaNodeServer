@@ -18,6 +18,15 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
 
 const db = {};
 
+db.setJSON=function(res,data,serviceName){
+  res.json({
+      status: (data.length>0)?true:false,
+      message: serviceName,
+      length: data.length,
+      data: data
+  });
+};
+
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 

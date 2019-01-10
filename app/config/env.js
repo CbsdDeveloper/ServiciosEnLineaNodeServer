@@ -31,9 +31,9 @@ const env = {
     database: 'db_cbsd',
     username: 'postgres',
     password: 'root',
-    host: '192.168.140.5',
+    host: 'localhost',
     dialect: 'postgres',
-    port: 5434,
+    port: 5432,
     pool: {
       max: 5,
       min: 0,

@@ -5,12 +5,7 @@ const sql = db.sequelize;
 exports.findAll = (req, res) => {
     const replacements = { type: sql.QueryTypes.SELECT };
     sql.query("SELECT * FROM admin.vw_usuarios", replacements).then(function (data) {
-        res.json({
-            status: (data.length>0)?true:false,
-            message: 'LISTADO DE USUARIOS',
-            length: data.length,
-            data: data
-        });
+        db.setJSON(res,data,'LISTADO DE USUARIOS');
     }).catch(function (err) {return next(err);});
 };
 
@@ -18,11 +13,6 @@ exports.findAll = (req, res) => {
 exports.findById = (req, res, next) => {
     const replacements = { replacements: req.params, type: sql.QueryTypes.SELECT };
     sql.query("SELECT * FROM admin.vw_usuarios WHERE usuario_login = :usuario", replacements).then(function (data) {
-        res.json({
-            status: (data.length>0)?true:false,
-            message: 'USUARIOS BY ID',
-            params: req.params,
-            data: data
-        });
+        db.setJSON(res,data,'USUARIOS BY ID');
     }).catch(function (err) {return next(err);});
 };

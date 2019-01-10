@@ -42,6 +42,7 @@ module.exports = function(app) {
     /*
      * RESOURCES
      */
+    app.get('/api/resources/slides/:module', resources.findSlidesByModule);
     app.get('/api/resources/countries', resources.findAllCountries);
     app.get('/api/resources/states/:countryId', resources.findStates);
     app.get('/api/resources/towns/:stateId', resources.findTowns);
