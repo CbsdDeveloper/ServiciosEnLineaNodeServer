@@ -1,4 +1,5 @@
-const db = require('../config/db.config.js');
+'use strict';
+const db = require('../../config/db.config.js');
 const Model = db.profiles;
 
 // FETCH All Customers

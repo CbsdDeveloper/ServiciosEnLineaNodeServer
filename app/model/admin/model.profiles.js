@@ -1,3 +1,4 @@
+'use strict';
 module.exports = (sequelize, Sequelize) => {
 	const Model = sequelize.define('tb_perfiles', {
 		perfil_id: { 
@@ -18,7 +19,8 @@ module.exports = (sequelize, Sequelize) => {
 	}, {
 		schema: 'admin',
 		underscored: true,
-		timestamps: false
+		timestamps: false,
+		freezeTableName: true
 	});
 	
 	return Model;

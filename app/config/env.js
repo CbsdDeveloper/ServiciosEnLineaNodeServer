@@ -1,3 +1,4 @@
+'use strict';
 const env = {
   db5: {
     database: 'db_cbsd',

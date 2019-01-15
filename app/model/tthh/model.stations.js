@@ -1,3 +1,4 @@
+'use strict';
 module.exports = (sequelize, Sequelize) => {
 	const Model = sequelize.define('tb_estaciones', {
 		estacion_id: { 
@@ -14,9 +15,6 @@ module.exports = (sequelize, Sequelize) => {
 		estacion_estado: { 
 			type: Sequelize.STRING,
 			defaultValue: 'ACTIVO' 
-		},
-		fk_usuario_id: { 
-			type: Sequelize.INTEGER
 		},
 		
 		estacion_nombre: { type: Sequelize.STRING },
@@ -36,7 +34,8 @@ module.exports = (sequelize, Sequelize) => {
 	}, {
 		schema: 'tthh',
 		underscored: true,
-		timestamps: false
+		timestamps: false,
+		freezeTableName: true
 	});
 	
 	return Model;

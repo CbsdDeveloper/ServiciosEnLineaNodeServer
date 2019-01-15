@@ -1,53 +1,76 @@
+'use strict';
 module.exports = function(app) {
-    const profiles = require('../controller/controller.profiles.js');
-    const users = require('../controller/controller.users.js');
-    const tthh = require('../controller/controller.tthh.js');
-    const permits = require('../controller/controller.permits.js');
-    const subjefature = require('../controller/controller.subjefature.js');
-    const resources = require('../controller/controller.resources.js');
-    const stations = require('../controller/controller.stations.js');
+
+    // DEFINICION DE CONTROLLERS
+    /*
+     * CONTROLLERS DE MODELOS
+     */
+    const resourcesCtrl = {
+        persons:        require('../controller/resources/controller.persons.js')
+    };
+    const adminCtrl = {
+        profiles:       require('../controller/admin/controller.profiles.js'),
+        users:          require('../controller/admin/controller.users.js')
+    };
+    const permitsCtrl = {
+        activities:     require('../controller/permits/controller.activities'),
+        entities:       require('../controller/permits/controller.entities.js')
+    };
+    const subjefatureCtrl = {
+
+    };
+    const tthhCtrl = {
+        stations:       require('../controller/controller.stations.js'),
+        academic:       require('../controller/tthh/controller.academicTraining.js')
+    };
+    /*
+     * CONTROLLERS DE SCHEMAS
+     */
+    const schemasCtrl = {
+        resources:      require('../controller/controller.resources.js'),
+        admin:          require('../controller/controller.admin.js'),
+        tthh:           require('../controller/controller.tthh.js'),
+        permits:        require('../controller/controller.permits.js'),
+        subjefature:    require('../controller/controller.subjefature.js')
+    };
+
+// DEFINICION DE RUTAS
+    /*
+     * CONTROLLERS DE MODELOS
+     */
+    // RESOURCES
+    app.post('/api/resources/persons', resourcesCtrl.persons.findByCC);
+    app.post('/api/resources/persons/academicTraining', tthhCtrl.academic.findByPerson);
+    // ADMIN
+    app.get('/api/admin/profiles', adminCtrl.profiles.findAll);
+    app.get('/api/admin/profiles/:id', adminCtrl.profiles.findById);
+    app.get('/api/admin/users', adminCtrl.users.findAll);
+    // PERMISOS
+    app.get('/api/permits/commercialActivities', permitsCtrl.activities.findCommercialActivities);
+    app.post('/api/permits/entities', permitsCtrl.entities.findByRUC);
+    // TTHH
+    app.get('/api/tthh/stations', tthhCtrl.stations.findAll);
+    app.get('/api/tthh/stations/:id', tthhCtrl.stations.findById);
 
     /*
-     * ADMINISTRACIÓN
+     * CONTROLLERS DE SCHEMAS
      */
-    // Listado de estaciones
-    app.get('/api/stations', stations.findAll);
-    app.get('/api/stations/:id', stations.findById);
-    // Perfiles de usuario
-    app.get('/api/profiles', profiles.findAll);
-    app.get('/api/profiles/:id', profiles.findById);
-    // Listado de usuarios
-    app.get('/api/users', users.findAll);
-    app.get('/api/users/:usuario', users.findById);
-
-    /*
-     * PERMISOS
-     */
-    app.get('/api/permits/commercialActivities', permits.findCommercialActivities);
-    app.post('/api/permits/ciiu', permits.findCiiuByActivity);
-
-    /*
-     * SUBJEFATURA
-     */
-    app.post('/api/subjefature/codesByNature', subjefature.findCodesByNature);
-    
-    /*
-     * TALENTO HUMANO
-     */
-    app.get('/api/tthh/staff', tthh.findAllStaff);
-    app.get('/api/tthh/drivers', tthh.findAllDrivers);
-    app.get('/api/tthh/platoons', tthh.findAllPlatoons);
-    app.get('/api/tthh/filtersWaterfall', tthh.findAllFiltersWaterfall);
-    
-    /*
-     * RESOURCES
-     */
-    app.get('/api/resources/slides/:module', resources.findSlidesByModule);
-    app.get('/api/resources/countries', resources.findAllCountries);
-    app.get('/api/resources/states/:countryId', resources.findStates);
-    app.get('/api/resources/towns/:stateId', resources.findTowns);
-    app.get('/api/resources/parishes/:townId', resources.findParishes);
-    app.get('/api/resources/institutionalcodes', resources.findAllCodes);
-    app.get('/api/resources/institutionalcodes/:option', resources.findCodesByType);
+    // PERMISOS
+    app.post('/api/permits/ciiu', schemasCtrl.permits.findCiiuByActivity);
+    // SUBJEFATURA
+    app.post('/api/subjefature/codesByNature', schemasCtrl.subjefature.findCodesByNature);
+    // TALENTO HUMANO
+    app.get('/api/tthh/staff', schemasCtrl.tthh.findAllStaff);
+    app.get('/api/tthh/drivers', schemasCtrl.tthh.findAllDrivers);
+    app.get('/api/tthh/platoons', schemasCtrl.tthh.findAllPlatoons);
+    app.get('/api/tthh/filtersWaterfall', schemasCtrl.tthh.findAllFiltersWaterfall);
+    // RESOURCES
+    app.get('/api/resources/slides/:module', schemasCtrl.resources.findSlidesByModule);
+    app.get('/api/resources/countries', schemasCtrl.resources.findAllCountries);
+    app.get('/api/resources/states/:countryId', schemasCtrl.resources.findStates);
+    app.get('/api/resources/towns/:stateId', schemasCtrl.resources.findTowns);
+    app.get('/api/resources/parishes/:townId', schemasCtrl.resources.findParishes);
+    app.get('/api/resources/institutionalcodes', schemasCtrl.resources.findAllCodes);
+    app.get('/api/resources/institutionalcodes/:option', schemasCtrl.resources.findCodesByType);
 
 }

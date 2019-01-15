@@ -1,11 +1,16 @@
 'use strict';
-const db = require('../config/db.config.js');
-const Model = db.stations;
+const db = require('../../config/db.config.js');
+const Model = db.users;
 
 // FETCH All Customers
 exports.findAll = (req, res) => {
-	Model.findAll().then(data => {
-		db.setJSON(res,data,'LISTADO DE ESTACIONES');
+	Model.findAll({
+		include: [
+			{ model: db.profiles, as: 'profile' },
+			{ model: db.persons, as: 'person' }
+		]
+	}).then(data => {
+		db.setJSON(res,data,'LISTADO DE USUARIOS');
 	}).catch(err => {
 		console.log(err);
 		res.status(500).json({msg: "error", details: err});
@@ -15,7 +20,7 @@ exports.findAll = (req, res) => {
 // Find a Customer by Id
 exports.findById = (req, res) => {	
 	Model.findById(req.params.id).then(data => {
-		db.setJSON(res,data,'ESTACION POR ID');
+		db.setJSON(res,data,'USUARIO POR ID');
 	}).catch(err => {
 		console.log(err);
 		res.status(500).json({msg: "error", details: err});

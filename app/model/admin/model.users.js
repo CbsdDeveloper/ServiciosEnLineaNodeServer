@@ -1,3 +1,4 @@
+'use strict';
 module.exports = (sequelize, Sequelize) => {
 	const Model = sequelize.define('tb_usuarios', {
 		usuario_id: { 
@@ -6,56 +7,44 @@ module.exports = (sequelize, Sequelize) => {
 			primaryKey: true,
 			autoIncrement: true
 		},
-		
-		fk_persona_id: Sequelize.INTEGER,
-		fk_perfil_id: { 
-			type: Sequelize.INTEGER,
-			references: {
-				model: tb_perfiles,
-				key: 'perfil_id'
-			}
-		},
-		usuario_login: Sequelize.text,
-		usuario_pass: Sequelize.text,
+
+		usuario_login: Sequelize.STRING,
+		usuario_pass: Sequelize.STRING,
 		usuario_estado: {
-			type: Sequelize.text,
+			type: Sequelize.STRING,
 			defaultValue: 'ACTIVO'
 		},
 		usuario_acceso_correcto:{
-			type: Sequelize.boolean,
+			type: Sequelize.BOOLEAN,
 			defaultValue: false
 		},
 		usuario_acceso_fallido:{
-			type: Sequelize.boolean,
+			type: Sequelize.BOOLEAN,
 			defaultValue: false
 		},
 		usuario_cambio_perfil:{
-			type: Sequelize.boolean,
+			type: Sequelize.BOOLEAN,
 			defaultValue: false
 		},
-		fk_usuario_id: { 
-			type: Sequelize.INTEGER,
-			references: {
-				model: tb_usuarios,
-				key: 'usuario_id'
-			}
-		},
 		usuario_cambiar_pass:{
-			type: Sequelize.boolean,
+			type: Sequelize.BOOLEAN,
 			defaultValue: true
 		},
 		usuario_idioma:{
-			type: Sequelize.text,
+			type: Sequelize.STRING,
 			defaultValue: 'es'
 		},
-		usuario_webmail_user: Sequelize.text,
-		usuario_webmail_pass: Sequelize.text,
+		usuario_webmail_user: Sequelize.STRING,
+		usuario_webmail_pass: Sequelize.STRING,
 		usuario_registro: {
 			type: Sequelize.DATE,
 			defaultValue: Sequelize.NOW
 		}
 	}, {
-		schema: 'admin'
+		schema: 'admin',
+		underscored: true,
+		timestamps: false,
+		freezeTableName: true
 	});
 	
 	return Model;
