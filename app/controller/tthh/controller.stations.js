@@ -1,5 +1,5 @@
 'use strict';
-const db = require('../config/db.config.js');
+const db = require('../../config/db.config.js');
 const Model = db.stations;
 
 // FETCH All Customers

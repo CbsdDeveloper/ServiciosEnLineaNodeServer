@@ -20,7 +20,9 @@ module.exports = function(app) {
 
     };
     const tthhCtrl = {
-        stations:       require('../controller/controller.stations.js'),
+        leaderships:    require('../controller/tthh/controller.leaderships.js'),
+        jobs:           require('../controller/tthh/controller.jobs.js'),
+        stations:       require('../controller/tthh/controller.stations.js'),
         academic:       require('../controller/tthh/controller.academicTraining.js')
     };
     /*
@@ -49,6 +51,8 @@ module.exports = function(app) {
     app.get('/api/permits/commercialActivities', permitsCtrl.activities.findCommercialActivities);
     app.post('/api/permits/entities', permitsCtrl.entities.findByRUC);
     // TTHH
+    app.get('/api/tthh/leaderships', tthhCtrl.leaderships.findAll);
+    app.get('/api/tthh/jobs', tthhCtrl.jobs.findAll);
     app.get('/api/tthh/stations', tthhCtrl.stations.findAll);
     app.get('/api/tthh/stations/:id', tthhCtrl.stations.findById);
 

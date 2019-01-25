@@ -16,11 +16,11 @@ const env = {
   },
   db3: {
     database: 'db_cbsd',
-    username: 'dba_cbsd',
+    username: 'postgres',
     password: 'Cbsd2019',
-    host: '192.168.140.3',
+    host: '192.168.1.3',
     dialect: 'postgres',
-    port: 5433,
+    port: 5432,
     pool: {
       max: 5,
       min: 0,
