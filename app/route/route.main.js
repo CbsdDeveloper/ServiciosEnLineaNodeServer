@@ -64,6 +64,7 @@ module.exports = function(app) {
     // SUBJEFATURA
     app.post('/api/subjefature/codesByNature', schemasCtrl.subjefature.findCodesByNature);
     // TALENTO HUMANO
+    app.get('/api/tthh/responsiblesByLeaderships', schemasCtrl.tthh.findAResponsiblesByLeaderships);
     app.get('/api/tthh/staff', schemasCtrl.tthh.findAllStaff);
     app.get('/api/tthh/drivers', schemasCtrl.tthh.findAllDrivers);
     app.get('/api/tthh/platoons', schemasCtrl.tthh.findAllPlatoons);
