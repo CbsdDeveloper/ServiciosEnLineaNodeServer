@@ -13,7 +13,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a Customer by Id
-exports.findById = (req, res) => {	
+exports.findById = (req, res) => {
 	Model.findById(req.params.id).then(data => {
 		db.setJSON(res,data,'ENTIDAD POR ID');
 	}).catch(err => {

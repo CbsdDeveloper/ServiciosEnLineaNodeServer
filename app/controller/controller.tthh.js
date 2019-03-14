@@ -27,7 +27,7 @@ exports.findAllPlatoons = (req, res, next) => {
             if(!platoonsList[v.fk_estacion_id]) platoonsList[v.fk_estacion_id]=[]; 
             platoonsList[v.fk_estacion_id].push(v); 
         });
-        db.setJSON(res,data,'LISTADO DE PELOTONES');
+        db.setJSON(res,platoonsList,'LISTADO DE PELOTONES');
     }).catch(function (err) {return next(err);});
 };
 

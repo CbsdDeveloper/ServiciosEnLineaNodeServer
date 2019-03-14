@@ -33,7 +33,9 @@ module.exports = function(app) {
         admin:          require('../controller/controller.admin.js'),
         tthh:           require('../controller/controller.tthh.js'),
         permits:        require('../controller/controller.permits.js'),
-        subjefature:    require('../controller/controller.subjefature.js')
+        administrative: require('../controller/controller.administrative.js'),
+        subjefature:    require('../controller/controller.subjefature.js'),
+        prevention:     require('../controller/controller.prevencion.js')
     };
 
 // DEFINICION DE RUTAS
@@ -61,6 +63,10 @@ module.exports = function(app) {
      */
     // PERMISOS
     app.post('/api/permits/ciiu', schemasCtrl.permits.findCiiuByActivity);
+    // PREVENCION
+    app.post('/api/prevention/inspectionsByEntity', schemasCtrl.prevention.inspectionsByEntity);
+    // ADMINISTRATIVO
+    app.get('/api/administrative/units', schemasCtrl.administrative.findAllUnits);
     // SUBJEFATURA
     app.post('/api/subjefature/codesByNature', schemasCtrl.subjefature.findCodesByNature);
     // TALENTO HUMANO
@@ -77,5 +83,10 @@ module.exports = function(app) {
     app.get('/api/resources/parishes/:townId', schemasCtrl.resources.findParishes);
     app.get('/api/resources/institutionalcodes', schemasCtrl.resources.findAllCodes);
     app.get('/api/resources/institutionalcodes/:option', schemasCtrl.resources.findCodesByType);
+
+    /*
+     * TWILIO
+     */
+    app.post('/twilio', schemasCtrl.admin.requestTwilio);
 
 }
