@@ -14,7 +14,7 @@ const env = {
       idle: 10000
     }
   },
-  db3: {
+  db: {
     database: 'db_cbsd',
     username: 'postgres',
     password: 'Cbsd2019',

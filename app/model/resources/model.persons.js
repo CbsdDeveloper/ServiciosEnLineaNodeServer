@@ -124,6 +124,10 @@ module.exports = (sequelize, Sequelize) => {
 		}, // text, -- 
 		persona_senialesparticulares:{
 			type: Sequelize.STRING
+		}, // text, -- 
+		
+		persona_titulo:{
+			type: Sequelize.STRING
 		} // text, -- 
 
 	}, {

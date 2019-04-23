@@ -6,7 +6,9 @@ module.exports = function(app) {
      * CONTROLLERS DE MODELOS
      */
     const resourcesCtrl = {
-        persons:        require('../controller/resources/controller.persons.js')
+        persons:        require('../controller/resources/controller.persons.js'),
+        coordinates:    require('../controller/resources/controller.coordinates.js'),
+        geojson:        require('../controller/resources/controller.geojson.js')
     };
     const adminCtrl = {
         profiles:       require('../controller/admin/controller.profiles.js'),
@@ -14,10 +16,14 @@ module.exports = function(app) {
     };
     const permitsCtrl = {
         activities:     require('../controller/permits/controller.activities'),
-        entities:       require('../controller/permits/controller.entities.js')
+        entities:       require('../controller/permits/controller.entities.js'),
+        locals:         require('../controller/permits/controller.locals.js')
+    };
+    const preventionCtrl = {
+        plans:          require('../controller/prevention/controller.plans')
     };
     const subjefatureCtrl = {
-
+        
     };
     const tthhCtrl = {
         leaderships:    require('../controller/tthh/controller.leaderships.js'),
@@ -45,13 +51,24 @@ module.exports = function(app) {
     // RESOURCES
     app.post('/api/resources/persons', resourcesCtrl.persons.findByCC);
     app.post('/api/resources/persons/academicTraining', tthhCtrl.academic.findByPerson);
+    app.post('/api/resources/geojson/entityId', resourcesCtrl.geojson.findByEntity);
+    app.post('/api/resources/coordinates/entityId', resourcesCtrl.coordinates.findByEntity);
     // ADMIN
     app.get('/api/admin/profiles', adminCtrl.profiles.findAll);
     app.get('/api/admin/profiles/:id', adminCtrl.profiles.findById);
     app.get('/api/admin/users', adminCtrl.users.findAll);
+    // PREVENCION
+    app.post('/api/prevention/plans/localId', preventionCtrl.plans.findByLocalId);
+    app.post('/api/prevention/plans/planById', preventionCtrl.plans.findById);
+
     // PERMISOS
     app.get('/api/permits/commercialActivities', permitsCtrl.activities.findCommercialActivities);
+    app.get('/api/permits/entities/:entityRuc', permitsCtrl.entities.findByEntity);
+    app.get('/api/permits/entities/resumen/:entityRuc', permitsCtrl.entities.summaryByRuc);
+    app.post('/api/permits/entities/login', permitsCtrl.entities.findByRUC);
     app.post('/api/permits/entities', permitsCtrl.entities.findByRUC);
+    app.post('/api/permits/local/localId', permitsCtrl.locals.findById);
+    app.put('/api/permits/locals', permitsCtrl.locals.updateEntity);
     // TTHH
     app.get('/api/tthh/leaderships', tthhCtrl.leaderships.findAll);
     app.get('/api/tthh/jobs', tthhCtrl.jobs.findAll);

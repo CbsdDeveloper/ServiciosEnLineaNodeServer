@@ -1,7 +1,7 @@
 const db = require('../../config/db.config.js');
 const Model = db.persons;
 
-// FETCH All Customers
+// LISTAR TODOS LOS REGISTROS
 exports.findAll = (req, res) => {
 	Model.findAll().then(data => {
 		db.setJSON(res,data,'LISTADO DE PERSONAS');
@@ -11,7 +11,7 @@ exports.findAll = (req, res) => {
 	});
 };
 
-// Find a Customer by Id
+// ENCONTRAR REGISTRO POR ID
 exports.findById = (req, res) => {	
 	Model.findById(req.params.id).then(data => {
 		db.setJSON(res,data,'PERSONA POR ID');
@@ -21,7 +21,7 @@ exports.findById = (req, res) => {
 	});
 };
 
-// Find a Customer by Id
+// ENCONTRAR REGISTRO POR CEDULA
 exports.findByCC = (req, res) => {
 	Model.findOne({
 		where: {persona_doc_identidad: req.body.identityCard}
