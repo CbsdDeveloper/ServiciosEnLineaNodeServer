@@ -13,7 +13,7 @@ exports.findAll = (req, res) => {
 
 // ENCONTRAR REGISTRO POR ID
 exports.findById = (req, res) => {	
-	Model.findById(req.params.id).then(data => {
+	Model.findById(req.body.personId).then(data => {
 		db.setJSON(res,data,'PERSONA POR ID');
 	}).catch(err => {
 		console.log(err);

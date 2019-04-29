@@ -53,7 +53,113 @@ module.exports = (sequelize, Sequelize) => {
 		}, // integer DEFAULT 0,
 		plan_clavecatastral:{
 			type: Sequelize.STRING
-		} // text COLLATE pg_catalog."default",
+		}, // text COLLATE pg_catalog."default",
+
+
+		// 4. EVALUACION DE FACTORES DE RIESGOS DETECTADOS
+		meseri_valor_x: { 
+			type: Sequelize.INTEGER,
+			defaultValue: 0
+		}, // int default 0, -- 
+		meseri_valor_y: { 
+			type: Sequelize.INTEGER,
+			defaultValue: 0
+		}, // int default 0, -- 
+		meseri_valor_p: { 
+			type: Sequelize.DECIMAL(6,2),
+			defaultValue: 0
+		}, // numeric(6,2) default 0, -- 
+		
+		// 7. PROTOCOLO DE ALARMA Y COMUNICACIONES PARA EMERGENCIAS
+		alarma_deteccion:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		alarma_aplicacion:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		alarma_aplicacion_anexo:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		alarma_grado_i:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		alarma_grado_ii:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		alarma_grado_iii:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		alarma_otros:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		
+		// 8. PROTOCOLOS DE INTERVENCIÓN ANTE EMERGENCIAS
+		intervencion_organigrama:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		intervencion_organigrama_anexo:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		intervencion_brigadas:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		intervencion_brigadas_anexo:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		intervencion_coordinacioninterinstitucional:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		intervencion_coordinacioninterinstitucional_anexo:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		intervencion_actuacion_durante_emergencia:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		intervencion_actuacion_especial:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		intervencion_actuacion_rehabilitacion:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		
+		// 9. EVACUACIÓN
+		evacuacion_decisiones:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		evacuacion_salidas_emergencia:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		evacuacion_procedimientos:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		
+		// 10. PROCEDIMIENTOS PARA LA IMPLANTACIÓN DEL PLAN DE EMERGENCIA
+		procedimiento_senializacion:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		procedimiento_cartelesinformativos:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		procedimiento_capacitaciones:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		procedimiento_simulacros:{
+			type: Sequelize.STRING
+		}, // text, -- 
+		procedimiento_capacitaciones_anexo:{
+			type: Sequelize.STRING
+		}, // text, -- 
+
+		// 11.	FIRMAS DE RESPONSABILIDAD Y SELLOS
+		
+		// OTROS DATOS
+		plan_fecha_registro: { 
+			type: Sequelize.DATE
+		}, // FECHA DE REGISTRO
+		plan_ciudad: { 
+			type: Sequelize.STRING,
+			defaultValue: 'Santo Domingo - Ecuador'
+		} // CIUDAD DE ELABORACION
 
 	}, {
 		schema: 'prevencion',

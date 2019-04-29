@@ -8,7 +8,7 @@ var strWhr;
 // BUSCAR LOCAL POR ID
 exports.findById = (req, res) => {
 	// CONDICIONAL
-	strWhr = {local_id: req.body.planLocalId};
+	strWhr = { local_id: req.body.localId };
 	// CONSUTAR SI EXISTE EL REGISTRO
 	localModel.count({
 		where: strWhr
@@ -18,7 +18,7 @@ exports.findById = (req, res) => {
 			localModel.findOne({
 				include:[
 					{ model: SOS, as: 'sos' },
-					{ model: coordinates, as: 'coordinates', where: { coordenada_entidad: 'locales', coordenada_entidad_id:req.body.planLocalId }}
+					{ model: coordinates, as: 'coordinates', required: false, where: { coordenada_entidad: 'locales'}}
 				],
 				where: strWhr
 			}).then(data => {
@@ -30,18 +30,14 @@ exports.findById = (req, res) => {
 				});
 			}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 		}else{
-			res.status(200).json({
-				estado: false,
-				mensaje: 'NO SE HA ENCONTRADO EL REGISTRO => local->findById'
-			});
+			db.setEmpty(res,'NO SE HA ENCONTRADO EL REGISTRO => local->findById');
 		}
 	});
-	
 };
 
 // ACTUALIZAR REGISTROS
 exports.updateEntity = (req, res) => {
-
+	
 	// CONDICIONAL
 	strWhr = { persona_doc_identidad: req.body.sos.persona_doc_identidad };
 	// CONSULTAR SI EXISTE EL REGISTRO
@@ -69,10 +65,7 @@ exports.updateEntity = (req, res) => {
 				estado: true,
 				mensaje: 'LOCALES POR ID'
 			});
-		}).catch(err => {
-			res.status(500).json({msg: "error", details: err});
-		});
-
+		}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 	});
 
 };

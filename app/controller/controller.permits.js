@@ -26,3 +26,14 @@ exports.findEntityByRUC = (req, res) => {
         db.setJSON(res,data,'INFORMACIÓN DE ENTIDAD POR RUC');
     }).catch(function (err) {return next(err);});
 };
+
+// BUSCAR PERMISOS POR ID DE LOCAL
+exports.findPermitsByLocal = (req, res) => {
+	var filterParams = { 
+		replacements: req.body, 
+		type: sql.QueryTypes.SELECT
+	};
+	sql.query("SELECT * FROM permisos.vw_permisos WHERE local_id = :localId", filterParams).then(function (data) {
+        db.setJSON(res,data,'BUSCAR PERMISOS POR ID DE LOCAL');
+    }).catch(function (err) {return next(err);});
+};

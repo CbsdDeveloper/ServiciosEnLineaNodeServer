@@ -168,7 +168,20 @@ module.exports = (sequelize, Sequelize) => {
 
 		local_sos:{
 			type: Sequelize.STRING
-		} //  text default 'NO'::text, -- TIENE PROFESIONAL DE SEGURIDAD
+		}, //  text default 'NO'::text, -- TIENE PROFESIONAL DE SEGURIDAD
+
+		local_longitud:{
+			type: Sequelize.STRING,
+			defaultValue: '-79.16464805603027'
+		}, //  text, -- ALTURA DE LA EDIFICACION
+		local_latitud:{
+			type: Sequelize.STRING,
+			defaultValue: '-0.2531997068768405'
+		}, //  text, -- ALTURA DE LA EDIFICACION
+		local_zoom:{
+			type: Sequelize.STRING,
+			defaultValue: '13'
+		} //  text, -- ALTURA DE LA EDIFICACION
 
 	}, {
 		schema: 'permisos',

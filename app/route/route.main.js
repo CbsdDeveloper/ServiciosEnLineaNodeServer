@@ -6,30 +6,35 @@ module.exports = function(app) {
      * CONTROLLERS DE MODELOS
      */
     const resourcesCtrl = {
-        persons:        require('../controller/resources/controller.persons.js'),
-        coordinates:    require('../controller/resources/controller.coordinates.js'),
-        geojson:        require('../controller/resources/controller.geojson.js')
+        persons:        require('../controller/resources/controller.persons'),
+        coordinates:    require('../controller/resources/controller.coordinates'),
+        geojson:        require('../controller/resources/controller.geojson'),
+        resources:      require('../controller/resources/controller.resources')
     };
     const adminCtrl = {
-        profiles:       require('../controller/admin/controller.profiles.js'),
-        users:          require('../controller/admin/controller.users.js')
+        profiles:       require('../controller/admin/controller.profiles'),
+        users:          require('../controller/admin/controller.users')
     };
     const permitsCtrl = {
         activities:     require('../controller/permits/controller.activities'),
-        entities:       require('../controller/permits/controller.entities.js'),
-        locals:         require('../controller/permits/controller.locals.js')
+        entities:       require('../controller/permits/controller.entities'),
+        locals:         require('../controller/permits/controller.locals')
     };
     const preventionCtrl = {
-        plans:          require('../controller/prevention/controller.plans')
+        plans:                      require('../controller/prevention/controller.plans'),
+        selfProtectionFactors:      require('../controller/prevention/controller.selfProtection.factors'),
+        selfProtectionPrevention:   require('../controller/prevention/controller.selfProtection.prevention'),
+        selfProtectionMaintenance:  require('../controller/prevention/controller.selfProtection.maintenance'),
+        selfProtectionMeseri:       require('../controller/prevention/controller.selfProtection.meseri')
     };
     const subjefatureCtrl = {
         
     };
     const tthhCtrl = {
-        leaderships:    require('../controller/tthh/controller.leaderships.js'),
-        jobs:           require('../controller/tthh/controller.jobs.js'),
-        stations:       require('../controller/tthh/controller.stations.js'),
-        academic:       require('../controller/tthh/controller.academicTraining.js')
+        leaderships:    require('../controller/tthh/controller.leaderships'),
+        jobs:           require('../controller/tthh/controller.jobs'),
+        stations:       require('../controller/tthh/controller.stations'),
+        academic:       require('../controller/tthh/controller.academicTraining')
     };
     /*
      * CONTROLLERS DE SCHEMAS
@@ -49,10 +54,13 @@ module.exports = function(app) {
      * CONTROLLERS DE MODELOS
      */
     // RESOURCES
-    app.post('/api/resources/persons', resourcesCtrl.persons.findByCC);
+    app.post('/api/resources/persons/personByCC', resourcesCtrl.persons.findByCC);
+    app.post('/api/resources/persons/id', resourcesCtrl.persons.findById);
     app.post('/api/resources/persons/academicTraining', tthhCtrl.academic.findByPerson);
     app.post('/api/resources/geojson/entityId', resourcesCtrl.geojson.findByEntity);
     app.post('/api/resources/coordinates/entityId', resourcesCtrl.coordinates.findByEntity);
+    app.get('/api/resources/resources/plans/factors', resourcesCtrl.resources.findResourcesFactorsForPlans);
+    app.get('/api/resources/resources/plans/prevention', resourcesCtrl.resources.findResourcesPreventionForPlans);
     // ADMIN
     app.get('/api/admin/profiles', adminCtrl.profiles.findAll);
     app.get('/api/admin/profiles/:id', adminCtrl.profiles.findById);
@@ -60,14 +68,19 @@ module.exports = function(app) {
     // PREVENCION
     app.post('/api/prevention/plans/localId', preventionCtrl.plans.findByLocalId);
     app.post('/api/prevention/plans/planById', preventionCtrl.plans.findById);
-
+    app.put('/api/prevention/plans/selfproteccion', preventionCtrl.plans.updateEntity);
+    app.put('/api/prevention/plans/selfproteccion/relations', preventionCtrl.plans.updateResourcesEntity);
+    app.post('/api/prevention/plans/selfProtectionFactorsByPlan', preventionCtrl.selfProtectionFactors.findSelfProtectionFactorsByPlan);
+    app.post('/api/prevention/plans/selfProtectionPreventionByPlan', preventionCtrl.selfProtectionPrevention.findSelfProtectionPreventionByPlan);
+    app.post('/api/prevention/plans/selfProtectionMaintenanceByPlan', preventionCtrl.selfProtectionMaintenance.findSelfProtectionMaintenanceByPlan);
+    app.post('/api/prevention/plans/selfProtectionMeseriByPlan', preventionCtrl.selfProtectionMeseri.findSelfProtectionMeseriByPlan);
     // PERMISOS
     app.get('/api/permits/commercialActivities', permitsCtrl.activities.findCommercialActivities);
     app.get('/api/permits/entities/:entityRuc', permitsCtrl.entities.findByEntity);
     app.get('/api/permits/entities/resumen/:entityRuc', permitsCtrl.entities.summaryByRuc);
     app.post('/api/permits/entities/login', permitsCtrl.entities.findByRUC);
-    app.post('/api/permits/entities', permitsCtrl.entities.findByRUC);
-    app.post('/api/permits/local/localId', permitsCtrl.locals.findById);
+    app.post('/api/permits/entities/enitiyByRUC', permitsCtrl.entities.findByRUC);
+    app.post('/api/permits/locals/localId', permitsCtrl.locals.findById);
     app.put('/api/permits/locals', permitsCtrl.locals.updateEntity);
     // TTHH
     app.get('/api/tthh/leaderships', tthhCtrl.leaderships.findAll);
@@ -80,8 +93,10 @@ module.exports = function(app) {
      */
     // PERMISOS
     app.post('/api/permits/ciiu', schemasCtrl.permits.findCiiuByActivity);
+    app.post('/api/permits/permitsByLocal', schemasCtrl.permits.findPermitsByLocal);
     // PREVENCION
     app.post('/api/prevention/inspectionsByEntity', schemasCtrl.prevention.inspectionsByEntity);
+    app.post('/api/prevention/inspectionsByLocal', schemasCtrl.prevention.inspectionsByLocal);
     // ADMINISTRATIVO
     app.get('/api/administrative/units', schemasCtrl.administrative.findAllUnits);
     // SUBJEFATURA

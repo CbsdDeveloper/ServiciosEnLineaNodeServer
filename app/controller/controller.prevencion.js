@@ -13,6 +13,17 @@ exports.inspectionsByEntity = (req, res, next) => {
     }).catch(function (err) {return next(err);});
 };
 
+// BUSCAR INSPECCIONES POR ID DE LOCAL
+exports.inspectionsByLocal = (req, res, next) => {
+    var filterParams = { 
+		replacements: req.body, 
+		type: sql.QueryTypes.SELECT
+	};
+	sql.query("SELECT * FROM prevencion.vw_inspecciones WHERE local_id = :localId", filterParams).then(function (data) {
+        db.setJSON(res,data,'INSPECCIONES POR ID DE LOCAL');
+    }).catch(function (err) {return next(err);});
+};
+
 // BUSCAR PLAN DE EMERGENCIA POR ID DE LOCAL
 exports.findPlanByLocalId = (req, res, next) => {
     var filterParams = { 

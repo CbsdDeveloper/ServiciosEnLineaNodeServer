@@ -35,11 +35,11 @@ db.setEmpty=function(res,serviceName,status=true){
   });
 };
 
-
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 // DECLARACION DE MODELOS
+db.resources          = require('../model/resources/model.resources')(sequelize, Sequelize);
 db.coordinates        = require('../model/resources/model.coordinates')(sequelize, Sequelize);
 db.geojson            = require('../model/resources/model.geojson')(sequelize, Sequelize);
 db.countries          = require('../model/resources/model.countries')(sequelize, Sequelize);
@@ -59,6 +59,10 @@ db.locals             = require('../model/permits/model.locals')(sequelize, Sequ
 db.leaderships        = require('../model/tthh/model.leaderships')(sequelize, Sequelize);
 db.jobs               = require('../model/tthh/model.jobs')(sequelize, Sequelize);
 db.plans              = require('../model/prevention/model.plans')(sequelize, Sequelize);
+db.selfProtectionFactors     = require('../model/prevention/model.selfprotection.factors')(sequelize, Sequelize);
+db.selfProtectionPrevention  = require('../model/prevention/model.selfprotection.prevention')(sequelize, Sequelize);
+db.selfProtectionMaintenance = require('../model/prevention/model.selfprotection.maintenances')(sequelize, Sequelize);
+db.selfProtectionMeseri      = require('../model/prevention/model.selfprotection.meseri')(sequelize, Sequelize);
 
 // ASOCIACION DE MODELOS
 db.states.belongsTo(db.countries, {foreignKey: 'fk_country_id'});
@@ -76,9 +80,10 @@ db.entities.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_representante_i
 db.locals.belongsTo(db.entities, {as: 'entity', foreignKey: 'fk_entidad_id', targetKey: 'entidad_id'});
 db.locals.belongsTo(db.ciiu, {as: 'ciiu', foreignKey: 'fk_ciiu_id', targetKey: 'ciiu_id'});
 db.locals.belongsTo(db.persons, {as: 'sos', foreignKey: 'fk_sos_id', targetKey: 'persona_id'});
-db.locals.hasOne(db.coordinates, {as: 'coordinates', foreignKey: 'coordenada_entidad_id'});
+db.locals.hasOne(db.coordinates, {as: 'coordinates', constraints: false, foreignKey: 'coordenada_entidad_id', targetKey: 'local_id'});
 
 db.plans.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
+db.plans.belongsTo(db.entities, {as: 'billing', foreignKey: 'facturacion_id', targetKey: 'entidad_id'});
 
 db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 
