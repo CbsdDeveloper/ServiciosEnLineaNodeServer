@@ -58,6 +58,7 @@ db.entities           = require('../model/permits/model.entities')(sequelize, Se
 db.locals             = require('../model/permits/model.locals')(sequelize, Sequelize);
 db.leaderships        = require('../model/tthh/model.leaderships')(sequelize, Sequelize);
 db.jobs               = require('../model/tthh/model.jobs')(sequelize, Sequelize);
+db.arrears            = require('../model/tthh/model.arrears')(sequelize, Sequelize);
 db.plans              = require('../model/prevention/model.plans')(sequelize, Sequelize);
 db.selfProtectionFactors     = require('../model/prevention/model.selfprotection.factors')(sequelize, Sequelize);
 db.selfProtectionPrevention  = require('../model/prevention/model.selfprotection.prevention')(sequelize, Sequelize);

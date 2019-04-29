@@ -49,7 +49,8 @@ module.exports = (sequelize, Sequelize) => {
 		}, // text, -- DOCUMENTO / BASE LEGAL DE MOVIMIENTO
 		puesto_partida: { 
 			type: Sequelize.STRING 
-		}, // text -- NUMERO DE PARTIDA
+		} // text -- NUMERO DE PARTIDA
+		
 	}, {
 		schema: 'tthh',
 		underscored: true,

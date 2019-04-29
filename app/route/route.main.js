@@ -33,6 +33,7 @@ module.exports = function(app) {
     const tthhCtrl = {
         leaderships:    require('../controller/tthh/controller.leaderships'),
         jobs:           require('../controller/tthh/controller.jobs'),
+        arrears:        require('../controller/tthh/controller.arrears'),
         stations:       require('../controller/tthh/controller.stations'),
         academic:       require('../controller/tthh/controller.academicTraining')
     };
@@ -83,6 +84,7 @@ module.exports = function(app) {
     app.post('/api/permits/locals/localId', permitsCtrl.locals.findById);
     app.put('/api/permits/locals', permitsCtrl.locals.updateEntity);
     // TTHH
+    app.post('/api/atrasos', tthhCtrl.arrears.insertEntity);
     app.get('/api/tthh/leaderships', tthhCtrl.leaderships.findAll);
     app.get('/api/tthh/jobs', tthhCtrl.jobs.findAll);
     app.get('/api/tthh/stations', tthhCtrl.stations.findAll);
