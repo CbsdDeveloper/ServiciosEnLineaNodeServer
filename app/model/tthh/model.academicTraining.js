@@ -14,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
 		}, // timestamp without time zone default current_timestamp(0),
 		formacion_estado: { 
 			type: Sequelize.STRING,
-			defaultValue: 'EN CURSO' 
+			defaultValue: 'FINALIZADO' 
 		}, // text default 'EN CURSO'::text, -- EN CURSO, FINALIZADO
 		
 		formacion_institucion: { 
@@ -43,6 +43,7 @@ module.exports = (sequelize, Sequelize) => {
 		formacion_pdf: { 
 			type: Sequelize.STRING
 		} // text
+		
 	}, {
 		schema: 'tthh',
 		underscored: true,

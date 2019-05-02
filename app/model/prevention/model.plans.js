@@ -55,7 +55,6 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.STRING
 		}, // text COLLATE pg_catalog."default",
 
-
 		// 4. EVALUACION DE FACTORES DE RIESGOS DETECTADOS
 		meseri_valor_x: { 
 			type: Sequelize.INTEGER,
@@ -151,6 +150,10 @@ module.exports = (sequelize, Sequelize) => {
 		}, // text, -- 
 
 		// 11.	FIRMAS DE RESPONSABILIDAD Y SELLOS
+		plan_sos: {
+			type: Sequelize.STRING,
+			defaultValue: 'REPRESENTANTE LEGAL'
+		}, // text default 'REPRESENTANTE LEGAL'::text
 		
 		// OTROS DATOS
 		plan_fecha_registro: { 

@@ -58,6 +58,7 @@ module.exports = function(app) {
     app.post('/api/resources/persons/personByCC', resourcesCtrl.persons.findByCC);
     app.post('/api/resources/persons/id', resourcesCtrl.persons.findById);
     app.post('/api/resources/persons/academicTraining', tthhCtrl.academic.findByPerson);
+    app.post('/api/resources/academicTraining/identificationPerson', tthhCtrl.academic.findByIdentificationPerson);
     app.post('/api/resources/geojson/entityId', resourcesCtrl.geojson.findByEntity);
     app.post('/api/resources/coordinates/entityId', resourcesCtrl.coordinates.findByEntity);
     app.get('/api/resources/resources/plans/factors', resourcesCtrl.resources.findResourcesFactorsForPlans);

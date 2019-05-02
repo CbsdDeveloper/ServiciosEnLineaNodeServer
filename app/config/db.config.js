@@ -28,12 +28,23 @@ db.setJSON=function(res,data,serviceName){
       data: data
   });
 };
-db.setEmpty=function(res,serviceName,status=true){
+db.setEmpty=function(res,serviceName,status=true,data={}){
   res.status(200).json({
       estado: status,
-      mensaje: serviceName
+      mensaje: serviceName,
+      data: data
   });
 };
+db.cloneObj=function(obj,exclude=true){
+  let newObj = Object.assign({},obj);
+  if( exclude !== true ) delete newObj[exclude];
+  return newObj;
+}
+db.cloneObjArray=function(obj,params){
+  let newObj = {};
+  params.forEach((v, k) => { newObj[v] = obj[v]; });
+  return newObj;
+}
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
@@ -78,14 +89,16 @@ db.users.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targe
 
 db.entities.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_representante_id', targetKey: 'persona_id'});
 
+db.persons.hasMany(db.academicTraining, {as: 'training', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+
 db.locals.belongsTo(db.entities, {as: 'entity', foreignKey: 'fk_entidad_id', targetKey: 'entidad_id'});
 db.locals.belongsTo(db.ciiu, {as: 'ciiu', foreignKey: 'fk_ciiu_id', targetKey: 'ciiu_id'});
-db.locals.belongsTo(db.persons, {as: 'sos', foreignKey: 'fk_sos_id', targetKey: 'persona_id'});
 db.locals.hasOne(db.coordinates, {as: 'coordinates', constraints: false, foreignKey: 'coordenada_entidad_id', targetKey: 'local_id'});
 
 db.plans.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
 db.plans.belongsTo(db.entities, {as: 'billing', foreignKey: 'facturacion_id', targetKey: 'entidad_id'});
-
-db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+db.plans.belongsTo(db.persons, {as: 'sos', foreignKey: 'fk_sos_id', targetKey: 'persona_id'});
+db.plans.belongsTo(db.academicTraining, {as: 'training', foreignKey: 'profesional_sos_id', targetKey: 'formacion_id'});
 
 module.exports = db;

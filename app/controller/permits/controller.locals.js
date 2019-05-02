@@ -1,6 +1,5 @@
 const db = require('../../config/db.config.js');
 const localModel = db.locals;
-const SOS = db.persons;
 const coordinates = db.coordinates;
 // VARIABLES GLOBALES
 var strWhr;
@@ -17,8 +16,12 @@ exports.findById = (req, res) => {
 		if( c > 0 ){
 			localModel.findOne({
 				include:[
-					{ model: SOS, as: 'sos' },
-					{ model: coordinates, as: 'coordinates', required: false, where: { coordenada_entidad: 'locales'}}
+					{ 
+						model: coordinates, 
+						as: 'coordinates', 
+						required: false, 
+						where: { coordenada_entidad: 'locales'}
+					}
 				],
 				where: strWhr
 			}).then(data => {
@@ -37,35 +40,17 @@ exports.findById = (req, res) => {
 
 // ACTUALIZAR REGISTROS
 exports.updateEntity = (req, res) => {
-	
-	// CONDICIONAL
-	strWhr = { persona_doc_identidad: req.body.sos.persona_doc_identidad };
-	// CONSULTAR SI EXISTE EL REGISTRO
-	SOS.findOrCreate({
-		where: strWhr, 
-		defaults: req.body.sos
-	}).then(([user, created]) => {
-		// VALIDAR SI SE HA CREADO EL REGISTRO Y ACTUALIZAR
-		if( !created ){
-			SOS.update(
-				req.body.sos,
-				{ where: strWhr }
-			).then(() => {})
-		}
-		// ID DE REGISTRO PARA RELACION CON LOCAL
-		req.body.fk_sos_id = user.persona_id;
-		// ACTUALIZAR DATOS DE LOCAL
-		localModel.update(
-			req.body,
-			{
-				where: { local_id: req.body.local_id }
-			}
-		).then(data => {
-			res.status(200).json({
-				estado: true,
-				mensaje: 'LOCALES POR ID'
-			});
-		}).catch(err => { res.status(500).json({msg: "error", details: err}); });
-	});
+	// ACTUALIZAR DATOS DE LOCAL
+	localModel.update(
+		req.body,
+		{ where: { local_id: req.body.local_id } }
+	).then(data => {
 
+		res.status(200).json({
+			estado: true,
+			data: req.body,
+			mensaje: '¡ACTUALIZACIÓN DE DATOS COMPLETADA CON ÉXITO!'
+		});
+
+	}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 };

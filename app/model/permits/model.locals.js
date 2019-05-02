@@ -166,10 +166,6 @@ module.exports = (sequelize, Sequelize) => {
 			defaultValue: 0
 		}, // int default 0, -- 
 
-		local_sos:{
-			type: Sequelize.STRING
-		}, //  text default 'NO'::text, -- TIENE PROFESIONAL DE SEGURIDAD
-
 		local_longitud:{
 			type: Sequelize.STRING,
 			defaultValue: '-79.16464805603027'
