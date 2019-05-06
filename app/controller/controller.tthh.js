@@ -46,3 +46,29 @@ exports.findAResponsiblesByLeaderships = (req, res, next) => {
         db.setJSON(res,data,'LISTADO DE RESPONSABLES DE UNIDADES Y DIRECCIONES');
     }).catch(function (err) {return next(err);});
 };
+
+// Operadores
+exports.findCieByFilter = (req, res, next) => {
+    const replacements = {
+        replacements: {
+            filter: '%' + ( (req.query.filter) ? req.query.filter : '' ) + '%'
+        }, 
+        type: sql.QueryTypes.SELECT
+    };
+    sql.query("SELECT * FROM resources.cie WHERE (LOWER(sinacentos(cie_descripcion)) LIKE LOWER(sinacentos(:filter)) OR LOWER(sinacentos(cie_codigo)) LIKE LOWER(sinacentos(:filter))) ORDER BY cie_descripcion LIMIT 30", replacements).then(function (data) {
+        db.setJSON(res,data,'LISTADO DE CIE 10');
+    }).catch(function (err) {return next(err);});
+};
+
+// Operadores
+exports.findMedicinesInStock = (req, res, next) => {
+    const replacements = {
+        replacements: {
+            filter: '%' + ( (req.query.filter) ? req.query.filter : '' ) + '%'
+        }, 
+        type: sql.QueryTypes.SELECT
+    };
+    sql.query("SELECT * FROM tthh.vw_medicamentos WHERE (LOWER(sinacentos(medicamento_nombre)) LIKE LOWER(sinacentos(:filter))) AND (total_medicamento > 0) ORDER BY medicamento_nombre", replacements).then(function (data) {
+        db.setJSON(res,data,'LISTADO DE MEDICAMENTOS EN STOCK');
+    }).catch(function (err) {return next(err);});
+};
