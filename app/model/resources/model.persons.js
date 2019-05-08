@@ -128,7 +128,31 @@ module.exports = (sequelize, Sequelize) => {
 		
 		persona_titulo:{
 			type: Sequelize.STRING
-		} // text, -- 
+		}, // text, -- 
+
+		
+		persona_anexo_cedula:{
+			type: Sequelize.STRING,
+			defaultValue: 'NO'
+		}, // text default 'NO'::text;
+		persona_anexo_votacion:{
+			type: Sequelize.STRING,
+			defaultValue: 'NO'
+		}, // text default 'NO'::text;
+
+
+		persona_cemergencia_nombre:{
+			type: Sequelize.STRING
+		}, // text; -- 
+		persona_cemergencia_parentesco:{
+			type: Sequelize.STRING
+		}, // text; -- 
+		persona_cemergencia_direccion:{
+			type: Sequelize.STRING
+		}, // text; -- 
+		persona_cemergencia_telefono:{
+			type: Sequelize.STRING
+		} // text; -- 
 
 	}, {
 		schema: 'resources',

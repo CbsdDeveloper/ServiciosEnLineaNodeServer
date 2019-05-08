@@ -141,7 +141,7 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.STRING
 		}, //  text, -- ACTIVIDAD A LA QUE SE DEDICA
 
-		local_aforo_hombres: { 
+		local_aforo_hombres: {
 			type: Sequelize.INTEGER ,
 			defaultValue: 0
 		}, // int default 0, -- 
@@ -150,6 +150,10 @@ module.exports = (sequelize, Sequelize) => {
 			defaultValue: 0
 		}, // int default 0, -- 
 		local_aforo_especiales: { 
+			type: Sequelize.INTEGER ,
+			defaultValue: 0
+		}, // int default 0, -- 
+		local_aforo_especiales_mujeres: { 
 			type: Sequelize.INTEGER ,
 			defaultValue: 0
 		}, // int default 0, -- 
@@ -177,6 +181,15 @@ module.exports = (sequelize, Sequelize) => {
 		local_zoom:{
 			type: Sequelize.STRING,
 			defaultValue: '13'
+		}, //  text, -- ALTURA DE LA EDIFICACION
+		
+		local_anios_construccion:{
+			type: Sequelize.INTEGER,
+			defaultValue: 0
+		}, //  text, -- ALTURA DE LA EDIFICACION
+		local_area_sector_incendio:{
+			type: Sequelize.DECIMAL(7,2),
+			defaultValue: 0
 		} //  text, -- ALTURA DE LA EDIFICACION
 
 	}, {

@@ -21,9 +21,15 @@ module.exports = (sequelize, Sequelize) => {
 		prevencion_estado:{
 			type: Sequelize.STRING
 		}, // text, -- BUENO, REGULAR, MALO
+		prevencion_revision:{
+			type: Sequelize.STRING
+		}, // 
 		prevencion_mantenimiento:{
 			type: Sequelize.STRING
-		} // text, -- SEMANAL, QUINCENAL, MENSUAL, BIMENSUAL, TRIMESTRAL, SEMESTRAL, ANUAL, BIANUAL
+		}, // text, -- SEMANAL, QUINCENAL, MENSUAL, BIMENSUAL, TRIMESTRAL, SEMESTRAL, ANUAL, BIANUAL
+		prevencion_proximo_mantenimiento:{
+			type: Sequelize.DATE
+		}
 
 	}, {
 		schema: 'prevencion',
