@@ -26,7 +26,15 @@ module.exports = (sequelize, Sequelize) => {
 		}, // text, -- BUENO, REGULAR, MALO
 		mantenimiento_periodicidad:{
 			type: Sequelize.STRING
-		} // text, -- SEMANAL, QUINCENAL, MENSUAL, BIMENSUAL, TRIMESTRAL, SEMESTRAL, ANUAL, BIANUAL
+		}, // text, -- SEMANAL, QUINCENAL, MENSUAL, BIMENSUAL, TRIMESTRAL, SEMESTRAL, ANUAL, BIANUAL
+
+		mantenimiento_fecha:{
+			type: Sequelize.STRING
+		}, // text
+		mantenimiento_responsable_tipo:{
+			type: Sequelize.STRING,
+			defaultValue: 'MISMA'
+		} //
 
 	}, {
 		schema: 'prevencion',

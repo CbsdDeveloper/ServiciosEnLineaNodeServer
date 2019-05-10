@@ -68,10 +68,26 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.DECIMAL(6,2),
 			defaultValue: 0
 		}, // numeric(6,2) default 0, -- 
+		meseri_observaciones:{
+			type: Sequelize.STRING
+		}, //
+		meseri_observaciones_revision:{
+			type: Sequelize.STRING
+		}, //
+
+		
+		// 5. PREVENCIÓN Y CONTROL DE RIESGOS
+		prevencion_proximo_mantenimiento:{
+			type: Sequelize.STRING
+		}, // 
+
+
+		// 6. PLAN DE AUTOPROTECCION - MANTENIMIENTO
 		
 		// 7. PROTOCOLO DE ALARMA Y COMUNICACIONES PARA EMERGENCIAS
 		alarma_deteccion:{
-			type: Sequelize.STRING
+			type: Sequelize.STRING,
+			defaultValue: 'DETECCIÓN AUTOMÁTICA'
 		}, // text, -- 
 		alarma_aplicacion:{
 			type: Sequelize.STRING
@@ -80,17 +96,36 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.STRING
 		}, // text, -- 
 		alarma_grado_i:{
-			type: Sequelize.STRING
+			type: Sequelize.STRING,
+			defaultValue: 'Determinada cuando se ha detectado un fuego en sus orígenes o cualquier otra emergencia de pequeñas magnitudes.\n'+
+			'En esta etapa actuará la Unidad de Contraincendios para controlar el evento y evitar que la situación pase a Grado II.\n'+
+			'La evacuación en este punto no es necesaria siempre y cuando se asegure la eficacia para el control del siniestro.'
 		}, // text, -- 
 		alarma_grado_ii:{
-			type: Sequelize.STRING
+			type: Sequelize.STRING,
+			defaultValue: 'Determinada cuando se ha detectado un incendio o evento adverso de medianas proporciones.\n'+
+			'En esta etapa procederán las Unidad Contra incendios para controlar el evento y evitar que la situación pase a Grado III; además se asegurará la presencia de los respectivos organismos de socorro (Bomberos, Paramédicos o Policía).\n'+
+			'Se aplicará la evacuación del personal de manera parcial de las áreas más afectadas, pero si se considera el avance del fuego ir directamente a una evacuación total.'
 		}, // text, -- 
 		alarma_grado_iii:{
-			type: Sequelize.STRING
+			type: Sequelize.STRING,
+			defaultValue: 'Determinada cuando el incendio o evento adverso es de grandes proporciones. Se considera también en este punto los eventos generados por movimientos sísmicos.\n'+
+			'En esta etapa procederán los respectivos organismos de socorro, quienes controlarán la situación, mientras que todo el personal e inclusive las unidades evacuarán de manera total las instalaciones'
 		}, // text, -- 
 		alarma_otros:{
 			type: Sequelize.STRING
 		}, // text, -- 
+		alarma_comunicacion_internos:{
+			type: Sequelize.STRING,
+			defaultValue: 'DETECCIÓN AUTOMÁTICA'
+		}, //
+		alarma_comunicacion_externos:{
+			type: Sequelize.STRING,
+			defaultValue: 'DETECCIÓN AUTOMÁTICA'
+		}, //
+		alarma_aplicacion_tipo:{
+			type: Sequelize.STRING
+		}, //
 		
 		// 8. PROTOCOLOS DE INTERVENCIÓN ANTE EMERGENCIAS
 		intervencion_organigrama:{

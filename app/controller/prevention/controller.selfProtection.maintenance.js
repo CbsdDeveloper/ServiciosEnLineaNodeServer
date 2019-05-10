@@ -1,5 +1,7 @@
 const db = require('../../config/db.config.js');
 const resourceModel = db.resources;
+const entityModel = db.entities;
+const personModel = db.persons;
 const maintenanceModel = db.selfProtectionMaintenance;
 
 // ENCONTRAR REGISTRO POR ID
@@ -22,7 +24,15 @@ exports.findSelfProtectionMaintenanceByPlan = (req, res) => {
 
 		// CONSULTAR RECURSOS DE UN PLAN
 		maintenanceModel.findAll({
-			where: { fk_plan_id: req.body.planId }
+			where: { fk_plan_id: req.body.planId },
+			include: [
+				{ 
+					model: entityModel, as: 'professional', 
+					include: [
+						{ model: personModel, as: 'person' }
+					]
+				}
+			]
 		}).then(preventionList => {
 
 			// CLASIFICACION DE RECURSOS
