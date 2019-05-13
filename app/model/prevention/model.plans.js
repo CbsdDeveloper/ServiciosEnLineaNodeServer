@@ -155,6 +155,15 @@ module.exports = (sequelize, Sequelize) => {
 		intervencion_actuacion_rehabilitacion:{
 			type: Sequelize.STRING
 		}, // text, -- 
+		intervencion_zonaseguridad:{
+			type: Sequelize.STRING
+		}, // text; -- 
+		intervencion_viasevacuacion:{
+			type: Sequelize.STRING
+		}, // text; --  
+		intervencion_puntoencuentro:{
+			type: Sequelize.STRING
+		}, // text; -- 
 		
 		// 9. EVACUACIÓN
 		evacuacion_decisiones:{
