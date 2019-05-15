@@ -18,14 +18,17 @@ module.exports = function(app) {
     const permitsCtrl = {
         activities:     require('../controller/permits/controller.activities'),
         entities:       require('../controller/permits/controller.entities'),
-        locals:         require('../controller/permits/controller.locals')
+        locals:         require('../controller/permits/controller.locals'),
+        employees:      require('../controller/permits/controller.employees')
     };
     const preventionCtrl = {
         plans:                      require('../controller/prevention/controller.plans'),
         selfProtectionFactors:      require('../controller/prevention/controller.selfProtection.factors'),
         selfProtectionPrevention:   require('../controller/prevention/controller.selfProtection.prevention'),
         selfProtectionMaintenance:  require('../controller/prevention/controller.selfProtection.maintenance'),
-        selfProtectionMeseri:       require('../controller/prevention/controller.selfProtection.meseri')
+        selfProtectionMeseri:       require('../controller/prevention/controller.selfProtection.meseri'),
+        brigades:                   require('../controller/prevention/controller.brigades'),
+        brigadists:                 require('../controller/prevention/controller.brigadists')
     };
     const subjefatureCtrl = {
         
@@ -76,6 +79,11 @@ module.exports = function(app) {
     app.post('/api/prevention/plans/selfProtectionPreventionByPlan', preventionCtrl.selfProtectionPrevention.findSelfProtectionPreventionByPlan);
     app.post('/api/prevention/plans/selfProtectionMaintenanceByPlan', preventionCtrl.selfProtectionMaintenance.findSelfProtectionMaintenanceByPlan);
     app.post('/api/prevention/plans/selfProtectionMeseriByPlan', preventionCtrl.selfProtectionMeseri.findSelfProtectionMeseriByPlan);
+    app.post('/api/prevention/brigades', preventionCtrl.brigades.insertEntity);
+    app.put('/api/prevention/brigades', preventionCtrl.brigades.insertEntity);
+    app.post('/api/prevention/brigades/localId', preventionCtrl.brigades.findByLocal);
+    app.post('/api/prevention/brigadists', preventionCtrl.brigadists.insertBrigadists);
+    app.post('/api/prevention/brigadists/brigadeId', preventionCtrl.brigadists.findByBrigade);
     // PERMISOS
     app.get('/api/permits/commercialActivities', permitsCtrl.activities.findCommercialActivities);
     app.get('/api/permits/entities/:entityRuc', permitsCtrl.entities.findByEntity);
@@ -84,6 +92,7 @@ module.exports = function(app) {
     app.post('/api/permits/entities/enitiyByRUC', permitsCtrl.entities.findByRUC);
     app.post('/api/permits/locals/localId', permitsCtrl.locals.findById);
     app.put('/api/permits/locals', permitsCtrl.locals.updateEntity);
+    app.post('/api/permits/employees/localId', permitsCtrl.employees.findByLocal);
     // TTHH
     app.post('/api/atrasos', tthhCtrl.arrears.insertEntity);
     app.get('/api/tthh/leaderships', tthhCtrl.leaderships.findAll);

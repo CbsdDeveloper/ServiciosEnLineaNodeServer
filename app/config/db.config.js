@@ -67,10 +67,13 @@ db.activities         = require('../model/permits/model.activities')(sequelize, 
 db.ciiu               = require('../model/permits/model.ciiu')(sequelize, Sequelize);
 db.entities           = require('../model/permits/model.entities')(sequelize, Sequelize);
 db.locals             = require('../model/permits/model.locals')(sequelize, Sequelize);
+db.employees          = require('../model/permits/model.employees')(sequelize, Sequelize);
 db.leaderships        = require('../model/tthh/model.leaderships')(sequelize, Sequelize);
 db.jobs               = require('../model/tthh/model.jobs')(sequelize, Sequelize);
 db.arrears            = require('../model/tthh/model.arrears')(sequelize, Sequelize);
 db.plans              = require('../model/prevention/model.plans')(sequelize, Sequelize);
+db.brigades           = require('../model/prevention/model.brigades')(sequelize, Sequelize);
+db.brigadists         = require('../model/prevention/model.brigadists')(sequelize, Sequelize);
 db.selfProtectionFactors     = require('../model/prevention/model.selfprotection.factors')(sequelize, Sequelize);
 db.selfProtectionPrevention  = require('../model/prevention/model.selfprotection.prevention')(sequelize, Sequelize);
 db.selfProtectionMaintenance = require('../model/prevention/model.selfprotection.maintenances')(sequelize, Sequelize);
@@ -92,15 +95,27 @@ db.entities.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_representante_i
 db.persons.hasMany(db.academicTraining, {as: 'training', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 
+// CONTROLLER - PERMISOS
 db.locals.belongsTo(db.entities, {as: 'entity', foreignKey: 'fk_entidad_id', targetKey: 'entidad_id'});
 db.locals.belongsTo(db.ciiu, {as: 'ciiu', foreignKey: 'fk_ciiu_id', targetKey: 'ciiu_id'});
 db.locals.hasOne(db.coordinates, {as: 'coordinates', constraints: false, foreignKey: 'coordenada_entidad_id', targetKey: 'local_id'});
 
+// LOCALES COMERCIALES
 db.plans.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
 db.plans.belongsTo(db.entities, {as: 'billing', foreignKey: 'facturacion_id', targetKey: 'entidad_id'});
 db.plans.belongsTo(db.persons, {as: 'sos', foreignKey: 'fk_sos_id', targetKey: 'persona_id'});
 db.plans.belongsTo(db.academicTraining, {as: 'training', foreignKey: 'profesional_sos_id', targetKey: 'formacion_id'});
+// LISTADO DE EMPLEADOS DE LOCALES
+db.employees.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+// BRIGADAS Y BRIGADISTAS
+db.brigades.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
+db.brigades.hasMany(db.brigadists, {as: 'brigadist', foreignKey: 'fk_brigada_id', targetKey: 'brigada_id'});
+db.brigadists.belongsTo(db.employees, {as: 'employee', foreignKey: 'fk_empleado_id', targetKey: 'empleado_id'});
+db.brigadists.belongsTo(db.brigades, {as: 'brigade', foreignKey: 'fk_brigada_id', targetKey: 'brigada_id'});
+// db.brigades.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 
+// AUTOPROTECCION
 db.selfProtectionMaintenance.belongsTo(db.entities, {as: 'professional', foreignKey: 'mantenimiento_responsable_id', targetKey: 'entidad_id'});
+
 
 module.exports = db;
