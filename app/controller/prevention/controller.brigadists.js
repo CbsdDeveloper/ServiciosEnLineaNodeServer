@@ -8,38 +8,21 @@ const personModel = db.persons;
 exports.insertBrigadists = (req, res) => {
 	
 	// TRANSACCION
-	db.sequelize.transaction( async transaction => {
+	db.sequelize.transaction( async t => {
 
 		// EMPLEADOS
-		await brigadistModel.destroy({
-			where: { fk_brigada_id: req.body.brigadeId }
-		}).then(async data => {
+		await brigadistModel.destroy(
+			{ where: { fk_brigada_id: req.body.brigadeId } }, t 
+		);
+		
+		await req.body.selected.forEach(async v => {
 
-			brigade = await brigadeModel.findOne({
-				where: { brigada_id: req.body.brigadeId },
-				include:[
-					{ 
-						model: brigadistModel,
-						as: 'brigadist'
-					}
-				]
-			});
+			await brigadistModel.create({ fk_empleado_id: v, fk_brigada_id: req.body.brigadeId }, { t });
 
-			await req.body.selected.forEach(async v => {
-
-				employee = await employeeModel.findByPk(v);
-				
-				brigade.addBrigadist({
-					employee: employee,
-					brigade: brigade
-				});
-
-			});
-	
-		}).catch(err => { res.status(500).json({msg: "error", details: err}); });
+		});
 		
 	}).then(result => {
-		db.setEmpty(res,'¡Datos actualizados correctamente!',true,req.body); 
+		db.setEmpty(res,'¡Datos actualizados correctamente!',true,result); 
 	}).catch(err => {
 		db.setEmpty(res,'¡Error en el proceso!',false,err); 
 	});

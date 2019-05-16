@@ -52,7 +52,10 @@ exports.findByLocal = (req, res) => {
 		// VALIDAR CONSULTA
 		if( c > 0 ){
 			brigadeModel.findAll({
-				where: strWhr
+				where: strWhr,
+				order: [
+					['brigada_nombre', 'ASC']
+				]
 			}).then(data => {
 				// RETORNAR LISTADO
 				res.status(200).json({

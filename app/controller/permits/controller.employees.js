@@ -18,11 +18,13 @@ exports.findByLocal = (req, res) => {
 				include:[
 					{ 
 						model: person, 
-						as: 'person', 
-						required: false
+						as: 'person'
 					}
 				],
-				where: strWhr
+				where: strWhr,
+				order: [
+					[ { model: person, as: 'person' }, 'persona_apellidos', 'ASC']
+				]
 			}).then(data => {
 				// RETORNAR MODELO
 				res.status(200).json({
