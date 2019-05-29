@@ -34,7 +34,12 @@ module.exports = (sequelize, Sequelize) => {
 		mantenimiento_responsable_tipo:{
 			type: Sequelize.STRING,
 			defaultValue: 'MISMA'
-		} //
+		}, //
+
+		mantenimiento_adjunto:{
+			type: Sequelize.STRING,
+			defaultValue: 'NA'
+		} // text default'NA'::text
 
 	}, {
 		schema: 'prevencion',

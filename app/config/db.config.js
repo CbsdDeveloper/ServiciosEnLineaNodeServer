@@ -74,6 +74,7 @@ db.arrears            = require('../model/tthh/model.arrears')(sequelize, Sequel
 db.plans              = require('../model/prevention/model.plans')(sequelize, Sequelize);
 db.brigades           = require('../model/prevention/model.brigades')(sequelize, Sequelize);
 db.brigadists         = require('../model/prevention/model.brigadists')(sequelize, Sequelize);
+db.selfProtectionAnnexes     = require('../model/prevention/model.selfprotection.annexes')(sequelize, Sequelize);
 db.selfProtectionFactors     = require('../model/prevention/model.selfprotection.factors')(sequelize, Sequelize);
 db.selfProtectionPrevention  = require('../model/prevention/model.selfprotection.prevention')(sequelize, Sequelize);
 db.selfProtectionMaintenance = require('../model/prevention/model.selfprotection.maintenances')(sequelize, Sequelize);
@@ -118,6 +119,5 @@ db.brigadists.belongsTo(db.brigades, {as: 'brigade', foreignKey: 'fk_brigada_id'
 
 // AUTOPROTECCION
 db.selfProtectionMaintenance.belongsTo(db.entities, {as: 'professional', foreignKey: 'mantenimiento_responsable_id', targetKey: 'entidad_id'});
-
 
 module.exports = db;

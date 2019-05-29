@@ -32,6 +32,13 @@ module.exports = (sequelize, Sequelize) => {
 		}, // text not null, -- 
 		medicamento_generico: { 
 			type: Sequelize.STRING
+		}, // text -- 
+
+		medicamento_dosis: {
+			type: Sequelize.STRING
+		}, // text -- 
+		medicamento_via_administracion: { 
+			type: Sequelize.STRING
 		} // text -- 
 		
 	}, {

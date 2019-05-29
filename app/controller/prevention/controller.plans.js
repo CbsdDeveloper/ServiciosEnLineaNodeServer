@@ -51,8 +51,15 @@ exports.findById = (req, res) => {
 						]
 					},
 					{ 
-						model: localModel, 
-						as: 'local'
+						model: localModel, as: 'local',
+						include:[
+							{ 
+								model: entityModel, as: 'entity', 
+								include: [
+									{ model: personModel, as: 'person' }
+								]
+							}
+						]
 					},
 					{ 
 						model: trainingModel, 

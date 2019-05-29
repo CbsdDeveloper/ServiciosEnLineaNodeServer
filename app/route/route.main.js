@@ -23,6 +23,7 @@ module.exports = function(app) {
     };
     const preventionCtrl = {
         plans:                      require('../controller/prevention/controller.plans'),
+        selfProtectionAnnexes:      require('../controller/prevention/controller.selfProtection.annexes'),
         selfProtectionFactors:      require('../controller/prevention/controller.selfProtection.factors'),
         selfProtectionPrevention:   require('../controller/prevention/controller.selfProtection.prevention'),
         selfProtectionMaintenance:  require('../controller/prevention/controller.selfProtection.maintenance'),
@@ -75,6 +76,7 @@ module.exports = function(app) {
     app.post('/api/prevention/plans/planById', preventionCtrl.plans.findById);
     app.put('/api/prevention/plans/selfproteccion', preventionCtrl.plans.updateEntity);
     app.put('/api/prevention/plans/selfproteccion/relations', preventionCtrl.plans.updateResourcesEntity);
+    app.post('/api/prevention/plans/selfProtectionAnnexesByPlan', preventionCtrl.selfProtectionAnnexes.findSelfProtectionAnnexesByPlan);
     app.post('/api/prevention/plans/selfProtectionFactorsByPlan', preventionCtrl.selfProtectionFactors.findSelfProtectionFactorsByPlan);
     app.post('/api/prevention/plans/selfProtectionPreventionByPlan', preventionCtrl.selfProtectionPrevention.findSelfProtectionPreventionByPlan);
     app.post('/api/prevention/plans/selfProtectionMaintenanceByPlan', preventionCtrl.selfProtectionMaintenance.findSelfProtectionMaintenanceByPlan);

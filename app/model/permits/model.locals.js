@@ -190,7 +190,14 @@ module.exports = (sequelize, Sequelize) => {
 		local_area_sector_incendio:{
 			type: Sequelize.DECIMAL(7,2),
 			defaultValue: 0
-		} //  text, -- ALTURA DE LA EDIFICACION
+		}, //  text, -- ALTURA DE LA EDIFICACION
+
+		local_impuestopredial:{
+			type: Sequelize.STRING
+		}, //
+		local_usodesuelo:{
+			type: Sequelize.STRING
+		} //
 
 	}, {
 		schema: 'permisos',
