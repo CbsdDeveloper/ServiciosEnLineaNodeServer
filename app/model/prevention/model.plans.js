@@ -206,7 +206,12 @@ module.exports = (sequelize, Sequelize) => {
 		plan_ciudad: { 
 			type: Sequelize.STRING,
 			defaultValue: 'Santo Domingo - Ecuador'
-		} // CIUDAD DE ELABORACION
+		}, // CIUDAD DE ELABORACION
+
+		plan_responsable_tramite: { 
+			type: Sequelize.STRING,
+			defaultValue: 'REPRESENTANTE LEGAL'
+		} //
 
 	}, {
 		schema: 'prevencion',
