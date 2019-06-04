@@ -105,6 +105,8 @@ module.exports = function(app) {
     /*
      * CONTROLLERS DE SCHEMAS
      */
+    // ADMIN
+    app.get('/api/admin/users/prevention', schemasCtrl.admin.findInspectorsPrevention);
     // PERMISOS
     app.post('/api/permits/ciiu', schemasCtrl.permits.findCiiuByActivity);
     app.post('/api/permits/permitsByLocal', schemasCtrl.permits.findPermitsByLocal);

@@ -10,3 +10,11 @@ exports.requestTwilio = (req, res) => {
         data: req.body
     });
 };
+
+// Operadores
+exports.findInspectorsPrevention = (req, res, next) => {
+    const replacements = { type: sql.QueryTypes.SELECT };
+    sql.query("SELECT * FROM admin.vw_informacion_usuarios WHERE perfil_id=6 AND usuario_estado='ACTIVO'", replacements).then(function (data) {
+        db.setJSON(res,data,'LISTADO DE PROFESIONALES DE PREVENCION E INGENIERIA DEL FUEGO');
+    }).catch(function (err) {return next(err);});
+};
