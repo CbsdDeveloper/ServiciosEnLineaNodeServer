@@ -50,6 +50,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 // DECLARACION DE MODELOS
+// RESOURCES
 db.resources          = require('../model/resources/model.resources')(sequelize, Sequelize);
 db.coordinates        = require('../model/resources/model.coordinates')(sequelize, Sequelize);
 db.geojson            = require('../model/resources/model.geojson')(sequelize, Sequelize);
@@ -59,18 +60,23 @@ db.cities             = require('../model/resources/model.cities')(sequelize, Se
 db.towns              = require('../model/resources/model.towns')(sequelize, Sequelize);
 db.parishes           = require('../model/resources/model.parishes')(sequelize, Sequelize);
 db.persons            = require('../model/resources/model.persons')(sequelize, Sequelize);
+// ADMINISTRACION
 db.profiles           = require('../model/admin/model.profiles')(sequelize, Sequelize);
 db.users              = require('../model/admin/model.users')(sequelize, Sequelize);
 db.stations           = require('../model/tthh/model.stations')(sequelize, Sequelize);
 db.academicTraining   = require('../model/tthh/model.academicTraining')(sequelize, Sequelize);
+// PERMISOS
 db.activities         = require('../model/permits/model.activities')(sequelize, Sequelize);
 db.ciiu               = require('../model/permits/model.ciiu')(sequelize, Sequelize);
 db.entities           = require('../model/permits/model.entities')(sequelize, Sequelize);
 db.locals             = require('../model/permits/model.locals')(sequelize, Sequelize);
 db.employees          = require('../model/permits/model.employees')(sequelize, Sequelize);
+// TALENTO HUMANO
 db.leaderships        = require('../model/tthh/model.leaderships')(sequelize, Sequelize);
 db.jobs               = require('../model/tthh/model.jobs')(sequelize, Sequelize);
 db.arrears            = require('../model/tthh/model.arrears')(sequelize, Sequelize);
+db.medicines          = require('../model/tthh/model.medicines')(sequelize, Sequelize);
+// PREVENCION
 db.plans              = require('../model/prevention/model.plans')(sequelize, Sequelize);
 db.brigades           = require('../model/prevention/model.brigades')(sequelize, Sequelize);
 db.brigadists         = require('../model/prevention/model.brigadists')(sequelize, Sequelize);

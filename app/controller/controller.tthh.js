@@ -60,7 +60,7 @@ exports.findCieByFilter = (req, res, next) => {
     }).catch(function (err) {return next(err);});
 };
 
-// Operadores
+// MEDICAMENTOS EN STOCK
 exports.findMedicinesInStock = (req, res, next) => {
     const replacements = {
         replacements: {
