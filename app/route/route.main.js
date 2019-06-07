@@ -123,6 +123,7 @@ module.exports = function(app) {
     // TALENTO HUMANO
     app.get('/api/tthh/responsiblesByLeaderships', schemasCtrl.tthh.findAResponsiblesByLeaderships);
     app.get('/api/tthh/staff', schemasCtrl.tthh.findAllStaff);
+    app.post('/api/tthh/staff/leadership', schemasCtrl.tthh.findAllStaffByLeadership);
     app.get('/api/tthh/drivers', schemasCtrl.tthh.findAllDrivers);
     app.get('/api/tthh/platoons', schemasCtrl.tthh.findAllPlatoons);
     app.get('/api/tthh/filtersWaterfall', schemasCtrl.tthh.findAllFiltersWaterfall);

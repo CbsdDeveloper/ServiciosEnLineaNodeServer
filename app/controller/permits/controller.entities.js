@@ -33,14 +33,10 @@ exports.findByRUC = (req, res) => {
 					{ model: partner, as: 'person' }
 				]
 			}).then(data => {
-				res.status(200).json({
-					estado: true,
-					mensaje: 'ENTIDAD POR RUC',
-					data: data
-				});
+				db.setEmpty(res,'ENTIDAD POR RUC',true,data);
 			}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 		}else{
-			db.setJSON(res,[],'NO SE HA ENCONTRADO EL REGISTRO => entityModel->findByRUC');
+			db.setEmpty(res,'¡No se ha encontrado ningún registro asociado a este dato!',false);
 		}
 	});
 };

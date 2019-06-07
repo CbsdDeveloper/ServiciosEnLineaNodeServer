@@ -10,6 +10,19 @@ exports.findAllStaff = (req, res) => {
     }).catch(function (err) {return next(err);});
 };
 
+// PERSONAL EN FUNCIONES
+exports.findAllStaffByLeadership = (req, res) => {
+    const replacements = {
+        replacements: {
+            leadershipId: req.body.leadershipId
+        }, 
+        type: sql.QueryTypes.SELECT
+    };
+    sql.query("SELECT * FROM tthh.vw_relations_personal WHERE direccion_id = :leadershipId AND ppersonal_estado='EN FUNCIONES' ORDER BY personal_nombre", replacements).then(function (data) {
+        db.setJSON(res,data,'LISTADO DE PERSONAL POR DIRECCION');
+    }).catch(function (err) {return next(err);});
+};
+
 // OPERADORES
 exports.findAllDrivers = (req, res, next) => {
     const replacements = { type: sql.QueryTypes.SELECT };
