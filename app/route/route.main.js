@@ -128,6 +128,7 @@ module.exports = function(app) {
     app.get('/api/tthh/platoons', schemasCtrl.tthh.findAllPlatoons);
     app.get('/api/tthh/filtersWaterfall', schemasCtrl.tthh.findAllFiltersWaterfall);
     app.get('/api/tthh/findMedicinesInStock', schemasCtrl.tthh.findMedicinesInStock);
+    app.get('/api/tthh/medicinesInStock', schemasCtrl.tthh.findMedicinesInStock);
     app.get('/api/tthh/findCieByFilter', schemasCtrl.tthh.findCieByFilter);
     // RESOURCES
     app.get('/api/resources/slides/:module', schemasCtrl.resources.findSlidesByModule);

@@ -52,24 +52,11 @@ exports.findAllFiltersWaterfall = (req, res, next) => {
     }).catch(function (err) {return next(err);});
 };
 
-// Operadores
+// DIRECTORES DE UNIDADES
 exports.findAResponsiblesByLeaderships = (req, res, next) => {
     const replacements = { type: sql.QueryTypes.SELECT };
     sql.query("SELECT * FROM tthh.vw_direcciones_unidades ORDER BY responsable", replacements).then(function (data) {
         db.setJSON(res,data,'LISTADO DE RESPONSABLES DE UNIDADES Y DIRECCIONES');
-    }).catch(function (err) {return next(err);});
-};
-
-// Operadores
-exports.findCieByFilter = (req, res, next) => {
-    const replacements = {
-        replacements: {
-            filter: '%' + ( (req.query.filter) ? req.query.filter : '' ) + '%'
-        }, 
-        type: sql.QueryTypes.SELECT
-    };
-    sql.query("SELECT * FROM resources.cie WHERE (LOWER(sinacentos(cie_descripcion)) LIKE LOWER(sinacentos(:filter)) OR LOWER(sinacentos(cie_codigo)) LIKE LOWER(sinacentos(:filter))) ORDER BY cie_descripcion LIMIT 30", replacements).then(function (data) {
-        db.setJSON(res,data,'LISTADO DE CIE 10');
     }).catch(function (err) {return next(err);});
 };
 
@@ -81,7 +68,20 @@ exports.findMedicinesInStock = (req, res, next) => {
         }, 
         type: sql.QueryTypes.SELECT
     };
-    sql.query("SELECT * FROM tthh.vw_medicamentos WHERE (LOWER(sinacentos(medicamento_nombre)) LIKE LOWER(sinacentos(:filter))) AND (total_medicamento > 0) ORDER BY medicamento_nombre", replacements).then(function (data) {
-        db.setJSON(res,data,'LISTADO DE MEDICAMENTOS EN STOCK');
+    sql.query("SELECT * FROM tthh.vw_medicamentos_stock WHERE (LOWER(sinacentos(medicamento_nombre)) LIKE LOWER(sinacentos(:filter))) ORDER BY medicamento_nombre LIMIT 25", replacements).then(function (data) {
+        db.setJSON(res,data,'MEDICAMENTOS EN STOCK');
+    }).catch(function (err) {return next(err);});
+};
+
+// LISTADO DE CIE 10
+exports.findCieByFilter = (req, res, next) => {
+    const replacements = {
+        replacements: {
+            filter: '%' + ( (req.query.filter) ? req.query.filter : '' ) + '%'
+        }, 
+        type: sql.QueryTypes.SELECT
+    };
+    sql.query("SELECT * FROM resources.cie WHERE (LOWER(sinacentos(cie_descripcion)) LIKE LOWER(sinacentos(:filter)) OR LOWER(sinacentos(cie_codigo)) LIKE LOWER(sinacentos(:filter))) ORDER BY cie_descripcion LIMIT 30", replacements).then(function (data) {
+        db.setJSON(res,data,'LISTADO DE CIE 10');
     }).catch(function (err) {return next(err);});
 };
