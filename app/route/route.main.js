@@ -101,9 +101,10 @@ module.exports = function(app) {
     app.get('/api/tthh/leaderships', tthhCtrl.leaderships.findAll);
     app.get('/api/tthh/jobs', tthhCtrl.jobs.findAll);
     app.get('/api/tthh/stations', tthhCtrl.stations.findAll);
-    app.get('/api/tthh/medicines', tthhCtrl.medicines.findAll);
-    app.get('/api/tthh/medicines/inventory', tthhCtrl.medicines.findMedicinesInStock);
     app.get('/api/tthh/stations/:id', tthhCtrl.stations.findById);
+    app.get('/api/tthh/medicines', tthhCtrl.medicines.findAll);
+    app.get('/api/tthh/medicines/inventory', tthhCtrl.medicines.findMedicinesInventory);
+    app.get('/api/tthh/medicines/stock', tthhCtrl.medicines.findMedicinesStock);
 
     /*
      * CONTROLLERS DE SCHEMAS
@@ -127,8 +128,6 @@ module.exports = function(app) {
     app.get('/api/tthh/drivers', schemasCtrl.tthh.findAllDrivers);
     app.get('/api/tthh/platoons', schemasCtrl.tthh.findAllPlatoons);
     app.get('/api/tthh/filtersWaterfall', schemasCtrl.tthh.findAllFiltersWaterfall);
-    app.get('/api/tthh/findMedicinesInStock', schemasCtrl.tthh.findMedicinesInStock);
-    app.get('/api/tthh/medicinesInStock', schemasCtrl.tthh.findMedicinesInStock);
     app.get('/api/tthh/findCieByFilter', schemasCtrl.tthh.findCieByFilter);
     // RESOURCES
     app.get('/api/resources/slides/:module', schemasCtrl.resources.findSlidesByModule);

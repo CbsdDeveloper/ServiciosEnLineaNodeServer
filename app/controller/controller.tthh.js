@@ -60,19 +60,6 @@ exports.findAResponsiblesByLeaderships = (req, res, next) => {
     }).catch(function (err) {return next(err);});
 };
 
-// MEDICAMENTOS EN STOCK
-exports.findMedicinesInStock = (req, res, next) => {
-    const replacements = {
-        replacements: {
-            filter: '%' + ( (req.query.filter) ? req.query.filter : '' ) + '%'
-        }, 
-        type: sql.QueryTypes.SELECT
-    };
-    sql.query("SELECT * FROM tthh.vw_medicamentos_stock WHERE (LOWER(sinacentos(medicamento_nombre)) LIKE LOWER(sinacentos(:filter))) ORDER BY medicamento_nombre LIMIT 25", replacements).then(function (data) {
-        db.setJSON(res,data,'MEDICAMENTOS EN STOCK');
-    }).catch(function (err) {return next(err);});
-};
-
 // LISTADO DE CIE 10
 exports.findCieByFilter = (req, res, next) => {
     const replacements = {
