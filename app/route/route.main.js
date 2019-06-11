@@ -102,9 +102,9 @@ module.exports = function(app) {
     app.get('/api/tthh/jobs', tthhCtrl.jobs.findAll);
     app.get('/api/tthh/stations', tthhCtrl.stations.findAll);
     app.get('/api/tthh/stations/:id', tthhCtrl.stations.findById);
-    app.get('/api/tthh/medicines', tthhCtrl.medicines.findAll);
-    app.get('/api/tthh/medicines/inventory', tthhCtrl.medicines.findMedicinesInventory);
-    app.get('/api/tthh/medicines/stock', tthhCtrl.medicines.findMedicinesStock);
+    app.get('/api/tthh/pharmacy/medicines', tthhCtrl.medicines.findAll);
+    app.get('/api/tthh/pharmacy/medicines/inventory', tthhCtrl.medicines.findInventory);
+    app.get('/api/tthh/pharmacy/medicines/stock', tthhCtrl.medicines.findStock);
 
     /*
      * CONTROLLERS DE SCHEMAS

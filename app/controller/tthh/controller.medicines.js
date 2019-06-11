@@ -15,8 +15,9 @@ exports.findAll = (req, res) => {
 };
 
 // MEDICAMENTOS EN STOCK
-exports.findMedicinesInventory = (req, res, next) => {
-	sql.query("SELECT * FROM tthh.vw_medicamentos ORDER BY medicamento_nombre").then(function (data) {
+exports.findInventory = (req, res, next) => {
+	const replacements = { type: sql.QueryTypes.SELECT };
+	sql.query("SELECT * FROM tthh.vw_medicamentos ORDER BY medicamento_nombre", replacements).then(data => {
 		data.forEach((v, k) => {
 			data[k].inventario_cantidad=0;
 			data[k].inventario_descripcion='AJUSTE DE INVENTARIO';
@@ -26,14 +27,14 @@ exports.findMedicinesInventory = (req, res, next) => {
 };
 
 // MEDICAMENTOS EN STOCK
-exports.findMedicinesStock = (req, res, next) => {
+exports.findStock = (req, res, next) => {
     const replacements = {
         replacements: {
             filter: '%' + ( (req.query.filter) ? req.query.filter : '' ) + '%'
         }, 
         type: sql.QueryTypes.SELECT
     };
-    sql.query("SELECT * FROM tthh.vw_medicamentos_stock WHERE (LOWER(sinacentos(medicamento_nombre)) LIKE LOWER(sinacentos(:filter))) ORDER BY medicamento_nombre LIMIT 25", replacements).then(function (data) {
+    sql.query("SELECT * FROM tthh.vw_medicamentos_stock WHERE (LOWER(sinacentos(medicamento_nombre)) LIKE LOWER(sinacentos(:filter))) ORDER BY medicamento_nombre LIMIT 25", replacements).then(data => {
         db.setJSON(res,data,'MEDICAMENTOS EN STOCK');
     }).catch(function (err) {return next(err);});
 };
