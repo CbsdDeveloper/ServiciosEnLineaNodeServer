@@ -76,6 +76,7 @@ db.leaderships        = require('../model/tthh/model.leaderships')(sequelize, Se
 db.jobs               = require('../model/tthh/model.jobs')(sequelize, Sequelize);
 db.arrears            = require('../model/tthh/model.arrears')(sequelize, Sequelize);
 db.medicines          = require('../model/tthh/model.medicines')(sequelize, Sequelize);
+db.inventoryMedicines = require('../model/tthh/model.inventory')(sequelize, Sequelize);
 // PREVENCION
 db.plans              = require('../model/prevention/model.plans')(sequelize, Sequelize);
 db.brigades           = require('../model/prevention/model.brigades')(sequelize, Sequelize);
@@ -101,6 +102,8 @@ db.entities.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_representante_i
 
 db.persons.hasMany(db.academicTraining, {as: 'training', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+// TTHH - DEPARTAMENTO MEDICO
+db.inventoryMedicines.belongsTo(db.medicines, {as: 'medicine', foreignKey: 'fk_medicamento_id', targetKey: 'medicamento_id'});
 
 // CONTROLLER - PERMISOS
 db.locals.belongsTo(db.entities, {as: 'entity', foreignKey: 'fk_entidad_id', targetKey: 'entidad_id'});

@@ -1,5 +1,6 @@
 const db = require('../../config/db.config.js');
 const medicineModel = db.medicines;
+const inventoryModel = db.inventoryMedicines;
 const sql = db.sequelize;
 
 // LISTAR TODOS LOS MEDICAMENTOS
@@ -22,8 +23,30 @@ exports.findInventory = (req, res, next) => {
 			data[k].inventario_cantidad=0;
 			data[k].inventario_descripcion='AJUSTE DE INVENTARIO';
 		});
-		db.setJSON(res,data,'LISTADO DE MEDICAMENTOS EN STOCK');
+		db.setJSON(res,data,'LISTADO DE MEDICAMENTOS PARA INVENTARIO');
     }).catch(function (err) {return next(err);});
+};
+
+// ACTUALIZAR DATOS DE INVENTARIO
+exports.insertInventory = (req, res, next) => {
+	// REGISTRO DE FORMULARIO
+	let inventoryData = req.body;
+	// VALIDAR SI SE HA CARGADO EL REGISTRO
+	if(inventoryData.inventario_cantidad<0 || inventoryData.inventario_cantidad>0){
+		// INGRESO DE CLAVE DE MEDICAMENTO
+		inventoryData.fk_medicamento_id=inventoryData.medicamento_id;
+		// TRANSACCION
+		inventoryData.inventario_transaccion = (inventoryData.inventario_cantidad>0)?'INGRESO':'DESCARGO';
+		// VALOR ABSOLUTO DE MEDICINA
+		inventoryData.inventario_cantidad=Math.abs(inventoryData.inventario_cantidad);
+		// INGRESAR REGISTRO
+		inventoryModel.create( inventoryData ).then(inventory => {
+			db.setEmpty(res,inventoryData.inventario_transaccion + 'REGISTRADO CON EXITO!');
+		});
+	}else{
+		// MENSAJE QUE NO SE HA REALIZADO TRANSACCION
+		db.setEmpty(res,'NO SE HA INGRESADO NINGUN REGISTRO',false);
+	}
 };
 
 // MEDICAMENTOS EN STOCK

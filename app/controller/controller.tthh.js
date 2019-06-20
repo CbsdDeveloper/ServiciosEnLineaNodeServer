@@ -5,7 +5,7 @@ const sql = db.sequelize;
 // PERSONAL EN FUNCIONES
 exports.findAllStaff = (req, res) => {
     const replacements = { type: sql.QueryTypes.SELECT };
-    sql.query("SELECT * FROM tthh.vw_personal WHERE ppersonal_estado='EN FUNCIONES' ORDER BY personal_nombre", replacements).then(function (data) {
+    sql.query("SELECT * FROM tthh.vw_personal ORDER BY personal_nombre", replacements).then(function (data) {
         db.setJSON(res,data,'LISTADO DE PERSONAL EN FUNCIONES');
     }).catch(function (err) {return next(err);});
 };
