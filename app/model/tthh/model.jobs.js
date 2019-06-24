@@ -20,10 +20,6 @@ module.exports = (sequelize, Sequelize) => {
 		puesto_nombre: { 
 			type: Sequelize.STRING 
 		}, // text not null, -- NOMBRE DE PUESTO
-		puesto_director: { 
-			type: Sequelize.STRING,
-			defaultValue: 'NO' 
-		}, // text default 'NO'::text, -- DECLARAR SI ES UN PUESTO DE DIRECCIÓN O NO, UNO POR CADA 
 		
 		puesto_remuneracion: {
 			type: Sequelize.DECIMAL(10,2)
@@ -49,7 +45,14 @@ module.exports = (sequelize, Sequelize) => {
 		}, // text, -- DOCUMENTO / BASE LEGAL DE MOVIMIENTO
 		puesto_partida: { 
 			type: Sequelize.STRING 
-		} // text -- NUMERO DE PARTIDA
+		}, // text -- NUMERO DE PARTIDA
+
+		fk_grupo_id: { 
+			type: Sequelize.INTEGER
+		}, // int references tthh.tb_gruposocupacionales(grupo_id), -- GRUPO OCUPACIONAL
+		puesto_coigo: { 
+			type: Sequelize.STRING 
+		} // text -- 
 		
 	}, {
 		schema: 'tthh',

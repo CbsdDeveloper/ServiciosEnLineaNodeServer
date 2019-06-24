@@ -35,6 +35,7 @@ module.exports = function(app) {
         
     };
     const tthhCtrl = {
+        workdays:       require('../controller/tthh/controller.workdays'),
         leaderships:    require('../controller/tthh/controller.leaderships'),
         jobs:           require('../controller/tthh/controller.jobs'),
         arrears:        require('../controller/tthh/controller.arrears'),
@@ -98,8 +99,10 @@ module.exports = function(app) {
     app.post('/api/permits/employees/localId', permitsCtrl.employees.findByLocal);
     // TTHH
     app.post('/api/atrasos', tthhCtrl.arrears.insertEntity);
+    app.get('/api/tthh/workdays', tthhCtrl.workdays.findAll);
     app.get('/api/tthh/leaderships', tthhCtrl.leaderships.findAll);
     app.get('/api/tthh/jobs', tthhCtrl.jobs.findAll);
+    app.get('/api/tthh/jobs/leaderships', tthhCtrl.jobs.findAllStaffByLeadership);
     app.get('/api/tthh/stations', tthhCtrl.stations.findAll);
     app.get('/api/tthh/stations/:id', tthhCtrl.stations.findById);
     app.get('/api/tthh/pharmacy/supplies', tthhCtrl.medicines.findAll);
@@ -130,6 +133,9 @@ module.exports = function(app) {
     app.get('/api/tthh/platoons', schemasCtrl.tthh.findAllPlatoons);
     app.get('/api/tthh/filtersWaterfall', schemasCtrl.tthh.findAllFiltersWaterfall);
     app.get('/api/tthh/findCieByFilter', schemasCtrl.tthh.findCieByFilter);
+    app.post('/api/tthh/regulations/actionType/list', schemasCtrl.tthh.findRegulationsByActionTypeList);
+    app.post('/api/tthh/regulationsByActionType', schemasCtrl.tthh.findRegulationsByActionType);
+    app.post('/api/tthh/regulationsByAction', schemasCtrl.tthh.findRegulationsByAction);
     // RESOURCES
     app.get('/api/resources/slides/:module', schemasCtrl.resources.findSlidesByModule);
     app.get('/api/resources/countries', schemasCtrl.resources.findAllCountries);

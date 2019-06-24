@@ -72,6 +72,7 @@ db.entities           = require('../model/permits/model.entities')(sequelize, Se
 db.locals             = require('../model/permits/model.locals')(sequelize, Sequelize);
 db.employees          = require('../model/permits/model.employees')(sequelize, Sequelize);
 // TALENTO HUMANO
+db.workdays           = require('../model/tthh/model.workdays')(sequelize, Sequelize);
 db.leaderships        = require('../model/tthh/model.leaderships')(sequelize, Sequelize);
 db.jobs               = require('../model/tthh/model.jobs')(sequelize, Sequelize);
 db.arrears            = require('../model/tthh/model.arrears')(sequelize, Sequelize);
@@ -93,7 +94,7 @@ db.cities.belongsTo(db.states, {foreignKey: 'fk_state_id'});
 db.towns.belongsTo(db.states, {foreignKey: 'fk_state_id'});
 db.parishes.belongsTo(db.towns, {foreignKey: 'fk_town_id'});
 
-db.jobs.belongsTo(db.leaderships, {foreignKey: 'fk_direccion_id'});
+db.jobs.belongsTo(db.leaderships, {as: 'leadership', foreignKey: 'fk_direccion_id', targetKey: 'direccion_id'});
 
 db.users.belongsTo(db.profiles, {as: 'profile', foreignKey: 'fk_perfil_id', targetKey: 'perfil_id'});
 db.users.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
