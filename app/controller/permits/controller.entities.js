@@ -12,7 +12,12 @@ exports.findAll = (req, res) => {
 
 // Find a Customer by Id
 exports.findById = (req, res) => {	
-	entityModel.findById(req.params.id).then(data => {
+	entityModel.findOne({
+		where: { entidad_id: req.body.id },
+		include: [
+			{ model: partner, as: 'person' }
+		]
+	}).then(data => {
 		db.setJSON(res,data,'ENTIDAD POR ID');
 	}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 };

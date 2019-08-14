@@ -11,7 +11,7 @@ exports.findCiiuByActivity = (req, res) => {
 		}, 
 		type: sql.QueryTypes.SELECT
 	};
-	sql.query("SELECT fk_actividad_id actividad_id,fk_tasa_id tasa_id,ciiu_id,ciiu_nombre,ciiu_codigo FROM permisos.vw_ciiu WHERE (fk_actividad_id = :fkParent) AND (LOWER(sinacentos(ciiu_nombre)) LIKE LOWER(sinacentos(:filter)) OR LOWER(sinacentos(ciiu_codigo)) LIKE LOWER(sinacentos(:filter)))", filterParams).then(function (data) {
+	sql.query("SELECT fk_actividad_id actividad_id,fk_tasa_id tasa_id,ciiu_id,ciiu_nombre,ciiu_codigo FROM permisos.vw_ciiu WHERE (fk_actividad_id = :fkParent) AND (LOWER(sinacentos(ciiu_nombre)) LIKE LOWER(sinacentos(:filter)) OR LOWER(sinacentos(ciiu_codigo)) LIKE LOWER(sinacentos(:filter))) LIMIT 20", filterParams).then(function (data) {
         db.setJSON(res,data,'LISTADO CIIU SEGUN ACTIVIDAD ECONOMICA');
     }).catch(function (err) {return next(err);});
 };

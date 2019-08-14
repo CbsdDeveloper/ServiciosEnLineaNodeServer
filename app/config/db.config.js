@@ -67,6 +67,7 @@ db.stations           = require('../model/tthh/model.stations')(sequelize, Seque
 db.academicTraining   = require('../model/tthh/model.academicTraining')(sequelize, Sequelize);
 // PERMISOS
 db.activities         = require('../model/permits/model.activities')(sequelize, Sequelize);
+db.taxes               = require('../model/permits/model.taxes')(sequelize, Sequelize);
 db.ciiu               = require('../model/permits/model.ciiu')(sequelize, Sequelize);
 db.entities           = require('../model/permits/model.entities')(sequelize, Sequelize);
 db.locals             = require('../model/permits/model.locals')(sequelize, Sequelize);
@@ -107,6 +108,8 @@ db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona
 db.inventoryMedicines.belongsTo(db.medicines, {as: 'medicine', foreignKey: 'fk_medicamento_id', targetKey: 'medicamento_id'});
 
 // CONTROLLER - PERMISOS
+db.taxes.belongsTo(db.activities, {as: 'activities', foreignKey: 'fk_actividad_id', targetKey: 'actividad_id'});
+db.ciiu.belongsTo(db.taxes, {as: 'taxes', foreignKey: 'fk_tasa_id', targetKey: 'tasa_id'});
 db.locals.belongsTo(db.entities, {as: 'entity', foreignKey: 'fk_entidad_id', targetKey: 'entidad_id'});
 db.locals.belongsTo(db.ciiu, {as: 'ciiu', foreignKey: 'fk_ciiu_id', targetKey: 'ciiu_id'});
 db.locals.hasOne(db.coordinates, {as: 'coordinates', constraints: false, foreignKey: 'coordenada_entidad_id', targetKey: 'local_id'});

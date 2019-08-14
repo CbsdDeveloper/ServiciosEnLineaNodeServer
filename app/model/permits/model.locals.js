@@ -197,7 +197,11 @@ module.exports = (sequelize, Sequelize) => {
 		}, //
 		local_usodesuelo:{
 			type: Sequelize.STRING
-		} //
+		}, //
+		local_establecimiento:{
+			type: Sequelize.STRING,
+			defaultValue: 'NO'
+		} //  text, -- ALTURA DE LA EDIFICACION
 
 	}, {
 		schema: 'permisos',

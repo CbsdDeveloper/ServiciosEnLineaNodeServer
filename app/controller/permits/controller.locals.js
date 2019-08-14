@@ -1,6 +1,8 @@
 const db = require('../../config/db.config.js');
 const localModel = db.locals;
 const coordinates = db.coordinates;
+const ciiu = db.ciiu;
+const taxes = db.taxes;
 // VARIABLES GLOBALES
 var strWhr;
 
@@ -21,6 +23,16 @@ exports.findById = (req, res) => {
 						as: 'coordinates', 
 						required: false, 
 						where: { coordenada_entidad: 'locales'}
+					},
+					{ 
+						model: ciiu, 
+						as: 'ciiu', 
+						include:[
+							{
+								model: taxes,
+								as: 'taxes'
+							}
+						]
 					}
 				],
 				where: strWhr

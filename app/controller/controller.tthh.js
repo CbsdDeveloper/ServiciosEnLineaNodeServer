@@ -87,7 +87,8 @@ exports.findRegulationsByActionTypeList = (req, res, next) => {
     }).catch(function (err) {return next(err);});
 };
 
-// REGLAMENTOS PARA ACCIONES DE PERSONAL
+// REGLAMENTOS PARA ACCIONES DE PERSONAL - 
+// CONFIGURACIÓN DE REGLAMENTOS PARA TIPO DE ACCION
 exports.findRegulationsByActionType = (req, res, next) => {
     const replacements = {
         replacements: {
@@ -112,6 +113,7 @@ exports.findRegulationsByActionType = (req, res, next) => {
 };
 
 // REGLAMENTOS PARA ACCIONES DE PERSONAL
+// BASE LEGAL - REGLAMENTOS PARA ACCION DE PERSONAL
 exports.findRegulationsByAction = (req, res, next) => {
     const replacements = {
         replacements: {
@@ -127,6 +129,49 @@ exports.findRegulationsByAction = (req, res, next) => {
         });
         // RETORNAR CONSULTA
         db.setJSON(res,model,'BASE LEGAL DE ACCIONES');
+    }).catch(function (err) {return next(err);});
+};
+
+
+/*
+ * *** UNIDAD DE SEGURIDAD Y SALUD OCUPACIONAL ***
+ */
+
+// REGLAMENTOS PARA ACCIONES DE PERSONAL
+exports.findQuestionsDamagesForms = (req, res, next) => {
+    const replacements = {
+        replacements: {
+            filter: req.body.actionTypeId
+        }, 
+        type: sql.QueryTypes.SELECT
+    };
+    sql.query("SELECT * FROM resources.tb_reglamentos WHERE reglamento_id IN (SELECT fk_reglamento_id FROM tthh.tb_tipoaccion_reglamento WHERE fk_tipoaccion_id=:filter ORDER BY reglamento_clasificacion)", replacements).then(function (data) {
+        // RETORNAR CONSULTA
+        db.setJSON(res,data,'REGLAMENTOS PARA TIPOS DE ACCIONES');
+    }).catch(function (err) {return next(err);});
+};
+
+// REGLAMENTOS PARA ACCIONES DE PERSONAL
+exports.findQuestionDamageFormsByForm = (req, res, next) => {
+    const replacements = {
+        replacements: {
+            filter: req.body.formId
+        }, 
+        type: sql.QueryTypes.SELECT
+    };
+    let model={
+        regulations:{},
+        selected:[]
+    };
+    sql.query("SELECT * FROM resources.tb_reglamentos WHERE reglamento_id IN (SELECT fk_reglamento_id FROM tthh.tb_tipoaccion_reglamento WHERE fk_tipoaccion_id=:filter)", replacements).then(function (data) {
+        // ORGANIZAR TIPOS DE REGLAMENTOS
+        data.forEach((v, k) => {
+            if(!model.regulations[v.reglamento_clasificacion]) model.regulations[v.reglamento_clasificacion]=[]; 
+            model.regulations[v.reglamento_clasificacion].push(v); 
+            model.selected.push(v.reglamento_id); 
+        });
+        // RETORNAR CONSULTA
+        db.setJSON(res,model,'REGLAMENTOS PARA TIPOS DE ACCIONES');
     }).catch(function (err) {return next(err);});
 };
 

@@ -34,3 +34,29 @@ exports.findPlanByLocalId = (req, res, next) => {
         db.setJSON(res,data,'INSPECCIONES POR ID DE ENTIDAD');
     }).catch(function (err) {return next(err);});
 };
+
+// PERSONAL PARA CAPACITACIONES
+exports.findParticipantsByEntityId = (req, res, next) => {
+    var filterParams = { 
+		replacements: req.body, 
+		type: sql.QueryTypes.SELECT
+	};
+	sql.query("SELECT * FROM prevencion.vw_participantes WHERE fk_entidad_id = :entityId", filterParams).then(function (data) {
+        db.setJSON(res,data,'PERSONAL PARA CAPACITACIONES SEGUN ID DE ENTIDAD');
+    }).catch(function (err) {return next(err);});
+};
+
+// PERSONAL PARA CAPACITACIONES
+exports.findParticipantsByTrainingId = (req, res, next) => {
+    var filterParams = { 
+		replacements: req.body, 
+		type: sql.QueryTypes.SELECT
+	};
+	var model=[];
+	sql.query("SELECT * FROM prevencion.tb_training_has_people WHERE fk_capacitacion_id = :trainingId", filterParams).then(function (data) {
+		// INSERTAR ID DE PARTICIPANTES
+		data.forEach(v => { model.push(v.fk_participante_id); });
+		// ENVIAR RESPUESTA
+        db.setJSON(res,model,'PERSONAL SELECCIONADO PARA UNA CAPACITACIONES');
+    }).catch(function (err) {return next(err);});
+};

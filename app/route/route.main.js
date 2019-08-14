@@ -91,6 +91,7 @@ module.exports = function(app) {
     // PERMISOS
     app.get('/api/permits/commercialActivities', permitsCtrl.activities.findCommercialActivities);
     app.get('/api/permits/entities/:entityRuc', permitsCtrl.entities.findByEntity);
+    app.post('/api/permits/entities/entityId', permitsCtrl.entities.findById);
     app.get('/api/permits/entities/resumen/:entityRuc', permitsCtrl.entities.summaryByRuc);
     app.post('/api/permits/entities/login', permitsCtrl.entities.findByRUC);
     app.post('/api/permits/entities/enitiyByRUC', permitsCtrl.entities.findByRUC);
@@ -119,6 +120,8 @@ module.exports = function(app) {
     app.post('/api/permits/ciiu', schemasCtrl.permits.findCiiuByActivity);
     app.post('/api/permits/permitsByLocal', schemasCtrl.permits.findPermitsByLocal);
     // PREVENCION
+    app.post('/api/prevention/training/participants/entityId', schemasCtrl.prevention.findParticipantsByEntityId);
+    app.post('/api/prevention/training/participants/trainingId', schemasCtrl.prevention.findParticipantsByTrainingId);
     app.post('/api/prevention/inspectionsByEntity', schemasCtrl.prevention.inspectionsByEntity);
     app.post('/api/prevention/inspectionsByLocal', schemasCtrl.prevention.inspectionsByLocal);
     // ADMINISTRATIVO
@@ -136,6 +139,8 @@ module.exports = function(app) {
     app.post('/api/tthh/regulations/actionType/list', schemasCtrl.tthh.findRegulationsByActionTypeList);
     app.post('/api/tthh/regulationsByActionType', schemasCtrl.tthh.findRegulationsByActionType);
     app.post('/api/tthh/regulationsByAction', schemasCtrl.tthh.findRegulationsByAction);
+    app.post('/api/tthh/sos/questionsdamageforms/list', schemasCtrl.tthh.findQuestionsDamagesForms);
+    app.post('/api/tthh/sos/questionsdamageforms/list', schemasCtrl.tthh.findQuestionDamageFormsByForm);
     // RESOURCES
     app.get('/api/resources/slides/:module', schemasCtrl.resources.findSlidesByModule);
     app.get('/api/resources/countries', schemasCtrl.resources.findAllCountries);
