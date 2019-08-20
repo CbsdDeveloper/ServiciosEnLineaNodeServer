@@ -48,7 +48,26 @@ module.exports = (sequelize, Sequelize) => {
 		label_idioma:{
 			type: Sequelize.STRING,
 			defaultValue: 'es'
-		} // text default 'es'::text, --idioma de la entidad
+		}, // text default 'es'::text, --idioma de la entidad
+
+		entidad_usuario:{
+			type: Sequelize.STRING
+		}, // 
+		entidad_apoderado:{
+			type: Sequelize.STRING
+		}, // 
+		entidad_correo:{
+			type: Sequelize.STRING
+		}, // 
+		entidad_telefono:{
+			type: Sequelize.STRING
+		}, // 
+		entidad_celular:{
+			type: Sequelize.STRING
+		}, // 
+		entidad_usuario_creacion:{
+			type: Sequelize.DATE
+		} // 
 	}, {
 		schema: 'permisos',
 		underscored: true,
