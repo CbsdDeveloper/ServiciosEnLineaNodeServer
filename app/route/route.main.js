@@ -50,6 +50,7 @@ module.exports = function(app) {
         resources:      require('../controller/controller.resources.js'),
         admin:          require('../controller/controller.admin.js'),
         tthh:           require('../controller/controller.tthh.js'),
+        financial:      require('../controller/controller.financial'),
         permits:        require('../controller/controller.permits.js'),
         administrative: require('../controller/controller.administrative.js'),
         subjefature:    require('../controller/controller.subjefature.js'),
@@ -141,6 +142,8 @@ module.exports = function(app) {
     app.post('/api/tthh/regulationsByAction', schemasCtrl.tthh.findRegulationsByAction);
     app.post('/api/tthh/sos/questionsdamageforms/list', schemasCtrl.tthh.findQuestionsDamagesForms);
     app.post('/api/tthh/sos/questionsdamageforms/list', schemasCtrl.tthh.findQuestionDamageFormsByForm);
+    // FINANCIERO- RECAUDACION
+    app.get('/api/financial/priorcontrol/requirements/list', schemasCtrl.financial.findRequirementsForContractingProcedures);
     // RESOURCES
     app.get('/api/resources/slides/:module', schemasCtrl.resources.findSlidesByModule);
     app.get('/api/resources/countries', schemasCtrl.resources.findAllCountries);
