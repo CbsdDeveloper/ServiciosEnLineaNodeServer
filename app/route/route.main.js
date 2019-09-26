@@ -83,6 +83,7 @@ module.exports = function(app) {
     app.post('/api/prevention/plans/selfProtectionFactorsByPlan', preventionCtrl.selfProtectionFactors.findSelfProtectionFactorsByPlan);
     app.post('/api/prevention/plans/selfProtectionPreventionByPlan', preventionCtrl.selfProtectionPrevention.findSelfProtectionPreventionByPlan);
     app.post('/api/prevention/plans/selfProtectionMaintenanceByPlan', preventionCtrl.selfProtectionMaintenance.findSelfProtectionMaintenanceByPlan);
+    app.post('/api/prevention/plans/findSelfProtectionMaintenanceApplyByPlan', preventionCtrl.selfProtectionMaintenance.findSelfProtectionMaintenanceApplyByPlan);
     app.post('/api/prevention/plans/selfProtectionMeseriByPlan', preventionCtrl.selfProtectionMeseri.findSelfProtectionMeseriByPlan);
     app.post('/api/prevention/brigades', preventionCtrl.brigades.insertEntity);
     app.put('/api/prevention/brigades', preventionCtrl.brigades.insertEntity);
@@ -120,11 +121,13 @@ module.exports = function(app) {
     // PERMISOS
     app.post('/api/permits/ciiu', schemasCtrl.permits.findCiiuByActivity);
     app.post('/api/permits/permitsByLocal', schemasCtrl.permits.findPermitsByLocal);
+    app.post('/api/permits/permits/localId', schemasCtrl.permits.findPermitsByLocal);
     // PREVENCION
     app.post('/api/prevention/training/participants/entityId', schemasCtrl.prevention.findParticipantsByEntityId);
     app.post('/api/prevention/training/participants/trainingId', schemasCtrl.prevention.findParticipantsByTrainingId);
     app.post('/api/prevention/inspectionsByEntity', schemasCtrl.prevention.inspectionsByEntity);
     app.post('/api/prevention/inspectionsByLocal', schemasCtrl.prevention.inspectionsByLocal);
+    app.post('/api/prevention/training/history/entityId', schemasCtrl.prevention.findTrainingsByEntity);
     // ADMINISTRATIVO
     app.get('/api/administrative/units', schemasCtrl.administrative.findAllUnits);
     // SUBJEFATURA

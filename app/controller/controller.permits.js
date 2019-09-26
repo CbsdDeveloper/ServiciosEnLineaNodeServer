@@ -33,7 +33,7 @@ exports.findPermitsByLocal = (req, res) => {
 		replacements: req.body, 
 		type: sql.QueryTypes.SELECT
 	};
-	sql.query("SELECT * FROM permisos.vw_permisos WHERE local_id = :localId", filterParams).then(function (data) {
+	sql.query("SELECT * FROM permisos.vw_permisos WHERE local_id = :localId ORDER BY codigo_per DESC", filterParams).then(function (data) {
         db.setJSON(res,data,'BUSCAR PERMISOS POR ID DE LOCAL');
     }).catch(function (err) {return next(err);});
 };

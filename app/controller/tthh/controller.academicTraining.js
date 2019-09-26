@@ -92,7 +92,7 @@ exports.findByIdentificationPerson = (req, res) => {
 
 			}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 
-		} else db.setEmpty(res,'NO SE HA ENCONTRADO EL REGISTRO => acaedmicTraining->findByIdentificationPerson');
+		} else db.setEmpty(res,'NO SE HA ENCONTRADO EL REGISTRO => acaedmicTraining->findByIdentificationPerson',false);
 
 	}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 

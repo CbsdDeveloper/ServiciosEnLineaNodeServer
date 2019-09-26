@@ -134,4 +134,7 @@ db.brigadists.belongsTo(db.brigades, {as: 'brigade', foreignKey: 'fk_brigada_id'
 // AUTOPROTECCION
 db.selfProtectionMaintenance.belongsTo(db.entities, {as: 'professional', foreignKey: 'mantenimiento_responsable_id', targetKey: 'entidad_id'});
 
+db.resources.hasMany(db.selfProtectionMaintenance, {as: 'maintenance', foreignKey: 'fk_recurso_id', targetKey: 'recurso_id'});
+db.selfProtectionMaintenance.belongsTo(db.resources, {as: 'resource', foreignKey: 'fk_recurso_id', targetKey: 'recurso_id'});
+
 module.exports = db;

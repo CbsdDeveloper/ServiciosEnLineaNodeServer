@@ -54,3 +54,30 @@ exports.findSelfProtectionMaintenanceByPlan = (req, res) => {
 		
 	}).catch(err => { res.status(500).json({msg: "error", details: err}); });	
 };
+
+// ENCONTRAR REGISTRO POR ID
+exports.findSelfProtectionMaintenanceApplyByPlan = (req, res) => {
+	
+	// CONSULTAR RECURSOS DE UN PLAN
+	maintenanceModel.findAll({
+		where: { 
+			fk_plan_id: req.body.planId,
+			mantenimiento_aplicacion: 'SI APLICA'
+		},
+		include: [
+			{ 
+				model: resourceModel, as: 'resource'
+			}
+		]
+	}).then(preventionList => {
+		// RETORNAR LISTADO
+		res.status(200).json({
+			estado: true,
+			mensaje: 'ANEXOS DE MANTENIMIENTO PARA PLANES DE AUTOPROTECCION',
+			data: preventionList
+		});
+	}).catch(err => { res.status(500).json({msg: "error", details: err}); });
+		
+};
+
+

@@ -60,3 +60,26 @@ exports.findParticipantsByTrainingId = (req, res, next) => {
         db.setJSON(res,model,'PERSONAL SELECCIONADO PARA UNA CAPACITACIONES');
     }).catch(function (err) {return next(err);});
 };
+
+// BUSCAR PERMISOS POR ID DE LOCAL
+exports.findTrainingsByEntity = (req, res) => {
+	var filterParams = { 
+		replacements: req.body, 
+		type: sql.QueryTypes.SELECT
+	};
+
+	// LISTADO DE SIMULACROS
+	sql.query("SELECT * FROM prevencion.vw_simulacros WHERE fk_entidad_id = :entityId AND simulacro_estado NOT IN ('ANULADA') ORDER BY simulacro_codigo DESC", filterParams).then(function (simulations) {
+		//LISTADO DE STANDS
+		sql.query("SELECT * FROM prevencion.vw_stands WHERE fk_entidad_id = :entityId AND stand_estado NOT IN ('ANULADA') ORDER BY stand_codigo DESC", filterParams).then(function (stands) {
+			// LISTADO DE CAPACITACIONES
+			sql.query("SELECT * FROM prevencion.vw_training WHERE fk_entidad_id = :entityId AND capacitacion_estado NOT IN ('ANULADA') ORDER BY capacitacion_codigo DESC", filterParams).then(function (trainings) {
+
+				db.setEmpty(res,'HISTORIAL DE CAPACITACIONES DE UNA EMPRESA',true,{trainingList:trainings,standsList:stands,simulationsList:simulations});
+		
+			}).catch(function (err) {return next(err);});
+			
+		}).catch(function (err) {return next(err);});
+		
+    }).catch(function (err) {return next(err);});
+};
