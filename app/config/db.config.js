@@ -88,6 +88,13 @@ db.selfProtectionFactors     = require('../model/prevention/model.selfprotection
 db.selfProtectionPrevention  = require('../model/prevention/model.selfprotection.prevention')(sequelize, Sequelize);
 db.selfProtectionMaintenance = require('../model/prevention/model.selfprotection.maintenances')(sequelize, Sequelize);
 db.selfProtectionMeseri      = require('../model/prevention/model.selfprotection.meseri')(sequelize, Sequelize);
+// PLANIFICACION
+db.programspoa        = require('../model/planing/model.programs')(sequelize, Sequelize);
+db.poa                = require('../model/planing/model.poa')(sequelize, Sequelize);
+db.poaprojects        = require('../model/planing/model.poaprojects')(sequelize, Sequelize);
+// FINANCIERO
+db.contractingprocedures     = require('../model/financial/model.contractingprocedures')(sequelize, Sequelize);
+
 
 // ASOCIACION DE MODELOS
 db.states.belongsTo(db.countries, {foreignKey: 'fk_country_id'});
@@ -129,12 +136,15 @@ db.brigades.belongsTo(db.persons, {as: 'junior', foreignKey: 'fk_subalterno_id',
 db.brigades.hasMany(db.brigadists, {as: 'brigadist', foreignKey: 'fk_brigada_id', targetKey: 'brigada_id'});
 db.brigadists.belongsTo(db.employees, {as: 'employee', foreignKey: 'fk_empleado_id', targetKey: 'empleado_id'});
 db.brigadists.belongsTo(db.brigades, {as: 'brigade', foreignKey: 'fk_brigada_id', targetKey: 'brigada_id'});
-// db.brigades.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 
 // AUTOPROTECCION
 db.selfProtectionMaintenance.belongsTo(db.entities, {as: 'professional', foreignKey: 'mantenimiento_responsable_id', targetKey: 'entidad_id'});
 
 db.resources.hasMany(db.selfProtectionMaintenance, {as: 'maintenance', foreignKey: 'fk_recurso_id', targetKey: 'recurso_id'});
 db.selfProtectionMaintenance.belongsTo(db.resources, {as: 'resource', foreignKey: 'fk_recurso_id', targetKey: 'recurso_id'});
+
+// PLANIFICACION
+db.poaprojects.belongsTo(db.programspoa, {as: 'program', foreignKey: 'fk_programa_id', targetKey: 'programa_id'});
+db.poaprojects.belongsTo(db.poa, {as: 'poa', foreignKey: 'fk_poa_id', targetKey: 'poa_id'});
 
 module.exports = db;

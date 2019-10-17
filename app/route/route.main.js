@@ -43,6 +43,14 @@ module.exports = function(app) {
         academic:       require('../controller/tthh/controller.academicTraining'),
         medicines:      require('../controller/tthh/controller.medicines')
     };
+    const financialCtrl = {
+        contractingprocedures:      require('../controller/financial/controller.contractingprocedures')
+    };
+    const planingCtrl = {
+        programspoa:        require('../controller/planing/controller.programspoa'),
+        poa:                require('../controller/planing/controller.programspoa'),
+        poaprojects:        require('../controller/planing/controller.poaprojects')
+    };
     /*
      * CONTROLLERS DE SCHEMAS
      */
@@ -112,6 +120,12 @@ module.exports = function(app) {
     app.get('/api/tthh/pharmacy/supplies/inventory', tthhCtrl.medicines.findInventory);
     app.post('/api/tthh/pharmacy/supplies/inventory', tthhCtrl.medicines.insertInventory);
     app.get('/api/tthh/pharmacy/supplies/stock', tthhCtrl.medicines.findStock);
+    // FINANCIERO - RECAUDACION
+    app.get('/api/financial/priorcontrol/contractingprocedures', financialCtrl.contractingprocedures.findAll);
+    app.get('/api/financial/priorcontrol/processcontracts/processId', financialCtrl.contractingprocedures.findById);
+    // PLANIFICACION - POA
+    app.get('/api/planing/poa/programs/list', planingCtrl.programspoa.findAll);
+    app.post('/api/planing/poa/projects/list/poaId', planingCtrl.poaprojects.findByPoa);
 
     /*
      * CONTROLLERS DE SCHEMAS
@@ -145,7 +159,7 @@ module.exports = function(app) {
     app.post('/api/tthh/regulationsByAction', schemasCtrl.tthh.findRegulationsByAction);
     app.post('/api/tthh/sos/questionsdamageforms/list', schemasCtrl.tthh.findQuestionsDamagesForms);
     app.post('/api/tthh/sos/questionsdamageforms/list', schemasCtrl.tthh.findQuestionDamageFormsByForm);
-    // FINANCIERO- RECAUDACION
+    // FINANCIERO - RECAUDACION
     app.get('/api/financial/priorcontrol/requirements/list', schemasCtrl.financial.findRequirementsForContractingProcedures);
     // RESOURCES
     app.get('/api/resources/slides/:module', schemasCtrl.resources.findSlidesByModule);
