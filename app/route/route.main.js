@@ -6,63 +6,65 @@ module.exports = function(app) {
      * CONTROLLERS DE MODELOS
      */
     const resourcesCtrl = {
-        persons:        require('../controller/resources/controller.persons'),
-        coordinates:    require('../controller/resources/controller.coordinates'),
-        geojson:        require('../controller/resources/controller.geojson'),
-        resources:      require('../controller/resources/controller.resources')
+        persons:        require('../controllers/resources/controller.persons'),
+        coordinates:    require('../controllers/resources/controller.coordinates'),
+        geojson:        require('../controllers/resources/controller.geojson'),
+        resources:      require('../controllers/resources/controller.resources')
     };
     const adminCtrl = {
-        profiles:       require('../controller/admin/controller.profiles'),
-        users:          require('../controller/admin/controller.users')
+        profiles:       require('../controllers/admin/controller.profiles'),
+        users:          require('../controllers/admin/controller.users')
     };
     const permitsCtrl = {
-        activities:     require('../controller/permits/controller.activities'),
-        entities:       require('../controller/permits/controller.entities'),
-        locals:         require('../controller/permits/controller.locals'),
-        employees:      require('../controller/permits/controller.employees')
+        activities:     require('../controllers/permits/controller.activities'),
+        entities:       require('../controllers/permits/controller.entities'),
+        locals:         require('../controllers/permits/controller.locals'),
+        employees:      require('../controllers/permits/controller.employees')
     };
     const preventionCtrl = {
-        plans:                      require('../controller/prevention/controller.plans'),
-        selfProtectionAnnexes:      require('../controller/prevention/controller.selfProtection.annexes'),
-        selfProtectionFactors:      require('../controller/prevention/controller.selfProtection.factors'),
-        selfProtectionPrevention:   require('../controller/prevention/controller.selfProtection.prevention'),
-        selfProtectionMaintenance:  require('../controller/prevention/controller.selfProtection.maintenance'),
-        selfProtectionMeseri:       require('../controller/prevention/controller.selfProtection.meseri'),
-        brigades:                   require('../controller/prevention/controller.brigades'),
-        brigadists:                 require('../controller/prevention/controller.brigadists')
+        plans:                      require('../controllers/prevention/controller.plans'),
+        selfProtectionAnnexes:      require('../controllers/prevention/controller.selfProtection.annexes'),
+        selfProtectionFactors:      require('../controllers/prevention/controller.selfProtection.factors'),
+        selfProtectionPrevention:   require('../controllers/prevention/controller.selfProtection.prevention'),
+        selfProtectionMaintenance:  require('../controllers/prevention/controller.selfProtection.maintenance'),
+        selfProtectionMeseri:       require('../controllers/prevention/controller.selfProtection.meseri'),
+        brigades:                   require('../controllers/prevention/controller.brigades'),
+        brigadists:                 require('../controllers/prevention/controller.brigadists')
     };
     const subjefatureCtrl = {
         
     };
     const tthhCtrl = {
-        workdays:       require('../controller/tthh/controller.workdays'),
-        leaderships:    require('../controller/tthh/controller.leaderships'),
-        jobs:           require('../controller/tthh/controller.jobs'),
-        arrears:        require('../controller/tthh/controller.arrears'),
-        stations:       require('../controller/tthh/controller.stations'),
-        academic:       require('../controller/tthh/controller.academicTraining'),
-        medicines:      require('../controller/tthh/controller.medicines')
+        workdays:           require('../controllers/tthh/controller.workdays'),
+        leaderships:        require('../controllers/tthh/controller.leaderships'),
+        jobs:               require('../controllers/tthh/controller.jobs'),
+        arrears:            require('../controllers/tthh/controller.arrears'),
+        stations:           require('../controllers/tthh/controller.stations'),
+        academic:           require('../controllers/tthh/controller.academicTraining'),
+        medicines:          require('../controllers/tthh/controller.medicines'),
+        psychosocialforms:      require('../controllers/tthh/controller.psychosocial.forms'),
+        psychosocialsections:   require('../controllers/tthh/controller.psychosocial.sections')
     };
     const financialCtrl = {
-        contractingprocedures:      require('../controller/financial/controller.contractingprocedures')
+        contractingprocedures:      require('../controllers/financial/controller.contractingprocedures')
     };
     const planingCtrl = {
-        programspoa:        require('../controller/planing/controller.programspoa'),
-        poa:                require('../controller/planing/controller.programspoa'),
-        poaprojects:        require('../controller/planing/controller.poaprojects')
+        programspoa:        require('../controllers/planing/controller.programspoa'),
+        poa:                require('../controllers/planing/controller.programspoa'),
+        poaprojects:        require('../controllers/planing/controller.poaprojects')
     };
     /*
      * CONTROLLERS DE SCHEMAS
      */
     const schemasCtrl = {
-        resources:      require('../controller/controller.resources.js'),
-        admin:          require('../controller/controller.admin.js'),
-        tthh:           require('../controller/controller.tthh.js'),
-        financial:      require('../controller/controller.financial'),
-        permits:        require('../controller/controller.permits.js'),
-        administrative: require('../controller/controller.administrative.js'),
-        subjefature:    require('../controller/controller.subjefature.js'),
-        prevention:     require('../controller/controller.prevencion.js')
+        resources:      require('../controllers/controller.resources.js'),
+        admin:          require('../controllers/controller.admin.js'),
+        tthh:           require('../controllers/controller.tthh.js'),
+        financial:      require('../controllers/controller.financial'),
+        permits:        require('../controllers/controller.permits.js'),
+        administrative: require('../controllers/controller.administrative.js'),
+        subjefature:    require('../controllers/controller.subjefature.js'),
+        prevention:     require('../controllers/controller.prevencion.js')
     };
 
 // DEFINICION DE RUTAS
@@ -95,6 +97,7 @@ module.exports = function(app) {
     app.post('/api/prevention/plans/selfProtectionMeseriByPlan', preventionCtrl.selfProtectionMeseri.findSelfProtectionMeseriByPlan);
     app.post('/api/prevention/brigades', preventionCtrl.brigades.insertEntity);
     app.put('/api/prevention/brigades', preventionCtrl.brigades.insertEntity);
+    app.delete('/api/prevention/brigades/:brigadeId', preventionCtrl.brigades.deleteEntity);
     app.post('/api/prevention/brigades/localId', preventionCtrl.brigades.findByLocal);
     app.post('/api/prevention/brigadists', preventionCtrl.brigadists.insertBrigadists);
     app.post('/api/prevention/brigadists/brigadeId', preventionCtrl.brigadists.findByBrigade);
@@ -107,7 +110,11 @@ module.exports = function(app) {
     app.post('/api/permits/entities/enitiyByRUC', permitsCtrl.entities.findByRUC);
     app.post('/api/permits/locals/localId', permitsCtrl.locals.findById);
     app.put('/api/permits/locals', permitsCtrl.locals.updateEntity);
+    
     app.post('/api/permits/employees/localId', permitsCtrl.employees.findByLocal);
+    app.put('/api/permits/employees', permitsCtrl.employees.updateEntity);
+    app.delete('/api/permits/employees/:employeeId', permitsCtrl.employees.deleteEntity);
+    app.delete('/api/permits/employees/localId/all/:localId', permitsCtrl.employees.deleteByLocal);
     // TTHH
     app.post('/api/atrasos', tthhCtrl.arrears.insertEntity);
     app.get('/api/tthh/workdays', tthhCtrl.workdays.findAll);
@@ -120,6 +127,11 @@ module.exports = function(app) {
     app.get('/api/tthh/pharmacy/supplies/inventory', tthhCtrl.medicines.findInventory);
     app.post('/api/tthh/pharmacy/supplies/inventory', tthhCtrl.medicines.insertInventory);
     app.get('/api/tthh/pharmacy/supplies/stock', tthhCtrl.medicines.findStock);
+        // RIESGO PSICOSOCIAL
+    app.get('/api/tthh/sos/psychosocial/forms/list', tthhCtrl.psychosocialforms.findAll);
+    app.get('/api/tthh/sos/psychosocial/forms/list/active', tthhCtrl.psychosocialforms.findAllActive);
+    app.post('/api/tthh/sos/psychosocial/forms/entityById', tthhCtrl.psychosocialforms.findById);
+    app.post('/api/tthh/sos/psychosocial/forms/sections/entityById', tthhCtrl.psychosocialsections.findById);
     // FINANCIERO - RECAUDACION
     app.get('/api/financial/priorcontrol/contractingprocedures', financialCtrl.contractingprocedures.findAll);
     app.get('/api/financial/priorcontrol/processcontracts/processId', financialCtrl.contractingprocedures.findById);
@@ -169,6 +181,8 @@ module.exports = function(app) {
     app.get('/api/resources/parishes/:townId', schemasCtrl.resources.findParishes);
     app.get('/api/resources/institutionalcodes', schemasCtrl.resources.findAllCodes);
     app.get('/api/resources/institutionalcodes/:option', schemasCtrl.resources.findCodesByType);
+    app.get('/api/resources/sos/psychosocial/forms/questions/list', schemasCtrl.resources.psychosocialFormQuestionsList);
+    app.get('/api/resources/sos/psychosocial/forms/ratingsystem/list', schemasCtrl.resources.psychosocialRatingSystemList);
 
     /*
      * TWILIO

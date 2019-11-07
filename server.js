@@ -7,14 +7,6 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 // app.use(compression());
 
-// INSTANCIA DE CONEXIÓN A BASE DE DATOS
-const db = require('./app/config/db.config.js');
-  
-// force: true ELIMINARÁ LAS TABLAS EXISTENTES
-db.sequelize.sync({force: false}).then(() => {
-  console.log('Drop and Resync with { force: true }');
-});
-
 // Add headers
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
@@ -35,9 +27,11 @@ require('./app/route/route.main.js')(app);
  
 // INICIALIZACIÓN DE SERVIDOR
 var server = app.listen(8081, function () {
- 
+
   var host = server.address().address;
   var port = server.address().port;
  
   console.log("App listening at http://%s:%s", host, port)
+  
+  // pm2 start server --env production
 });

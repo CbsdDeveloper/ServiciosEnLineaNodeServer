@@ -1,0 +1,34 @@
+{
+  "production": {
+    "database": "db_cbsd",
+    "username": "postgres",
+    "password": "Cbsd2019",
+    "config":{
+      "host": "192.168.1.3",
+      "dialect": "postgres",
+      "port": 5432,
+      "pool": {
+        "max": 5,
+        "min": 0,
+        "acquire": 30000,
+        "idle": 10000
+      }
+    }
+  },
+  "development": {
+    "database": "db_cbsd",
+    "username": "postgres",
+    "password": "root",
+    "config":{
+      "host": "localhost",
+      "dialect": "postgres",
+      "port": 5432,
+      "pool": {
+        "max": 5,
+        "min": 0,
+        "acquire": 30000,
+        "idle": 10000
+      }
+    }
+  }
+}
