@@ -42,8 +42,10 @@ module.exports = function(app) {
         stations:           require('../controllers/tthh/controller.stations'),
         academic:           require('../controllers/tthh/controller.academicTraining'),
         medicines:          require('../controllers/tthh/controller.medicines'),
-        psychosocialforms:      require('../controllers/tthh/controller.psychosocial.forms'),
-        psychosocialsections:   require('../controllers/tthh/controller.psychosocial.sections')
+        psychosocialforms:          require('../controllers/tthh/controller.psychosocial.forms'),
+        psychosocialsections:       require('../controllers/tthh/controller.psychosocial.sections'),
+        psychosocialevaluations:    require('../controllers/tthh/controller.psychosocial.evaluations'),
+        psychosocialtest:           require('../controllers/tthh/controller.psychosocial.test')
     };
     const financialCtrl = {
         contractingprocedures:      require('../controllers/financial/controller.contractingprocedures')
@@ -132,6 +134,12 @@ module.exports = function(app) {
     app.get('/api/tthh/sos/psychosocial/forms/list/active', tthhCtrl.psychosocialforms.findAllActive);
     app.post('/api/tthh/sos/psychosocial/forms/entityById', tthhCtrl.psychosocialforms.findById);
     app.post('/api/tthh/sos/psychosocial/forms/sections/entityById', tthhCtrl.psychosocialsections.findById);
+    app.post('/api/tthh/sos/psychosocial/evaluations/entityById', tthhCtrl.psychosocialevaluations.findById);
+    app.post('/api/tthh/sos/psychosocial/evaluation/questions/list', tthhCtrl.psychosocialevaluations.questionsByEvaluation);
+    app.post('/api/tthh/sos/psychosocial/evaluation/questions/selected', tthhCtrl.psychosocialevaluations.selectedQuestionsByEvaluation);
+    app.post('/api/tthh/sos/psychosocial/evaluation/questions', tthhCtrl.psychosocialevaluations.setQuestionsForEvaluation);
+    app.post('/api/tthh/sos/psychosocial/questionnaire/questions', tthhCtrl.psychosocialevaluations.questionnaireByEvaluation);
+    app.post('/api/tthh/sos/psychosocial/test', tthhCtrl.psychosocialtest.insertPsychosocialTest);
     // FINANCIERO - RECAUDACION
     app.get('/api/financial/priorcontrol/contractingprocedures', financialCtrl.contractingprocedures.findAll);
     app.get('/api/financial/priorcontrol/processcontracts/processId', financialCtrl.contractingprocedures.findById);

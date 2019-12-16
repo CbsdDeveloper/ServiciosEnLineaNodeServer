@@ -1,7 +1,7 @@
 'use strict';
 
 const Sequelize = require('sequelize');
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || 'production';
 // const env = 'production';
 const config = require(`${__dirname}/../config/config.json`)[env];
 const db = {};
@@ -66,11 +66,17 @@ db.employees          = require('../models/permits/model.employees')(sequelize, 
 db.workdays           = require('../models/tthh/model.workdays')(sequelize, Sequelize);
 db.leaderships        = require('../models/tthh/model.leaderships')(sequelize, Sequelize);
 db.jobs               = require('../models/tthh/model.jobs')(sequelize, Sequelize);
+db.staff			  = require('../models/tthh/model.staff')(sequelize, Sequelize);
 db.arrears            = require('../models/tthh/model.arrears')(sequelize, Sequelize);
 db.medicines          = require('../models/tthh/model.medicines')(sequelize, Sequelize);
 db.inventoryMedicines = require('../models/tthh/model.inventory')(sequelize, Sequelize);
 db.psychosocialforms  = require('../models/tthh/model.psychosocial.forms')(sequelize, Sequelize);
 db.psychosocialformsSections	= require('../models/tthh/model.psychosocial.sections')(sequelize, Sequelize);
+db.psychosocialformsQuestions	= require('../models/tthh/model.psychosocial.forms.questions')(sequelize, Sequelize);
+db.psychosocialEvaluations		= require('../models/tthh/model.psychosocial.evaluation')(sequelize, Sequelize);
+db.psychosocialEvaluationsQuestions	= require('../models/tthh/model.psychosocial.evaluation.questions')(sequelize, Sequelize);
+db.psychosocialTest				= require('../models/tthh/model.psychosocial.test')(sequelize, Sequelize);
+db.psychosocialTestAnswers		= require('../models/tthh/model.psychosocial.test.answers')(sequelize, Sequelize);
 // PREVENCION
 db.plans              			= require('../models/prevention/model.plans')(sequelize, Sequelize);
 db.brigades           			= require('../models/prevention/model.brigades')(sequelize, Sequelize);
@@ -144,6 +150,21 @@ db.poaprojects.belongsTo(db.poa, {as: 'poa', foreignKey: 'fk_poa_id', targetKey:
 
 // EVALUACION DE RIESGO PSICOSOCIAL
 db.psychosocialformsSections.belongsTo(db.psychosocialforms, {as: 'form', foreignKey: 'fk_formulario_id', targetKey: 'formulario_id'});
+db.psychosocialformsSections.hasMany(db.psychosocialformsQuestions, {as: 'questions', foreignKey: 'fk_seccion_id', targetKey: 'seccion_id'});
+db.psychosocialformsQuestions.belongsTo(db.psychosocialformsSections, {as: 'section', foreignKey: 'fk_seccion_id', targetKey: 'seccion_id'});
+db.psychosocialformsQuestions.belongsTo(db.resources, {as: 'question', foreignKey: 'fk_pregunta_id', targetKey: 'recurso_id'});
+db.psychosocialformsQuestions.belongsTo(db.resources, {as: 'ranking', foreignKey: 'fk_sistemacalificacion_id', targetKey: 'recurso_id'});
+db.psychosocialEvaluations.belongsTo(db.psychosocialforms, {as: 'form', foreignKey: 'fk_formulario_id', targetKey: 'formulario_id'});
+db.psychosocialformsQuestions.belongsToMany(db.psychosocialEvaluations, {through: 'tb_evaluacionesriesgopsicosocial_preguntas', foreignKey: 'fk_pregunta_id'});
+db.psychosocialEvaluations.belongsToMany(db.psychosocialformsQuestions, {through: 'tb_evaluacionesriesgopsicosocial_preguntas', foreignKey: 'fk_evaluacion_id'});
+db.psychosocialEvaluationsQuestions.belongsTo(db.psychosocialformsQuestions, {as: 'question', foreignKey: 'fk_pregunta_id', targetKey: 'pregunta_id'});
+db.psychosocialEvaluationsQuestions.belongsTo(db.psychosocialEvaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id', targetKey: 'evaluacion_id'});
+
+db.psychosocialTest.belongsTo(db.psychosocialEvaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id', targetKey: 'evaluacion_id'});
+db.psychosocialTest.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_evaluado_id', targetKey: 'personal_id'});
+
+db.psychosocialTestAnswers.belongsTo(db.psychosocialTest, {as: 'test', foreignKey: 'fk_test_id', targetKey: 'test_id'});
+db.psychosocialTestAnswers.belongsTo(db.psychosocialformsQuestions, {as: 'question', foreignKey: 'fk_pregunta_id', targetKey: 'pregunta_id'});
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;

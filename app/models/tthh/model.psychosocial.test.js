@@ -1,25 +1,24 @@
 'use strict';
 module.exports = (sequelize, DataType) => {
-	const Model = sequelize.define('tb_formulariosriesgopsicosocial', {
-		formulario_id: { 
+	const Model = sequelize.define('tb_testriesgopsicosocial', {
+		test_id: { 
 			type: DataType.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 	
-		formulario_registro: {
+		test_registro: {
 			type: DataType.DATE,
 			defaultValue: DataType.NOW 
 		}, // timestamp without time zone default current_timestamp(0), -- FECHA DE MOVIMIENTO
-		formulario_estado: { 
+		test_estado: {
 			type: DataType.STRING,
-			defaultValue: 'ACTIVO' 
+			defaultValue: 'TEST REALIZADA' 
 		}, // text default 'ACTIVO'::text, -- ESTADOS DE REGISTROS
-		
-		formulario_nombre: { 
-			type: DataType.STRING 
-		} // text not null, -- NOMBRE DE PUESTO
+		fk_personal_id: {
+			type: DataType.INTEGER
+		}
 		
 	}, {
 		schema: 'tthh',
