@@ -38,7 +38,14 @@ module.exports = function(app) {
         workdays:           require('../controllers/tthh/controller.workdays'),
         leaderships:        require('../controllers/tthh/controller.leaderships'),
         jobs:               require('../controllers/tthh/controller.jobs'),
+        staff:              require('../controllers/tthh/controller.staff'),
         arrears:            require('../controllers/tthh/controller.arrears'),
+        biometric:          require('../controllers/tthh/controller.biometric'),
+        biometricPeriods:   require('../controllers/tthh/controller.biometricPeriods'),
+        biometricMarkings:  require('../controllers/tthh/controller.biometricMarkings'),
+        ranches:            require('../controllers/tthh/controller.ranches'),
+        typeadvances:       require('../controllers/tthh/controller.typeadvances'),
+        typecontracts:      require('../controllers/tthh/controller.typecontracts'),
         stations:           require('../controllers/tthh/controller.stations'),
         academic:           require('../controllers/tthh/controller.academicTraining'),
         medicines:          require('../controllers/tthh/controller.medicines'),
@@ -48,7 +55,16 @@ module.exports = function(app) {
         psychosocialtest:           require('../controllers/tthh/controller.psychosocial.test')
     };
     const financialCtrl = {
-        contractingprocedures:      require('../controllers/financial/controller.contractingprocedures')
+        contractingprocedures:      require('../controllers/financial/controller.contractingprocedures'),
+        budgetclassifier:           require('../controllers/financial/controller.budgetclassifier'),
+        retentionclassifier:        require('../controllers/financial/controller.retentionclassifier'),
+        accountcatalog:             require('../controllers/financial/controller.accountcatalog'),
+        programs:                   require('../controllers/financial/controller.programs'),
+        subprograms:                require('../controllers/financial/controller.subprograms'),
+        projects:                   require('../controllers/financial/controller.projects'),
+        activities:                 require('../controllers/financial/controller.activities'),
+        entities:                   require('../controllers/financial/controller.entities'),
+        typedocuments:              require('../controllers/financial/controller.typedocuments')
     };
     const planingCtrl = {
         programspoa:        require('../controllers/planing/controller.programspoa'),
@@ -119,7 +135,16 @@ module.exports = function(app) {
     app.delete('/api/permits/employees/localId/all/:localId', permitsCtrl.employees.deleteByLocal);
     // TTHH
     app.post('/api/atrasos', tthhCtrl.arrears.insertEntity);
+    app.get('/api/tthh/typeadvances/list', tthhCtrl.typeadvances.listEntity);
+    app.put('/api/tthh/typeadvances', tthhCtrl.typeadvances.updateEntity);
+    app.put('/api/tthh/typecontracts', tthhCtrl.typecontracts.updateEntity);
     app.get('/api/tthh/workdays', tthhCtrl.workdays.findAll);
+    app.post('/api/tthh/workdays/detail', tthhCtrl.workdays.findByIdDetail);
+    app.put('/api/tthh/workdays', tthhCtrl.workdays.updateEntity);
+    app.put('/api/tthh/staff/biometric', tthhCtrl.staff.updateBiometricCode);
+    app.post('/api/tthh/biometricperiods', tthhCtrl.biometricPeriods.insertEntity);
+    app.put('/api/tthh/biometricperiods', tthhCtrl.biometricPeriods.updateEntity);
+    app.put('/api/tthh/staff/biometric/markings', tthhCtrl.biometricMarkings.updateEntity);
     app.get('/api/tthh/leaderships', tthhCtrl.leaderships.findAll);
     app.get('/api/tthh/jobs', tthhCtrl.jobs.findAll);
     app.get('/api/tthh/jobs/leaderships', tthhCtrl.jobs.findAllStaffByLeadership);
@@ -140,12 +165,38 @@ module.exports = function(app) {
     app.post('/api/tthh/sos/psychosocial/evaluation/questions', tthhCtrl.psychosocialevaluations.setQuestionsForEvaluation);
     app.post('/api/tthh/sos/psychosocial/questionnaire/questions', tthhCtrl.psychosocialevaluations.questionnaireByEvaluation);
     app.post('/api/tthh/sos/psychosocial/test', tthhCtrl.psychosocialtest.insertPsychosocialTest);
-    // FINANCIERO - RECAUDACION
-    app.get('/api/financial/priorcontrol/contractingprocedures', financialCtrl.contractingprocedures.findAll);
-    app.get('/api/financial/priorcontrol/processcontracts/processId', financialCtrl.contractingprocedures.findById);
     // PLANIFICACION - POA
     app.get('/api/planing/poa/programs/list', planingCtrl.programspoa.findAll);
     app.post('/api/planing/poa/projects/list/poaId', planingCtrl.poaprojects.findByPoa);
+    // FINANCIERO - RECAUDACION
+    app.get('/api/financial/priorcontrol/contractingprocedures', financialCtrl.contractingprocedures.findAll);
+    app.get('/api/financial/priorcontrol/processcontracts/processId', financialCtrl.contractingprocedures.findById);
+
+
+    /*
+     * SERVICIOS PARA PAGINAR RESULTADOS
+     */
+    // PERMISOS
+    app.get('/api/paginate/permits/entities', permitsCtrl.entities.paginationEntity);
+    // TALENTO HUMANO
+    app.get('/api/paginate/tthh/workdays', tthhCtrl.workdays.paginationEntity);
+    app.get('/api/paginate/tthh/typeadvances', tthhCtrl.typeadvances.paginationEntity);
+    app.get('/api/paginate/tthh/typecontracts', tthhCtrl.typecontracts.paginationEntity);
+    app.get('/api/paginate/tthh/biometriccodes', tthhCtrl.biometric.paginationEntity);
+    app.get('/api/paginate/tthh/biometricperiods', tthhCtrl.biometricPeriods.paginationEntity);
+    app.get('/api/paginate/tthh/biometricmarkings', tthhCtrl.biometricMarkings.paginationEntity);
+    app.get('/api/paginate/tthh/ranches', tthhCtrl.ranches.paginationEntity);
+    // FINANCIERO
+    app.get('/api/paginate/financial/budgetclassifier', financialCtrl.budgetclassifier.paginationEntity);
+    app.get('/api/paginate/financial/retentionclassifier', financialCtrl.retentionclassifier.paginationEntity);
+    app.get('/api/paginate/financial/accountcatalog', financialCtrl.accountcatalog.paginationEntity);
+    app.get('/api/paginate/financial/programs', financialCtrl.programs.paginationEntity);
+    app.get('/api/paginate/financial/subprograms', financialCtrl.subprograms.paginationEntity);
+    app.get('/api/paginate/financial/projects', financialCtrl.projects.paginationEntity);
+    app.get('/api/paginate/financial/activities', financialCtrl.activities.paginationEntity);
+    app.get('/api/paginate/financial/entities', financialCtrl.entities.paginationEntity);
+    app.get('/api/paginate/financial/typedocuments', financialCtrl.typedocuments.paginationEntity);
+
 
     /*
      * CONTROLLERS DE SCHEMAS
@@ -168,7 +219,7 @@ module.exports = function(app) {
     app.post('/api/subjefature/codesByNature', schemasCtrl.subjefature.findCodesByNature);
     // TALENTO HUMANO
     app.get('/api/tthh/responsiblesByLeaderships', schemasCtrl.tthh.findAResponsiblesByLeaderships);
-    app.get('/api/tthh/staff', schemasCtrl.tthh.findAllStaff);
+    app.get('/api/tthh/staffList', schemasCtrl.tthh.findAllStaff);
     app.post('/api/tthh/staff/leadership', schemasCtrl.tthh.findAllStaffByLeadership);
     app.get('/api/tthh/drivers', schemasCtrl.tthh.findAllDrivers);
     app.get('/api/tthh/platoons', schemasCtrl.tthh.findAllPlatoons);

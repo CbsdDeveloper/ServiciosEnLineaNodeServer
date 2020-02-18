@@ -12,7 +12,18 @@ if (config.use_env_variable) sequelize = new Sequelize(process.env[config.use_en
 else sequelize = new Sequelize(config.database, config.username, config.password, config.config);
 
 
+db.getCurrentDate=function(){
+	return new Date();
+};
+db.setDataTable=function(res,data,serviceName = 'dataTable',status = true){
+	res.status(200).json({
+		estado: status,
+		mensaje: serviceName,
+		data: data
+	});
+};
 db.setJSON=function(res,data,serviceName){
+	res.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=Strict");
 	res.status(200).json({
 		estado: (data.length>0)?true:false,
 		mensaje: serviceName,
@@ -21,6 +32,7 @@ db.setJSON=function(res,data,serviceName){
 	});
 };
 db.setEmpty=function(res,serviceName,status=true,data={}){
+	res.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=Strict");
 	res.status(200).json({
 		estado: status,
 		mensaje: serviceName,
@@ -64,10 +76,15 @@ db.locals             = require('../models/permits/model.locals')(sequelize, Seq
 db.employees          = require('../models/permits/model.employees')(sequelize, Sequelize);
 // TALENTO HUMANO
 db.workdays           = require('../models/tthh/model.workdays')(sequelize, Sequelize);
+db.scheduleworkdays   = require('../models/tthh/model.scheduleworkdays')(sequelize, Sequelize);
 db.leaderships        = require('../models/tthh/model.leaderships')(sequelize, Sequelize);
 db.jobs               = require('../models/tthh/model.jobs')(sequelize, Sequelize);
 db.staff			  = require('../models/tthh/model.staff')(sequelize, Sequelize);
 db.arrears            = require('../models/tthh/model.arrears')(sequelize, Sequelize);
+db.biometricPeriods	  = require('../models/tthh/model.biometricPeriods')(sequelize, Sequelize);
+db.biometricMarkings  = require('../models/tthh/model.biometricMarkings')(sequelize, Sequelize);
+db.typeAdvances       = require('../models/tthh/model.typeadvances')(sequelize, Sequelize);
+db.typeContracts      = require('../models/tthh/model.typecontracts')(sequelize, Sequelize);
 db.medicines          = require('../models/tthh/model.medicines')(sequelize, Sequelize);
 db.inventoryMedicines = require('../models/tthh/model.inventory')(sequelize, Sequelize);
 db.psychosocialforms  = require('../models/tthh/model.psychosocial.forms')(sequelize, Sequelize);
@@ -91,7 +108,17 @@ db.programspoa		= require('../models/planing/model.programs')(sequelize, Sequeli
 db.poa				= require('../models/planing/model.poa')(sequelize, Sequelize);
 db.poaprojects		= require('../models/planing/model.poaprojects')(sequelize, Sequelize);
 // FINANCIERO
-db.contractingprocedures	= require('../models/financial/model.contractingprocedures')(sequelize, Sequelize);
+db.budgetclassifier			= require('./financial/model.budgetClassifier')(sequelize, Sequelize);
+db.accountcatalog			= require('./financial/model.accountCatalog')(sequelize, Sequelize);
+db.retentionclassifier		= require('./financial/model.retentionClassifier')(sequelize, Sequelize);
+db.financialPrograms		= require('./financial/model.programs')(sequelize, Sequelize);
+db.financialSubprograms		= require('./financial/model.subprograms')(sequelize, Sequelize);
+db.financialProjects		= require('./financial/model.projects')(sequelize, Sequelize);
+db.financialActivities		= require('./financial/model.activities')(sequelize, Sequelize);
+db.financialentities		= require('./financial/model.entities')(sequelize, Sequelize);
+db.financialtypedocuments	= require('./financial/model.typedocuments')(sequelize, Sequelize);
+
+db.contractingprocedures	= require('./financial/model.contractingprocedures')(sequelize, Sequelize);
 
 
 // ASOCIACION DE MODELOS
@@ -111,6 +138,15 @@ db.persons.hasMany(db.academicTraining, {as: 'training', foreignKey: 'fk_persona
 db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 // TTHH - DEPARTAMENTO MEDICO
 db.inventoryMedicines.belongsTo(db.medicines, {as: 'medicine', foreignKey: 'fk_medicamento_id', targetKey: 'medicamento_id'});
+db.workdays.hasMany(db.scheduleworkdays, {as: 'schedules', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
+db.scheduleworkdays.belongsTo(db.workdays, {as: 'workday', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
+db.staff.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+db.staff.belongsTo(db.workdays, {as: 'workday', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
+db.typeContracts.belongsTo(db.typeAdvances, {as: 'advance', foreignKey: 'fk_tipoanticipo_id', targetKey: 'tanticipo_id'});
+db.biometricMarkings.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_biometrico_id', targetKey: 'biometrico_id'});
+db.biometricMarkings.belongsTo(db.stations, {as: 'station', foreignKey: 'fk_estacion_id', targetKey: 'estacion_id'});
+db.biometricMarkings.belongsTo(db.workdays, {as: 'workday', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
+db.biometricMarkings.belongsTo(db.biometricPeriods, {as: 'period', foreignKey: 'fk_periodo_id', targetKey: 'periodo_id'});
 
 // CONTROLLER - PERMISOS
 db.taxes.belongsTo(db.activities, {as: 'activities', foreignKey: 'fk_actividad_id', targetKey: 'actividad_id'});
@@ -165,6 +201,15 @@ db.psychosocialTest.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_evaluado_i
 
 db.psychosocialTestAnswers.belongsTo(db.psychosocialTest, {as: 'test', foreignKey: 'fk_test_id', targetKey: 'test_id'});
 db.psychosocialTestAnswers.belongsTo(db.psychosocialformsQuestions, {as: 'question', foreignKey: 'fk_pregunta_id', targetKey: 'pregunta_id'});
+
+// DIRECCIÓN FINANCIERA
+db.budgetclassifier.belongsTo(db.budgetclassifier, {as: 'parent', foreignKey: 'fk_parent_id', targetKey: 'clasificador_id'});
+db.financialPrograms.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+db.financialSubprograms.belongsTo(db.financialPrograms, {as: 'program', foreignKey: 'fk_programa_id', targetKey: 'programa_id'});
+db.financialProjects.belongsTo(db.financialSubprograms, {as: 'subprogram', foreignKey: 'fk_subprograma_id', targetKey: 'subprograma_id'});
+db.financialActivities.belongsTo(db.financialProjects, {as: 'project', foreignKey: 'fk_proyecto_id', targetKey: 'proyecto_id'});
+db.financialentities.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+db.financialtypedocuments.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;

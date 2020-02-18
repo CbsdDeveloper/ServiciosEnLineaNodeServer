@@ -21,7 +21,7 @@ module.exports = (sequelize, DataType) => {
 			type: DataType.INTEGER
 		}, // int references admin.tb_usuarios(usuario_id), -- USUARIO RESPONSABLE
 		
-		fk_persona_id: { 
+		fk_persona_id: {
 			type: DataType.INTEGER
 		}, // int not null references resources.tb_personas(persona_id), -- RELACION CON REGISTRO DE PERSONAS
 		fk_estacion_id: { 

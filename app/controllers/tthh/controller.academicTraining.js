@@ -60,7 +60,7 @@ exports.findByPerson = (req, res) => {
 // BUSCAR POR CEDULA
 exports.findByIdentificationPerson = (req, res) => {
 	// SENTENCIA WEHER
-	strWhr = { persona_doc_identidad: req.body.academicTraining };
+	let strWhr = { persona_doc_identidad: req.body.academicTraining };
 	// CONSUTAR SI EXISTE EL REGISTRO
 	personModel.count({
 		where: strWhr
