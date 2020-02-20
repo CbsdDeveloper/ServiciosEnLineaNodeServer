@@ -11,6 +11,17 @@ exports.findAllStaff = (req, res) => {
 };
 
 // PERSONAL EN FUNCIONES
+exports.findAllStaffFunctions = (req, res) => {
+    const replacements = {
+        replacements: {}, 
+        type: sql.QueryTypes.SELECT
+    };
+    sql.query("SELECT * FROM tthh.vw_personal_funciones WHERE estado='EN FUNCIONES' ORDER BY estado,personal_nombre",replacements).then(function (data) {
+        db.setJSON(res,data,'LISTADO DE PERSONAL');
+    }).catch(function (err) {return next(err);});
+};
+
+// PERSONAL EN FUNCIONES
 exports.findAllStaffByLeadership = (req, res) => {
     const replacements = {
         replacements: {

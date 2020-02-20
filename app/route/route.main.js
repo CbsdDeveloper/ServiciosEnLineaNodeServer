@@ -220,6 +220,7 @@ module.exports = function(app) {
     // TALENTO HUMANO
     app.get('/api/tthh/responsiblesByLeaderships', schemasCtrl.tthh.findAResponsiblesByLeaderships);
     app.get('/api/tthh/staffList', schemasCtrl.tthh.findAllStaff);
+    app.get('/api/tthh/staff/functions/list', schemasCtrl.tthh.findAllStaffFunctions);
     app.post('/api/tthh/staff/leadership', schemasCtrl.tthh.findAllStaffByLeadership);
     app.get('/api/tthh/drivers', schemasCtrl.tthh.findAllDrivers);
     app.get('/api/tthh/platoons', schemasCtrl.tthh.findAllPlatoons);

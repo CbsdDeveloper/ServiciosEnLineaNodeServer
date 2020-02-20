@@ -28,6 +28,14 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.DATE
 		}, // date not null
 		
+		fk_registra: { 
+			type: Sequelize.STRING
+		}, // text not null,
+		
+		fk_aprueba: { 
+			type: Sequelize.STRING
+		} // text not null,
+		
 	}, {
 		schema: 'tthh',
 		underscored: true,
