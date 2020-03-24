@@ -1,72 +1,72 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_entidades', {
 		entidad_id: {
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		}, // serial primary key,
 
 		entidad_estado:{
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO'
 		}, // text default 'ACTIVO'::text,
 		entidad_registro:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // timestamp without time zone default current_timestamp(0),
 		
 		entidad_contribuyente:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text default 'natural'::text, -- natural, privada, public, fiscal (unidades educativas)
 		entidad_ruc:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text not null, -- número de ruc de la entidad, código AMIE
 		entidad_razonsocial:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text not null, -- razón social de la entidad
 		entidad_sitioweb:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text,-- sitio web de la institución
 		
 		notificar_ingreso:{
-			type: Sequelize.BOOLEAN,
+			type: DataTypes.BOOLEAN,
 			defaultValue: false
 		}, // boolean default false, -- Notificar mediante email acceso al sistema
 		notificar_cambioinformacion:{
-			type: Sequelize.BOOLEAN,
+			type: DataTypes.BOOLEAN,
 			defaultValue: false
 		}, // boolean default false, -- Notificar mediante email cambio de información
 		notificar_autoinspeccion:{
-			type: Sequelize.BOOLEAN,
+			type: DataTypes.BOOLEAN,
 			defaultValue: false
 		}, // boolean default false, -- Notificar mediante email nueva autoinspección
 		notificar_permiso:{
-			type: Sequelize.BOOLEAN,
+			type: DataTypes.BOOLEAN,
 			defaultValue: false
 		}, // boolean default false, -- Notificar mediante email cuando se emita e permiso de funcionmiento
 		label_idioma:{
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'es'
 		}, // text default 'es'::text, --idioma de la entidad
 
 		entidad_usuario:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // 
 		entidad_apoderado:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // 
 		entidad_correo:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // 
 		entidad_telefono:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // 
 		entidad_celular:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // 
 		entidad_usuario_creacion:{
-			type: Sequelize.DATE
+			type: DataTypes.DATE
 		} // 
 	}, {
 		schema: 'permisos',

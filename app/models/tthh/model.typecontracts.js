@@ -1,27 +1,27 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_tiposcontratos', {
 		tcontrato_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 	
 		tcontrato_registro: { 
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.NOW 
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW 
 		}, // timestamp without time zone default current_timestamp(0),
 		tcontrato_estado: { 
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO' 
 		}, // text default 'ACTIVO'::text, -- REGISTRO, MODIFICACIÓN
 		
 		tcontrato_nombre: { 
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text not null, -- NOMBRE DE CONTRATO
 		tcontrato_detalle: { 
-			type: Sequelize.STRING 
+			type: DataTypes.STRING 
 		} // text, -- DETALLE
 		
 	}, {

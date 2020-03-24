@@ -1,27 +1,27 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_formulariosriesgopsicosocial_secciones', {
 		seccion_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 	
 		seccion_registro: {
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.NOW 
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW 
 		}, // timestamp without time zone default current_timestamp(0), -- FECHA DE MOVIMIENTO
 		seccion_estado: { 
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO' 
 		}, // text default 'ACTIVO'::text, -- ESTADOS DE REGISTROS
 		
 		seccion_nombre: { 
-			type: Sequelize.STRING 
+			type: DataTypes.STRING 
 		}, // text not null, -- NOMBRE DE PUESTO
 		seccion_index: { 
-			type: Sequelize.INTEGER
+			type: DataTypes.INTEGER
 		} // text not null, -- NOMBRE DE PUESTO
 		
 	}, {

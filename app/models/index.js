@@ -23,7 +23,7 @@ db.setDataTable=function(res,data,serviceName = 'dataTable',status = true){
 	});
 };
 db.setJSON=function(res,data,serviceName){
-	res.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=Strict");
+	// res.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=Strict");
 	res.status(200).json({
 		estado: (data.length>0)?true:false,
 		mensaje: serviceName,
@@ -32,12 +32,19 @@ db.setJSON=function(res,data,serviceName){
 	});
 };
 db.setEmpty=function(res,serviceName,status=true,data={}){
-	res.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=Strict");
+	// res.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=Strict");
 	res.status(200).json({
 		estado: status,
 		mensaje: serviceName,
 		data: data
 	});
+};
+db.endConection=function(res,next,serviceName='ServiceName',status=false,code=200){
+	res.status(code).json({
+		estado: status,
+		mensaje: serviceName
+	});
+	return next();
 };
 db.cloneObj=function(obj,exclude=true){
 	let newObj = Object.assign({},obj);
@@ -63,6 +70,10 @@ db.towns              = require('../models/resources/model.towns')(sequelize, Se
 db.parishes           = require('../models/resources/model.parishes')(sequelize, Sequelize);
 db.persons            = require('../models/resources/model.persons')(sequelize, Sequelize);
 // ADMINISTRACION
+db.labels             = require('../models/admin/model.labels')(sequelize, Sequelize);
+db.parameters         = require('../models/admin/model.parameters')(sequelize, Sequelize);
+db.webmail            = require('../models/admin/model.webmail')(sequelize, Sequelize);
+db.reports			  = require('../models/admin/model.reports')(sequelize, Sequelize);
 db.profiles           = require('../models/admin/model.profiles')(sequelize, Sequelize);
 db.users              = require('../models/admin/model.users')(sequelize, Sequelize);
 db.stations           = require('../models/tthh/model.stations')(sequelize, Sequelize);
@@ -85,8 +96,11 @@ db.biometricPeriods	  = require('../models/tthh/model.biometricPeriods')(sequeli
 db.biometricMarkings  = require('../models/tthh/model.biometricMarkings')(sequelize, Sequelize);
 db.typeAdvances       = require('../models/tthh/model.typeadvances')(sequelize, Sequelize);
 db.typeContracts      = require('../models/tthh/model.typecontracts')(sequelize, Sequelize);
+db.wineries			  = require('../models/tthh/model.wineries')(sequelize, Sequelize);
+	// DEP. MEDICO
 db.medicines          = require('../models/tthh/model.medicines')(sequelize, Sequelize);
 db.inventoryMedicines = require('../models/tthh/model.inventory')(sequelize, Sequelize);
+	// SOS
 db.psychosocialforms  = require('../models/tthh/model.psychosocial.forms')(sequelize, Sequelize);
 db.psychosocialformsSections	= require('../models/tthh/model.psychosocial.sections')(sequelize, Sequelize);
 db.psychosocialformsQuestions	= require('../models/tthh/model.psychosocial.forms.questions')(sequelize, Sequelize);
@@ -94,6 +108,10 @@ db.psychosocialEvaluations		= require('../models/tthh/model.psychosocial.evaluat
 db.psychosocialEvaluationsQuestions	= require('../models/tthh/model.psychosocial.evaluation.questions')(sequelize, Sequelize);
 db.psychosocialTest				= require('../models/tthh/model.psychosocial.test')(sequelize, Sequelize);
 db.psychosocialTestAnswers		= require('../models/tthh/model.psychosocial.test.answers')(sequelize, Sequelize);
+	// APH
+db.aphSupplies					= require('../models/tthh/model.aph.supplies')(sequelize, Sequelize);
+db.aphSupplycontrol				= require('../models/tthh/model.aph.supplycontrol')(sequelize, Sequelize);
+db.aphSupplyMovements			= require('../models/tthh/model.aph.supplycontrolmovements')(sequelize, Sequelize);
 // PREVENCION
 db.plans              			= require('../models/prevention/model.plans')(sequelize, Sequelize);
 db.brigades           			= require('../models/prevention/model.brigades')(sequelize, Sequelize);
@@ -136,6 +154,8 @@ db.entities.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_representante_i
 
 db.persons.hasMany(db.academicTraining, {as: 'training', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+// TTHH - GENERAL
+db.wineries.belongsTo(db.stations, {as: 'station', foreignKey: 'fk_estacion_id', targetKey: 'estacion_id'});
 // TTHH - DEPARTAMENTO MEDICO
 db.inventoryMedicines.belongsTo(db.medicines, {as: 'medicine', foreignKey: 'fk_medicamento_id', targetKey: 'medicamento_id'});
 db.workdays.hasMany(db.scheduleworkdays, {as: 'schedules', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
@@ -147,6 +167,11 @@ db.biometricMarkings.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_biometric
 db.biometricMarkings.belongsTo(db.stations, {as: 'station', foreignKey: 'fk_estacion_id', targetKey: 'estacion_id'});
 db.biometricMarkings.belongsTo(db.workdays, {as: 'workday', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
 db.biometricMarkings.belongsTo(db.biometricPeriods, {as: 'period', foreignKey: 'fk_periodo_id', targetKey: 'periodo_id'});
+// TTHH - APH
+db.aphSupplycontrol.belongsTo(db.wineries, {as: 'cellar', foreignKey: 'fk_bodega_id', targetKey: 'bodega_id'});
+db.aphSupplyMovements.belongsTo(db.aphSupplies, {as: 'supply', foreignKey: 'fk_insumo_id', targetKey: 'insumo_id'});
+db.aphSupplyMovements.belongsTo(db.aphSupplycontrol, {as: 'control', foreignKey: 'fk_inventario_id', targetKey: 'inventario_id'});
+db.aphSupplyMovements.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
 
 // CONTROLLER - PERMISOS
 db.taxes.belongsTo(db.activities, {as: 'activities', foreignKey: 'fk_actividad_id', targetKey: 'actividad_id'});

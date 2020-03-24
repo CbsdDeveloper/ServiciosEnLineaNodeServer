@@ -1,40 +1,40 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_tasas', {
 		tasa_id: {
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		}, // serial primary key,
 
 		tasa_estado:{
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO'
 		}, // text default 'ACTIVO'::text,
 		tasa_registro:{
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.NOW
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW
 		}, // timestamp without time zone default current_timestamp(0),
 		tasa_evento:{
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'INGRESO'
 		}, // text default 'INGRESO'::text,
 		
 		tasa_nombre:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text not null, -- 
 		tasa_riesgobajo:{
-			type: Sequelize.DECIMAL(5,2)
+			type: DataTypes.DECIMAL(5,2)
 		}, // numeric (5,2), -- 
 		tasa_riesgomoderado:{
-			type: Sequelize.DECIMAL(5,2)
+			type: DataTypes.DECIMAL(5,2)
 		}, // numeric (5,2), -- 
 		tasa_riesgoalto:{
-			type: Sequelize.DECIMAL(5,2)
+			type: DataTypes.DECIMAL(5,2)
 		}, // numeric (5,2),
 		tasa_codigo:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text
 	}, {
 		schema: 'permisos',

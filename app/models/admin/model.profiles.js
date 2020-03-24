@@ -1,20 +1,20 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_perfiles', {
 		perfil_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
-		perfil_nombre: Sequelize.STRING,
-		perfil_descripcion: Sequelize.STRING,
+		perfil_nombre: DataTypes.STRING,
+		perfil_descripcion: DataTypes.STRING,
 		perfil_estado: {
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO' 
 		},
 		fk_usuario_id:{
-			type: Sequelize.INTEGER
+			type: DataTypes.INTEGER
 		}
 	}, {
 		schema: 'admin',

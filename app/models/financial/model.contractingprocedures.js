@@ -1,38 +1,38 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_procedimientoscontratacion', {
 		procedimiento_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 	
 		procedimiento_registro:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, //  timestamp without time zone default current_timestamp(0), -- 
 		procedimiento_estado: {
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO' 
 		}, // text default 'ACTIVO'::text, -- 
 		
 		procedimiento_contratacion:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, //  text, -- CATALOGO ELECTRONICO, INFIMA CUANTIA, SUBASTA INVERSA ELECTRONICA, ...
 		
 		procedimiento_tipo_contratacion:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, //  text, -- BIENES, SERVICIOS, BIENES Y SERVICIOS, OBRAS, CONSULTORIAS, FERIAS INLUSIVAS
 		procedimiento_normalizado: {
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'NO' 
 		}, //  text default 'NO'::text, -- SI, NO, NA
 		
 		procedimiento_monto_minimo: {
-			type: Sequelize.DECIMAL(10,2)
+			type: DataTypes.DECIMAL(10,2)
 		}, //  numeric(10,2) default 0, -- 
 		procedimiento_monto_maximo: {
-			type: Sequelize.DECIMAL(10,2)
+			type: DataTypes.DECIMAL(10,2)
 		} //  numeric(10,2) -- 
 
 	}, {

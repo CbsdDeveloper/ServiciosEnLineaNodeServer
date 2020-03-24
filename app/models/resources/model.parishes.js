@@ -1,14 +1,14 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('parishes', {
 		parish_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 		parrish_name:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		} // text NOT NULL,
 	}, {
 		schema: 'resources',

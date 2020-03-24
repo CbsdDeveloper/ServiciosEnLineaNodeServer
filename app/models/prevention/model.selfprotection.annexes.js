@@ -1,29 +1,29 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_autoproteccion_anexos', {
 		anexo_id: {
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		}, // serial primary key,
 		
 		anexo_tipo:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- TIPO DE ARCHIVO
 		
 		anexo_clasificacion:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text default 'RECURSOS DEL SISTEMA CONTRA INCENDIOS'::text, -- RECURSOS DEL SISTEMA CONTRA INCENDIOS, ANEXO
 		anexo_nombre:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text not null, -- NOMBRE DEL ANEXO
 		anexo_descripcion:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- NOMBRE DEL ANEXO
 		
 		anexo_adjunto:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		} // text -- NOMBRE DEL ANEXO
 
 	}, {

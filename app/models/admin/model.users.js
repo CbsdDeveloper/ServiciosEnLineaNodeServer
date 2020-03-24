@@ -1,44 +1,44 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_usuarios', {
 		usuario_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 
-		usuario_login: Sequelize.STRING,
-		usuario_pass: Sequelize.STRING,
+		usuario_login: DataTypes.STRING,
+		usuario_pass: DataTypes.STRING,
 		usuario_estado: {
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO'
 		},
 		usuario_acceso_correcto:{
-			type: Sequelize.BOOLEAN,
+			type: DataTypes.BOOLEAN,
 			defaultValue: false
 		},
 		usuario_acceso_fallido:{
-			type: Sequelize.BOOLEAN,
+			type: DataTypes.BOOLEAN,
 			defaultValue: false
 		},
 		usuario_cambio_perfil:{
-			type: Sequelize.BOOLEAN,
+			type: DataTypes.BOOLEAN,
 			defaultValue: false
 		},
 		usuario_cambiar_pass:{
-			type: Sequelize.BOOLEAN,
+			type: DataTypes.BOOLEAN,
 			defaultValue: true
 		},
 		usuario_idioma:{
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'es'
 		},
-		usuario_webmail_user: Sequelize.STRING,
-		usuario_webmail_pass: Sequelize.STRING,
+		usuario_webmail_user: DataTypes.STRING,
+		usuario_webmail_pass: DataTypes.STRING,
 		usuario_registro: {
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.NOW
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW
 		}
 	}, {
 		schema: 'admin',

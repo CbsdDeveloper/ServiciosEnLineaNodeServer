@@ -1,24 +1,24 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_georeferenciacion', {
 		mapa_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 
 		mapa_entidad:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text COLLATE pg_catalog."default" NOT NULL,
 		mapa_entidad_id:{
-			type: Sequelize.INTEGER
+			type: DataTypes.INTEGER
 		}, // integer NOT NULL,
 		mapa_geojson_id:{
-			type: Sequelize.INTEGER
+			type: DataTypes.INTEGER
 		}, // integer,
 		mapa_geojson:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		} // text COLLATE pg_catalog."default",
 
 	}, {

@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-	const Model = sequelize.define('tb_inventario_medicamentos', {
+	const Model = sequelize.define('tb_inventario_insumosaph', {
 		inventario_id: { 
 			type: DataTypes.INTEGER,
 			unique: true,
@@ -16,26 +16,20 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO' 
 		}, // text default 'ACTIVO'::text, -- REGISTRO, MODIFICACIÓN
-		fk_personal_id: { 
-			type: DataTypes.INTEGER
-		}, // integer not null references tthh.tb_personal(personal_id), -- 
 		
-		inventario_transaccion: { 
+		inventario_codigo: { 
 			type: DataTypes.STRING
-		}, // text not null, -- DESCARGO, INGRESO
-		inventario_cantidad: {
-			type: DataTypes.DECIMAL(8,2)
-		}, // numeric(8,2) default 0, -- 
+		}, // text not null,
+		inventario_tipo: { 
+			type: DataTypes.STRING
+		}, // text not null,
+	
+		inventario_fecha_registro: { 
+			type: DataTypes.DATE
+		}, // text not null, -- 
 		inventario_descripcion: { 
-			type: DataTypes.STRING 
-		}, // text, -- 
-		
-		fk_table: { 
 			type: DataTypes.STRING
-		}, // text, -- CONSULTA MEDICA, ESTACION
-		fk_id: { 
-			type: DataTypes.INTEGER
-		} // int -- ID DE ENTIDADES
+		} // text not null, -- 
 		
 	}, {
 		schema: 'tthh',

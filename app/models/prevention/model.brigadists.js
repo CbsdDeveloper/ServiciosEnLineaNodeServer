@@ -1,15 +1,15 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_brigadistas', {
 		brigadista_id: {
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		}, // serial primary key,
 
 		brigadista_funcion: {
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		} // 
 
 	}, {

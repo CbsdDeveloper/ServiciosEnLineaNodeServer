@@ -1,24 +1,24 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_jornadas_trabajo', {
 		jornada_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		}, 
 		
 		jornada_registro: {
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.NOW 
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW 
 		}, // timestamp without time zone default current_timestamp(0), -- FECHA DE MOVIMIENTO
 		jornada_estado: { 
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO' 
 		}, // text default 'ACTIVO'::text, -- ESTADOS DE REGISTROS
 		
 		jornada_nombre: { 
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		} // text not null, -- NOMBRE DE JORNADAS
 
 	}, {

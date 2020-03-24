@@ -1,39 +1,39 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_biomertico_periodos', {
 		periodo_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 		
 		periodo_registro: { 
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.NOW 
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW 
 		}, // timestamp without time zone default current_timestamp(0), -- 
 		periodo_estado: { 
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'REVISION' 
 		}, // text default 'CORRECTO'::text, -- CORRECTO, REVISION, ANULADO
 		
 		periodo_nombre: { 
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text not null,
 		
 		periodo_desde: { 
-			type: Sequelize.DATE
+			type: DataTypes.DATE
 		}, // date not null,
 		periodo_hasta: { 
-			type: Sequelize.DATE
+			type: DataTypes.DATE
 		}, // date not null
 		
 		fk_registra: { 
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text not null,
 		
 		fk_aprueba: { 
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		} // text not null,
 		
 	}, {

@@ -12,6 +12,10 @@ module.exports = function(app) {
         resources:      require('../controllers/resources/controller.resources')
     };
     const adminCtrl = {
+        labels:         require('../controllers/admin/controller.labels'),
+        reports:        require('../controllers/admin/controller.reports'),
+        parameters:     require('../controllers/admin/controller.parameters'),
+        webmail:        require('../controllers/admin/controller.webmail'),
         profiles:       require('../controllers/admin/controller.profiles'),
         users:          require('../controllers/admin/controller.users')
     };
@@ -52,7 +56,11 @@ module.exports = function(app) {
         psychosocialforms:          require('../controllers/tthh/controller.psychosocial.forms'),
         psychosocialsections:       require('../controllers/tthh/controller.psychosocial.sections'),
         psychosocialevaluations:    require('../controllers/tthh/controller.psychosocial.evaluations'),
-        psychosocialtest:           require('../controllers/tthh/controller.psychosocial.test')
+        psychosocialtest:           require('../controllers/tthh/controller.psychosocial.test'),
+        aphSupplies:            require('../controllers/tthh/controller.aph.supplies'),
+        aphSupplycontrol:       require('../controllers/tthh/controller.aph.supplycontrol'),
+        aphSupplyMovements:     require('../controllers/tthh/controller.aph.supplycontrolmovements'),
+        wineries:               require('../controllers/tthh/controller.wineries')
     };
     const financialCtrl = {
         contractingprocedures:      require('../controllers/financial/controller.contractingprocedures'),
@@ -149,11 +157,16 @@ module.exports = function(app) {
     app.get('/api/tthh/jobs', tthhCtrl.jobs.findAll);
     app.get('/api/tthh/jobs/leaderships', tthhCtrl.jobs.findAllStaffByLeadership);
     app.get('/api/tthh/stations', tthhCtrl.stations.findAll);
+    app.get('/api/tthh/wineries', tthhCtrl.wineries.findAll);
     app.get('/api/tthh/stations/:id', tthhCtrl.stations.findById);
+        // DEP. MEDICO
     app.get('/api/tthh/pharmacy/supplies', tthhCtrl.medicines.findAll);
     app.get('/api/tthh/pharmacy/supplies/inventory', tthhCtrl.medicines.findInventory);
     app.post('/api/tthh/pharmacy/supplies/inventory', tthhCtrl.medicines.insertInventory);
     app.get('/api/tthh/pharmacy/supplies/stock', tthhCtrl.medicines.findStock);
+        // APH
+    app.post('/api/tthh/aph/suppliesinventory/movements/list', tthhCtrl.aphSupplyMovements.suppliesByInventoryId);
+    app.post('/api/tthh/aph/supplies/inventory/single', tthhCtrl.aphSupplyMovements.insertInventory);
         // RIESGO PSICOSOCIAL
     app.get('/api/tthh/sos/psychosocial/forms/list', tthhCtrl.psychosocialforms.findAll);
     app.get('/api/tthh/sos/psychosocial/forms/list/active', tthhCtrl.psychosocialforms.findAllActive);
@@ -176,6 +189,11 @@ module.exports = function(app) {
     /*
      * SERVICIOS PARA PAGINAR RESULTADOS
      */
+    // ADMIN
+    app.get('/api/paginate/admin/labels', adminCtrl.labels.paginationEntity);
+    app.get('/api/paginate/admin/parameters', adminCtrl.parameters.paginationEntity);
+    app.get('/api/paginate/admin/webmail', adminCtrl.webmail.paginationEntity);
+    app.get('/api/paginate/admin/reports', adminCtrl.reports.paginationEntity);
     // PERMISOS
     app.get('/api/paginate/permits/entities', permitsCtrl.entities.paginationEntity);
     // TALENTO HUMANO
@@ -186,6 +204,11 @@ module.exports = function(app) {
     app.get('/api/paginate/tthh/biometricperiods', tthhCtrl.biometricPeriods.paginationEntity);
     app.get('/api/paginate/tthh/biometricmarkings', tthhCtrl.biometricMarkings.paginationEntity);
     app.get('/api/paginate/tthh/ranches', tthhCtrl.ranches.paginationEntity);
+    app.get('/api/paginate/tthh/aph/supplies/list', tthhCtrl.aphSupplies.paginationEntity);
+    app.get('/api/paginate/tthh/aph/supplies/all/stock/list', tthhCtrl.aphSupplies.paginationStockSupplies);
+    app.get('/api/paginate/tthh/aph/supplies/stock/wineries/list', tthhCtrl.aphSupplies.paginationSuppliesStockStations);
+    app.get('/api/paginate/tthh/aph/control/supplies', tthhCtrl.aphSupplycontrol.paginationEntity);
+    app.get('/api/paginate/tthh/institution/wineries/list', tthhCtrl.wineries.paginationEntity);
     // FINANCIERO
     app.get('/api/paginate/financial/budgetclassifier', financialCtrl.budgetclassifier.paginationEntity);
     app.get('/api/paginate/financial/retentionclassifier', financialCtrl.retentionclassifier.paginationEntity);

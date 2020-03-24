@@ -31,7 +31,7 @@ module.exports = {
 					limit: limit,
 					where: (filter != '')?where:{},
 					order: [ sort ],
-					attributes : ['personal_id','personal_estado','personal_correo_institucional','biometrico_id','fk_jornada_id'],
+					attributes : ['personal_id','personal_estado','personal_registro','personal_correo_institucional','biometrico_id','fk_jornada_id'],
 					include: [
 						{
 							model: persons, as: 'person',

@@ -1,30 +1,30 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_coordenadas', {
 		coordenada_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 
 		coordenada_entidad:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text COLLATE pg_catalog."default" NOT NULL,
 		coordenada_entidad_id:{
-			type: Sequelize.INTEGER
+			type: DataTypes.INTEGER
 		}, // integer NOT NULL,
 		coordenada_longitud:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text COLLATE pg_catalog."default",
 		coordenada_latitud:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text COLLATE pg_catalog."default",
 		coordenada_zoom:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text COLLATE pg_catalog."default",
 		coordenada_thumbnail:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		} // text COLLATE pg_catalog."default",
 
 	}, {

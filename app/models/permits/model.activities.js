@@ -1,33 +1,33 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_actividades', {
 		actividad_id: {
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		}, // serial primary key,
 
 		actividad_estado:{
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO'
 		}, // text default 'ACTIVO'::text,
 		actividad_registro:{
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.NOW
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW
 		}, // timestamp without time zone default current_timestamp(0),
 		
 		actividad_codigo:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text not null, -- limit 4
 		actividad_nombre:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text not null, -- NOMBRE DE MACROACTIVIDAD
 		actividad_descripcion:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- DESCRIPCIÓN
 		actividad_color:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		} // text -- COLOR
 	}, {
 		schema: 'permisos',

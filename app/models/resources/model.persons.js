@@ -1,19 +1,19 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Person = sequelize.define('tb_personas', {
 		persona_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 		
 		persona_fingreso:{
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.NOW
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW
 		}, // timestamp without time zone default current_timestamp(0),
 		fk_usuario_id:{
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			references: {
 				model: 'tb_usuarios',
 				key: 'usuario_id'
@@ -21,137 +21,137 @@ module.exports = (sequelize, Sequelize) => {
 		}, // integer references admin.tb_usuarios(usuario_id),
 		
 		persona_tipo_doc:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text not null default 'cedula'::text, -- doocumento de identificación
 		persona_doc_identidad:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text not null, -- doocumento de identificación
 		persona_nombres:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text not null, -- nombres de la persona
 		persona_apellidos:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text not null, -- apellidos de la persona
 		
 		persona_fnacimiento:{
-			type: Sequelize.DATE
+			type: DataTypes.DATE
 		}, // date,
 		persona_lugarnacimiento:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text -- 
 		
 		persona_sexo:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- HOMBRE, MUJER
 		persona_estadocivil:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- SOLTERO, CASADO, DIVORCIADO, VIUDO, SOLTERA, CASADA, DIVORCIADA, VIUDA
 		persona_licenciaconducir:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- 
 		persona_tiposangre:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- 
 		persona_estatura:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- m
 		persona_peso:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- kg
 		persona_imagen:{
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'default.png'
 		}, // text default 'default.png'::text,
 		
 		persona_nacionalidad:{
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ECUATORIANA'
 		}, // text DEFAULT 'ECUATORIANA'::text, -- 
 		fk_parroquia_id:{
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			references: {
 				model: 'parishes',
 				key: 'parish_id'
 			}
 		}, // integer references resources.parishes(parish_id),
 		persona_direccion:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- dirección de contacto
 		persona_telefono:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- teléfono de contacto
 		persona_celular:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- celular personal
 		persona_correo:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- correo de contacto
 		
 		persona_principal:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- correo de contacto
 		persona_secundaria:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- correo de contacto
 		persona_no_casa:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- correo de contacto
 		persona_referencia:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- correo de contacto
 		persona_barrio_ciudadela:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- correo de contacto
 		persona_barrio_sector:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- correo de contacto
 		
 		persona_acerca:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- 
 		persona_destrezas:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- 
 		persona_alergias:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- 
 		persona_discapacidad:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- 
 		
 		persona_etnia:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- 
 		persona_senialesparticulares:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- 
 		
 		persona_titulo:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- 
 
 		
 		persona_anexo_cedula:{
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'NO'
 		}, // text default 'NO'::text;
 		persona_anexo_votacion:{
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'NO'
 		}, // text default 'NO'::text;
 
 
 		persona_cemergencia_nombre:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text; -- 
 		persona_cemergencia_parentesco:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text; -- 
 		persona_cemergencia_direccion:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text; -- 
 		persona_cemergencia_telefono:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		} // text; -- 
 
 	}, {

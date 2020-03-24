@@ -1,26 +1,26 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_programasfinancieros', {
 		programa_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 	
 		programa_registro:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, //  timestamp without time zone default current_timestamp(0), -- 
 		programa_estado: {
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO' 
 		}, // text default 'ACTIVO'::text, -- 
 		
 		programa_codigo:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- 
 		programa_descripcion:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		} // text -- 
 
 	}, {

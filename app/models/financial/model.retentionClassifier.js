@@ -1,32 +1,32 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_clasificadorretenciones', {
 		clasificador_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 	
 		clasificador_registro:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, //  timestamp without time zone default current_timestamp(0), -- 
 		clasificador_estado: {
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO' 
 		}, // text default 'ACTIVO'::text, -- 
 		
 		clasificador_codigo:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- 
 		clasificador_codigo_formulario:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- 
 		clasificador_descripcion:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text -- 
 		clasificador_procentaje:{
-			type: Sequelize.DECIMAL(7,4),
+			type: DataTypes.DECIMAL(7,4),
 			defaultValue: 0
 		} // numeric(7,4) default 0, -- 
 		

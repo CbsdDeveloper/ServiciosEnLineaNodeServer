@@ -1,36 +1,36 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_estaciones', {
 		estacion_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 	
 		estacion_registro: { 
-			type: Sequelize.DATE,
-			defaultValue: Sequelize.NOW
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW
 		},
 		estacion_estado: { 
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO' 
 		},
 		
-		estacion_nombre: { type: Sequelize.STRING },
-		estacion_nombre_alterno: { type: Sequelize.STRING },
+		estacion_nombre: { type: DataTypes.STRING },
+		estacion_nombre_alterno: { type: DataTypes.STRING },
 		
-		estacion_principal: { type: Sequelize.STRING },
-		estacion_secudaria: { type: Sequelize.STRING },
-		estacion_longitud: { type: Sequelize.STRING },
-		estacion_latitud: { type: Sequelize.STRING },
+		estacion_principal: { type: DataTypes.STRING },
+		estacion_secudaria: { type: DataTypes.STRING },
+		estacion_longitud: { type: DataTypes.STRING },
+		estacion_latitud: { type: DataTypes.STRING },
 		estacion_imagen: { 
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'default.png' 
 		},
-		estacion_telefono: { type: Sequelize.STRING },
-		estacion_email: { type: Sequelize.STRING },
-		estacion_construccion: { type: Sequelize.DATE }
+		estacion_telefono: { type: DataTypes.STRING },
+		estacion_email: { type: DataTypes.STRING },
+		estacion_construccion: { type: DataTypes.DATE }
 	}, {
 		schema: 'tthh',
 		underscored: true,

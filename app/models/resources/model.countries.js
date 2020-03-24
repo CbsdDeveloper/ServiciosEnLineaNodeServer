@@ -1,27 +1,27 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('countries', {
 		country_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 		country_sortname:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // varchar(3) NOT NULL,
 		country_name:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text NOT NULL,
 		
 		country_nombre:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text,
 		country_gentilicio:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text,
 		country_iso3:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		} // text
 
 	}, {

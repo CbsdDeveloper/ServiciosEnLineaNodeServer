@@ -1,26 +1,26 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_entidadesfinancieras', {
 		entidad_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 	
 		entidad_registro:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, //  timestamp without time zone default current_timestamp(0), -- 
 		entidad_estado: {
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO' 
 		}, // text default 'ACTIVO'::text, -- 
 		
 		entidad_nombre:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, // text, -- 
 		entidad_cuenta_bce:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		} // text -- 
 
 	}, {

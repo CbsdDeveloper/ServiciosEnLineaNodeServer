@@ -1,33 +1,33 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_poa', {
 		poa_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 	
 		poa_registro:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, //  timestamp without time zone default current_timestamp(0), -- 
 		poa_estado: {
-			type: Sequelize.STRING,
+			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO' 
 		}, // text default 'ACTIVO'::text, -- 
 		
 		poa_periodo:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, //  text, -- 
 		poa_descripcion:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		}, //  text, -- 
 
 		poa_periodo_inicio: { 
-			type: Sequelize.DATE
+			type: DataTypes.DATE
 		}, // date, -- 
 		poa_periodo_cierre: { 
-			type: Sequelize.DATE
+			type: DataTypes.DATE
 		}, // date, -- 
 
 	}, {

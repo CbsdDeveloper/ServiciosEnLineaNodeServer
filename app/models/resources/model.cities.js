@@ -1,14 +1,14 @@
 'use strict';
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('cities', {
 		city_id: { 
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 		city_name:{
-			type: Sequelize.STRING
+			type: DataTypes.STRING
 		} // varchar(30) NOT NULL,
 	}, {
 		schema: 'resources',
