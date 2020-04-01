@@ -96,22 +96,18 @@ db.biometricPeriods	  = require('../models/tthh/model.biometricPeriods')(sequeli
 db.biometricMarkings  = require('../models/tthh/model.biometricMarkings')(sequelize, Sequelize);
 db.typeAdvances       = require('../models/tthh/model.typeadvances')(sequelize, Sequelize);
 db.typeContracts      = require('../models/tthh/model.typecontracts')(sequelize, Sequelize);
-db.wineries			  = require('../models/tthh/model.wineries')(sequelize, Sequelize);
+db.wineries			  = require('./tthh/model.wineries')(sequelize, Sequelize);
 	// DEP. MEDICO
 db.medicines          = require('../models/tthh/model.medicines')(sequelize, Sequelize);
 db.inventoryMedicines = require('../models/tthh/model.inventory')(sequelize, Sequelize);
 	// SOS
-db.psychosocialforms  = require('../models/tthh/model.psychosocial.forms')(sequelize, Sequelize);
-db.psychosocialformsSections	= require('../models/tthh/model.psychosocial.sections')(sequelize, Sequelize);
-db.psychosocialformsQuestions	= require('../models/tthh/model.psychosocial.forms.questions')(sequelize, Sequelize);
-db.psychosocialEvaluations		= require('../models/tthh/model.psychosocial.evaluation')(sequelize, Sequelize);
+db.psychosocialforms				= require('../models/tthh/model.psychosocial.forms')(sequelize, Sequelize);
+db.psychosocialformsSections		= require('../models/tthh/model.psychosocial.sections')(sequelize, Sequelize);
+db.psychosocialformsQuestions		= require('../models/tthh/model.psychosocial.forms.questions')(sequelize, Sequelize);
+db.psychosocialEvaluations			= require('../models/tthh/model.psychosocial.evaluation')(sequelize, Sequelize);
 db.psychosocialEvaluationsQuestions	= require('../models/tthh/model.psychosocial.evaluation.questions')(sequelize, Sequelize);
-db.psychosocialTest				= require('../models/tthh/model.psychosocial.test')(sequelize, Sequelize);
-db.psychosocialTestAnswers		= require('../models/tthh/model.psychosocial.test.answers')(sequelize, Sequelize);
-	// APH
-db.aphSupplies					= require('../models/tthh/model.aph.supplies')(sequelize, Sequelize);
-db.aphSupplycontrol				= require('../models/tthh/model.aph.supplycontrol')(sequelize, Sequelize);
-db.aphSupplyMovements			= require('../models/tthh/model.aph.supplycontrolmovements')(sequelize, Sequelize);
+db.psychosocialTest					= require('../models/tthh/model.psychosocial.test')(sequelize, Sequelize);
+db.psychosocialTestAnswers			= require('../models/tthh/model.psychosocial.test.answers')(sequelize, Sequelize);
 // PREVENCION
 db.plans              			= require('../models/prevention/model.plans')(sequelize, Sequelize);
 db.brigades           			= require('../models/prevention/model.brigades')(sequelize, Sequelize);
@@ -122,9 +118,9 @@ db.selfProtectionPrevention  	= require('../models/prevention/model.selfprotecti
 db.selfProtectionMaintenance	= require('../models/prevention/model.selfprotection.maintenances')(sequelize, Sequelize);
 db.selfProtectionMeseri      	= require('../models/prevention/model.selfprotection.meseri')(sequelize, Sequelize);
 // PLANIFICACION
-db.programspoa		= require('../models/planing/model.programs')(sequelize, Sequelize);
-db.poa				= require('../models/planing/model.poa')(sequelize, Sequelize);
-db.poaprojects		= require('../models/planing/model.poaprojects')(sequelize, Sequelize);
+db.programspoa				= require('../models/planing/model.programs')(sequelize, Sequelize);
+db.poa						= require('../models/planing/model.poa')(sequelize, Sequelize);
+db.poaprojects				= require('../models/planing/model.poaprojects')(sequelize, Sequelize);
 // FINANCIERO
 db.budgetclassifier			= require('./financial/model.budgetClassifier')(sequelize, Sequelize);
 db.accountcatalog			= require('./financial/model.accountCatalog')(sequelize, Sequelize);
@@ -137,6 +133,14 @@ db.financialentities		= require('./financial/model.entities')(sequelize, Sequeli
 db.financialtypedocuments	= require('./financial/model.typedocuments')(sequelize, Sequelize);
 
 db.contractingprocedures	= require('./financial/model.contractingprocedures')(sequelize, Sequelize);
+// SUBJEFATURA - APH
+db.aphSupplies					= require('./subjefature/aph/model.aph.supplies')(sequelize, Sequelize);
+db.aphSupplycontrol				= require('./subjefature/aph/model.aph.supplycontrol')(sequelize, Sequelize);
+db.aphSupplyMovements			= require('./subjefature/aph/model.aph.supplycontrolmovements')(sequelize, Sequelize);
+// SUBJEFATURA - PARTES
+db.parts					= require('../models/subjefature/model.parts')(sequelize, Sequelize);
+db.attended					= require('../models/subjefature/model.attended')(sequelize, Sequelize);
+db.partSupplies				= require('../models/subjefature/model.aphsupplies')(sequelize, Sequelize);
 
 
 // ASOCIACION DE MODELOS
@@ -154,7 +158,8 @@ db.entities.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_representante_i
 
 db.persons.hasMany(db.academicTraining, {as: 'training', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
-// TTHH - GENERAL
+
+// SUBJEFATURA - GENERAL
 db.wineries.belongsTo(db.stations, {as: 'station', foreignKey: 'fk_estacion_id', targetKey: 'estacion_id'});
 // TTHH - DEPARTAMENTO MEDICO
 db.inventoryMedicines.belongsTo(db.medicines, {as: 'medicine', foreignKey: 'fk_medicamento_id', targetKey: 'medicamento_id'});
@@ -167,11 +172,6 @@ db.biometricMarkings.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_biometric
 db.biometricMarkings.belongsTo(db.stations, {as: 'station', foreignKey: 'fk_estacion_id', targetKey: 'estacion_id'});
 db.biometricMarkings.belongsTo(db.workdays, {as: 'workday', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
 db.biometricMarkings.belongsTo(db.biometricPeriods, {as: 'period', foreignKey: 'fk_periodo_id', targetKey: 'periodo_id'});
-// TTHH - APH
-db.aphSupplycontrol.belongsTo(db.wineries, {as: 'cellar', foreignKey: 'fk_bodega_id', targetKey: 'bodega_id'});
-db.aphSupplyMovements.belongsTo(db.aphSupplies, {as: 'supply', foreignKey: 'fk_insumo_id', targetKey: 'insumo_id'});
-db.aphSupplyMovements.belongsTo(db.aphSupplycontrol, {as: 'control', foreignKey: 'fk_inventario_id', targetKey: 'inventario_id'});
-db.aphSupplyMovements.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
 
 // CONTROLLER - PERMISOS
 db.taxes.belongsTo(db.activities, {as: 'activities', foreignKey: 'fk_actividad_id', targetKey: 'actividad_id'});
@@ -235,6 +235,18 @@ db.financialProjects.belongsTo(db.financialSubprograms, {as: 'subprogram', forei
 db.financialActivities.belongsTo(db.financialProjects, {as: 'project', foreignKey: 'fk_proyecto_id', targetKey: 'proyecto_id'});
 db.financialentities.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
 db.financialtypedocuments.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+
+// SUBJEFATURA - APH
+db.aphSupplies.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+db.aphSupplycontrol.belongsTo(db.wineries, {as: 'cellar', foreignKey: 'fk_bodega_id', targetKey: 'bodega_id'});
+db.aphSupplyMovements.belongsTo(db.aphSupplies, {as: 'supply', foreignKey: 'fk_insumo_id', targetKey: 'insumo_id'});
+db.aphSupplyMovements.belongsTo(db.aphSupplycontrol, {as: 'control', foreignKey: 'fk_inventario_id', targetKey: 'inventario_id'});
+db.aphSupplyMovements.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+// SUBJEFATURA - PARTES
+db.attended.belongsTo(db.parts, {as: 'part', foreignKey: 'fk_parte_id', targetKey: 'parte_id'});
+db.partSupplies.belongsTo(db.parts, {as: 'part', foreignKey: 'fk_parte_id', targetKey: 'parte_id'});
+db.partSupplies.belongsTo(db.aphSupplies, {as: 'supply', foreignKey: 'fk_insumo_id', targetKey: 'insumo_id'});
+db.partSupplies.belongsTo(db.wineries, {as: 'cellar', foreignKey: 'fk_bodega_id', targetKey: 'bodega_id'});
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;

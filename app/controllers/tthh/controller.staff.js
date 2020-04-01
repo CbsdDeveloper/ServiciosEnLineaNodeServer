@@ -4,6 +4,8 @@ const db = require('../../models');
 const staffModel = db.staff;
 const workdayModel = db.workdays;
 
+const user = db.users;
+
 module.exports = {
 
     /*

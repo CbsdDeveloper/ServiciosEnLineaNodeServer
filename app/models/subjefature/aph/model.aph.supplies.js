@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
 		}, // text default 'ACTIVO'::text, -- REGISTRO, MODIFICACIÓN
 		
 		insumo_codigo: { 
-			type: DataTypes.STRING
+			type: DataTypes.STRING,
+			unique: true
 		}, // text not null,
 	
 		insumo_presentacion: { 
@@ -32,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
 		} // text -- 
 		
 	}, {
-		schema: 'tthh',
+		schema: 'subjefatura',
 		underscored: true,
 		timestamps: false,
 		freezeTableName: true

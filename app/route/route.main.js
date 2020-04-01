@@ -36,31 +36,32 @@ module.exports = function(app) {
         brigadists:                 require('../controllers/prevention/controller.brigadists')
     };
     const subjefatureCtrl = {
-        
+        attended:                   require('../controllers/subjefature/controller.attended'),
+        partSupplies:               require('../controllers/subjefature/controller.aphsupplies'),
+        aphSupplies:                require('../controllers/subjefature/aph/controller.aph.supplies'),
+        aphSupplycontrol:           require('../controllers/subjefature/aph/controller.aph.supplycontrol'),
+        aphSupplyMovements:         require('../controllers/subjefature/aph/controller.aph.supplycontrolmovements')
     };
     const tthhCtrl = {
-        workdays:           require('../controllers/tthh/controller.workdays'),
-        leaderships:        require('../controllers/tthh/controller.leaderships'),
-        jobs:               require('../controllers/tthh/controller.jobs'),
-        staff:              require('../controllers/tthh/controller.staff'),
-        arrears:            require('../controllers/tthh/controller.arrears'),
-        biometric:          require('../controllers/tthh/controller.biometric'),
-        biometricPeriods:   require('../controllers/tthh/controller.biometricPeriods'),
-        biometricMarkings:  require('../controllers/tthh/controller.biometricMarkings'),
-        ranches:            require('../controllers/tthh/controller.ranches'),
-        typeadvances:       require('../controllers/tthh/controller.typeadvances'),
-        typecontracts:      require('../controllers/tthh/controller.typecontracts'),
-        stations:           require('../controllers/tthh/controller.stations'),
-        academic:           require('../controllers/tthh/controller.academicTraining'),
-        medicines:          require('../controllers/tthh/controller.medicines'),
+        wineries:                   require('../controllers/tthh/controller.wineries'),
+        workdays:                   require('../controllers/tthh/controller.workdays'),
+        leaderships:                require('../controllers/tthh/controller.leaderships'),
+        jobs:                       require('../controllers/tthh/controller.jobs'),
+        staff:                      require('../controllers/tthh/controller.staff'),
+        arrears:                    require('../controllers/tthh/controller.arrears'),
+        biometric:                  require('../controllers/tthh/controller.biometric'),
+        biometricPeriods:           require('../controllers/tthh/controller.biometricPeriods'),
+        biometricMarkings:          require('../controllers/tthh/controller.biometricMarkings'),
+        ranches:                    require('../controllers/tthh/controller.ranches'),
+        typeadvances:               require('../controllers/tthh/controller.typeadvances'),
+        typecontracts:              require('../controllers/tthh/controller.typecontracts'),
+        stations:                   require('../controllers/tthh/controller.stations'),
+        academic:                   require('../controllers/tthh/controller.academicTraining'),
+        medicines:                  require('../controllers/tthh/controller.medicines'),
         psychosocialforms:          require('../controllers/tthh/controller.psychosocial.forms'),
         psychosocialsections:       require('../controllers/tthh/controller.psychosocial.sections'),
         psychosocialevaluations:    require('../controllers/tthh/controller.psychosocial.evaluations'),
-        psychosocialtest:           require('../controllers/tthh/controller.psychosocial.test'),
-        aphSupplies:            require('../controllers/tthh/controller.aph.supplies'),
-        aphSupplycontrol:       require('../controllers/tthh/controller.aph.supplycontrol'),
-        aphSupplyMovements:     require('../controllers/tthh/controller.aph.supplycontrolmovements'),
-        wineries:               require('../controllers/tthh/controller.wineries')
+        psychosocialtest:           require('../controllers/tthh/controller.psychosocial.test')
     };
     const financialCtrl = {
         contractingprocedures:      require('../controllers/financial/controller.contractingprocedures'),
@@ -127,6 +128,18 @@ module.exports = function(app) {
     app.post('/api/prevention/brigades/localId', preventionCtrl.brigades.findByLocal);
     app.post('/api/prevention/brigadists', preventionCtrl.brigadists.insertBrigadists);
     app.post('/api/prevention/brigadists/brigadeId', preventionCtrl.brigadists.findByBrigade);
+    // SUBJEFATURA
+    app.get('/api/subjefature/parts/attended/partId', subjefatureCtrl.attended.attendedByPrtId);
+    app.post('/api/subjefature/parts/attended/partId/new', subjefatureCtrl.attended.newAttendedByPrtId);
+    app.delete('/api/subjefature/parts/attended/partId/remove', subjefatureCtrl.attended.removeAttendedByPrtId);
+    app.get('/api/subjefature/parts/supplies/partId', subjefatureCtrl.partSupplies.suppliesByPrtId);
+    app.post('/api/subjefature/parts/supplies/partId/new', subjefatureCtrl.partSupplies.newSupplyByPrtId);
+    app.delete('/api/subjefature/parts/supplies/partId/remove', subjefatureCtrl.partSupplies.removeSupplyByPrtId);
+    app.post('/api/subjefature/aph/suppliest', subjefatureCtrl.aphSupplies.newEntity);
+    app.put('/api/subjefature/aph/suppliest', subjefatureCtrl.aphSupplies.updateEntity);
+    // APH
+    app.post('/api/subjefature/aph/suppliesinventory/movements/list', subjefatureCtrl.aphSupplyMovements.suppliesByInventoryId);
+    app.post('/api/subjefature/aph/supplies/inventory/single', subjefatureCtrl.aphSupplyMovements.insertInventory);
     // PERMISOS
     app.get('/api/permits/commercialActivities', permitsCtrl.activities.findCommercialActivities);
     app.get('/api/permits/entities/:entityRuc', permitsCtrl.entities.findByEntity);
@@ -142,6 +155,7 @@ module.exports = function(app) {
     app.delete('/api/permits/employees/:employeeId', permitsCtrl.employees.deleteEntity);
     app.delete('/api/permits/employees/localId/all/:localId', permitsCtrl.employees.deleteByLocal);
     // TTHH
+    app.get('/api/tthh/wineries', tthhCtrl.wineries.findAll);
     app.post('/api/atrasos', tthhCtrl.arrears.insertEntity);
     app.get('/api/tthh/typeadvances/list', tthhCtrl.typeadvances.listEntity);
     app.put('/api/tthh/typeadvances', tthhCtrl.typeadvances.updateEntity);
@@ -157,16 +171,12 @@ module.exports = function(app) {
     app.get('/api/tthh/jobs', tthhCtrl.jobs.findAll);
     app.get('/api/tthh/jobs/leaderships', tthhCtrl.jobs.findAllStaffByLeadership);
     app.get('/api/tthh/stations', tthhCtrl.stations.findAll);
-    app.get('/api/tthh/wineries', tthhCtrl.wineries.findAll);
     app.get('/api/tthh/stations/:id', tthhCtrl.stations.findById);
         // DEP. MEDICO
     app.get('/api/tthh/pharmacy/supplies', tthhCtrl.medicines.findAll);
     app.get('/api/tthh/pharmacy/supplies/inventory', tthhCtrl.medicines.findInventory);
     app.post('/api/tthh/pharmacy/supplies/inventory', tthhCtrl.medicines.insertInventory);
     app.get('/api/tthh/pharmacy/supplies/stock', tthhCtrl.medicines.findStock);
-        // APH
-    app.post('/api/tthh/aph/suppliesinventory/movements/list', tthhCtrl.aphSupplyMovements.suppliesByInventoryId);
-    app.post('/api/tthh/aph/supplies/inventory/single', tthhCtrl.aphSupplyMovements.insertInventory);
         // RIESGO PSICOSOCIAL
     app.get('/api/tthh/sos/psychosocial/forms/list', tthhCtrl.psychosocialforms.findAll);
     app.get('/api/tthh/sos/psychosocial/forms/list/active', tthhCtrl.psychosocialforms.findAllActive);
@@ -197,6 +207,7 @@ module.exports = function(app) {
     // PERMISOS
     app.get('/api/paginate/permits/entities', permitsCtrl.entities.paginationEntity);
     // TALENTO HUMANO
+    app.get('/api/paginate/tthh/institution/wineries/list', tthhCtrl.wineries.paginationEntity);
     app.get('/api/paginate/tthh/workdays', tthhCtrl.workdays.paginationEntity);
     app.get('/api/paginate/tthh/typeadvances', tthhCtrl.typeadvances.paginationEntity);
     app.get('/api/paginate/tthh/typecontracts', tthhCtrl.typecontracts.paginationEntity);
@@ -204,11 +215,12 @@ module.exports = function(app) {
     app.get('/api/paginate/tthh/biometricperiods', tthhCtrl.biometricPeriods.paginationEntity);
     app.get('/api/paginate/tthh/biometricmarkings', tthhCtrl.biometricMarkings.paginationEntity);
     app.get('/api/paginate/tthh/ranches', tthhCtrl.ranches.paginationEntity);
-    app.get('/api/paginate/tthh/aph/supplies/list', tthhCtrl.aphSupplies.paginationEntity);
-    app.get('/api/paginate/tthh/aph/supplies/all/stock/list', tthhCtrl.aphSupplies.paginationStockSupplies);
-    app.get('/api/paginate/tthh/aph/supplies/stock/wineries/list', tthhCtrl.aphSupplies.paginationSuppliesStockStations);
-    app.get('/api/paginate/tthh/aph/control/supplies', tthhCtrl.aphSupplycontrol.paginationEntity);
-    app.get('/api/paginate/tthh/institution/wineries/list', tthhCtrl.wineries.paginationEntity);
+    // SUBJEFATURA
+    app.get('/api/paginate/subjefature/aph/supplies/list', subjefatureCtrl.aphSupplies.paginationEntity);
+    app.get('/api/paginate/subjefature/aph/supplies/all/stock/list', subjefatureCtrl.aphSupplies.paginationStockSupplies);
+    app.get('/api/paginate/subjefature/aph/supplies/stock/wineries/list', subjefatureCtrl.aphSupplies.paginationSuppliesStockWineries);
+    app.get('/api/paginate/subjefature/aph/supplies/stock/stations/list', subjefatureCtrl.aphSupplies.paginationSuppliesStockStations);
+    app.get('/api/paginate/subjefature/aph/control/supplies', subjefatureCtrl.aphSupplycontrol.paginationEntity);
     // FINANCIERO
     app.get('/api/paginate/financial/budgetclassifier', financialCtrl.budgetclassifier.paginationEntity);
     app.get('/api/paginate/financial/retentionclassifier', financialCtrl.retentionclassifier.paginationEntity);

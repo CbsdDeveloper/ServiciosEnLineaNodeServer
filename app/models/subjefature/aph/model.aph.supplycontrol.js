@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
 		} // text not null, -- 
 		
 	}, {
-		schema: 'tthh',
+		schema: 'subjefatura',
 		underscored: true,
 		timestamps: false,
 		freezeTableName: true

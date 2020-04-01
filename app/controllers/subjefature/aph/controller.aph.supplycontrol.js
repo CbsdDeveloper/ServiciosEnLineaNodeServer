@@ -1,7 +1,7 @@
 'use strict';
-const db = require('../../models');
+const db = require('../../../models');
 const seq = db.sequelize;
-const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
+const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
 const model = db.aphSupplycontrol;
 const cellar = db.wineries;
