@@ -1,5 +1,5 @@
 'use strict';
-const db = require('../../models');
+const db = require('../../../models');
 const testModel = db.psychosocialTest;
 const Answer = db.psychosocialTestAnswers;
 

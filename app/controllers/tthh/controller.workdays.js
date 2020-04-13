@@ -44,12 +44,21 @@ module.exports = {
 			// ACTUALIZAR DATOS DE MODELO
 			req.body.jornada_registro = db.getCurrentDate();
 			// OBTENER REGISTRO
-			let workday = await workdaysModel.findByPk(req.body.jornada_id);
+			let workday = await workdaysModel.findByPk(req.body.jornada_id), schedule;
 			// ACTUALIZAR MODELO
-			workday.update(req.body);
+			await workday.update(req.body);
 
-			// ACTUALIZACIÓN DE REGISTO DE MARCACIONES
-			
+			// REGISTRO DE HORARIOS
+			req.body.schedules.forEach(async e => {
+				
+				// BUSCAR HORARIO
+				schedule = await scheduleworkdays.findByPk(e.horario_id);
+				// CAMBIAR MODELO
+				e.horario_dias_semana = JSON.stringify(e.horario_dias_semana);
+				// ACTUALIZAR REGISTRO
+				await schedule.update(e);
+
+			});
 			
 			// RETORNAR CONSULTA
 			db.setEmpty(res,'DATOS ACTUALIZADOS CORRECTAMENTE',true,workday);

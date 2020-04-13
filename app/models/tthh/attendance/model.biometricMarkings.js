@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-	const Model = sequelize.define('tb_biomertico_marcaciones', {
+	const Model = sequelize.define('tb_biometrico_marcaciones', {
 		marcacion_id: { 
 			type: DataTypes.INTEGER,
 			unique: true,

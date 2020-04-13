@@ -1,7 +1,7 @@
 'use strict';
-const db = require('../../models');
+const db = require('../../../models');
 const seq = db.sequelize;
-const { calculateLimitAndOffset, paginate, calculateLimitAndOffsetArray } = require('../../config/pagination');
+const { calculateLimitAndOffset, paginate, calculateLimitAndOffsetArray } = require('../../../config/pagination');
 
 const staff = db.staff;
 const persons = db.persons;

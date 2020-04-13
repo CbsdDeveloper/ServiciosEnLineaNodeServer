@@ -46,7 +46,7 @@ module.exports = {
 	},
 
 	/**
-	 * @function newAttendedByPrtId
+	 * @function removeAttendedByPrtId
 	*/
 	async removeAttendedByPrtId(req, res, next){
 

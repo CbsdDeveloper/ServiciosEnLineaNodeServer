@@ -1,9 +1,10 @@
 'use strict';
-const db = require('../../models');
+const db = require('../../../models');
 const seq = db.sequelize;
-const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
+const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
 const periodModel = db.biometricPeriods;
+const markings = db.biometricMarkings;
 
 module.exports = {
 
@@ -17,22 +18,43 @@ module.exports = {
 		try {
 			const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
-			const where = { 
-				periodo_nombre: seq.where(seq.fn('LOWER', seq.col('periodo_nombre')), 'LIKE', '%' + filter + '%') 
-			};
-			const { rows, count } = await periodModel.findAndCountAll(
-				{
-					offset: offset,
-					limit: limit,
-					where: (filter != '')?where:{},
-					order: [ sort ]
-				});
-			const meta = paginate(currentPage, count, rows, pageLimit);
-			db.setDataTable(res,{ rows, meta },'REGISTRO DE PERIODOS');
-		} catch (error) {
-			db.setEmpty(res,'REGISTRO DE PERIODOS',false,error);
-		}
+			const where = { periodo_nombre: seq.where(seq.fn('LOWER', seq.col('periodo_nombre')), 'LIKE', '%' + filter + '%') };
+			
+			// STRING DE CONSULTA 
+			let count = periodModel.count({ where: where });
+			let rows = await periodModel.findAll({
+				offset: offset,
+				limit: limit,
+				where: where,
+				include: [
+					{ 
+						model: markings, as: 'markings',
+						where: { marcacion_estado: [ 'ERROR' ] }
+					}
+				]
+			});
 
+			const meta = paginate(currentPage, count.length, rows, pageLimit);
+
+			db.setDataTable(res,{ rows, meta },'REGISTRO DE PERIODOS');
+
+		} catch (error) { db.setEmpty(res,'REGISTRO DE PERIODOS',false,error); }
+
+	},
+
+	/*
+	 * INGRESO DE REGISTROS
+	 */
+    async findById(req, res){
+
+        // ACTUALIZAR DATOS DE BIOMETRICO
+        let period = await periodModel.findOne({
+			where: { periodo_id: req.body.id }
+		});
+
+        // RETORNAR CONSULTA
+        db.setEmpty(res,'REGISTRO BIOMETRICO - PERIODO',true,period);
+               
 	},
 
 	/*
@@ -46,8 +68,9 @@ module.exports = {
         // RETORNAR CONSULTA
         db.setEmpty(res,'DATOS GUARDADOS CORRECTAMENTE',true,period);
                
-    },
-
+	},
+	
+	
 	/*
 	 * ACTUALIZACIÓN DE MARCACIONES
 	 */

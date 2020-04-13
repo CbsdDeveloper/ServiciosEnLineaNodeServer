@@ -39,6 +39,16 @@ db.setEmpty=function(res,serviceName,status=true,data={}){
 		data: data
 	});
 };
+db.parseJSON=function(msg,status=false,data={}){
+	return {
+		estado: status,
+		mensaje: msg,
+		data: data
+	};
+};
+db.sendJSON=function(res, json){
+	res.status(200).json( json );
+};
 db.endConection=function(res,next,serviceName='ServiceName',status=false,code=200){
 	res.status(code).json({
 		estado: status,
@@ -91,23 +101,26 @@ db.scheduleworkdays   = require('../models/tthh/model.scheduleworkdays')(sequeli
 db.leaderships        = require('../models/tthh/model.leaderships')(sequelize, Sequelize);
 db.jobs               = require('../models/tthh/model.jobs')(sequelize, Sequelize);
 db.staff			  = require('../models/tthh/model.staff')(sequelize, Sequelize);
-db.arrears            = require('../models/tthh/model.arrears')(sequelize, Sequelize);
-db.biometricPeriods	  = require('../models/tthh/model.biometricPeriods')(sequelize, Sequelize);
-db.biometricMarkings  = require('../models/tthh/model.biometricMarkings')(sequelize, Sequelize);
+db.biometricPeriods	  = require('./tthh/attendance/model.biometricPeriods')(sequelize, Sequelize);
+db.biometricMarkings  = require('./tthh/attendance/model.biometricMarkings')(sequelize, Sequelize);
 db.typeAdvances       = require('../models/tthh/model.typeadvances')(sequelize, Sequelize);
 db.typeContracts      = require('../models/tthh/model.typecontracts')(sequelize, Sequelize);
 db.wineries			  = require('./tthh/model.wineries')(sequelize, Sequelize);
+	// CONTROL DE ASISTENCIA
+db.absences			  = require('./tthh/attendance/model.absences')(sequelize, Sequelize);
+db.absencesControl	  = require('./tthh/attendance/model.absences.control')(sequelize, Sequelize);
 	// DEP. MEDICO
-db.medicines          = require('../models/tthh/model.medicines')(sequelize, Sequelize);
-db.inventoryMedicines = require('../models/tthh/model.inventory')(sequelize, Sequelize);
+db.medicines          				= require('./tthh/md/model.medicines')(sequelize, Sequelize);
+db.inventoryMedicines 				= require('./tthh/md/model.inventory')(sequelize, Sequelize);
+db.medicalrestRecipients 			= require('./tthh/md/model.medicalrest.recipients')(sequelize, Sequelize);
 	// SOS
-db.psychosocialforms				= require('../models/tthh/model.psychosocial.forms')(sequelize, Sequelize);
-db.psychosocialformsSections		= require('../models/tthh/model.psychosocial.sections')(sequelize, Sequelize);
-db.psychosocialformsQuestions		= require('../models/tthh/model.psychosocial.forms.questions')(sequelize, Sequelize);
-db.psychosocialEvaluations			= require('../models/tthh/model.psychosocial.evaluation')(sequelize, Sequelize);
-db.psychosocialEvaluationsQuestions	= require('../models/tthh/model.psychosocial.evaluation.questions')(sequelize, Sequelize);
-db.psychosocialTest					= require('../models/tthh/model.psychosocial.test')(sequelize, Sequelize);
-db.psychosocialTestAnswers			= require('../models/tthh/model.psychosocial.test.answers')(sequelize, Sequelize);
+db.psychosocialforms				= require('./tthh/sos/model.psychosocial.forms')(sequelize, Sequelize);
+db.psychosocialformsSections		= require('./tthh/sos/model.psychosocial.sections')(sequelize, Sequelize);
+db.psychosocialformsQuestions		= require('./tthh/sos/model.psychosocial.forms.questions')(sequelize, Sequelize);
+db.psychosocialEvaluations			= require('./tthh/sos/model.psychosocial.evaluation')(sequelize, Sequelize);
+db.psychosocialEvaluationsQuestions	= require('./tthh/sos/model.psychosocial.evaluation.questions')(sequelize, Sequelize);
+db.psychosocialTest					= require('./tthh/sos/model.psychosocial.test')(sequelize, Sequelize);
+db.psychosocialTestAnswers			= require('./tthh/sos/model.psychosocial.test.answers')(sequelize, Sequelize);
 // PREVENCION
 db.plans              			= require('../models/prevention/model.plans')(sequelize, Sequelize);
 db.brigades           			= require('../models/prevention/model.brigades')(sequelize, Sequelize);
@@ -162,16 +175,27 @@ db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona
 // SUBJEFATURA - GENERAL
 db.wineries.belongsTo(db.stations, {as: 'station', foreignKey: 'fk_estacion_id', targetKey: 'estacion_id'});
 // TTHH - DEPARTAMENTO MEDICO
+db.medicalrestRecipients.belongsTo(db.staff, {as: 'responsible', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+db.medicalrestRecipients.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_destinatario_id', targetKey: 'personal_id'});
 db.inventoryMedicines.belongsTo(db.medicines, {as: 'medicine', foreignKey: 'fk_medicamento_id', targetKey: 'medicamento_id'});
 db.workdays.hasMany(db.scheduleworkdays, {as: 'schedules', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
 db.scheduleworkdays.belongsTo(db.workdays, {as: 'workday', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
 db.staff.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 db.staff.belongsTo(db.workdays, {as: 'workday', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
 db.typeContracts.belongsTo(db.typeAdvances, {as: 'advance', foreignKey: 'fk_tipoanticipo_id', targetKey: 'tanticipo_id'});
+	// CONTROL DE ASISTENCIA
+db.biometricPeriods.hasMany(db.biometricMarkings, {as: 'markings', foreignKey: 'fk_periodo_id', targetKey: 'periodo_id'});
+db.biometricMarkings.belongsTo(db.biometricPeriods, {as: 'period', foreignKey: 'fk_periodo_id', targetKey: 'periodo_id'});
 db.biometricMarkings.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_biometrico_id', targetKey: 'biometrico_id'});
 db.biometricMarkings.belongsTo(db.stations, {as: 'station', foreignKey: 'fk_estacion_id', targetKey: 'estacion_id'});
 db.biometricMarkings.belongsTo(db.workdays, {as: 'workday', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
-db.biometricMarkings.belongsTo(db.biometricPeriods, {as: 'period', foreignKey: 'fk_periodo_id', targetKey: 'periodo_id'});
+db.absences.belongsTo(db.staff, {as: 'responsible', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+db.absences.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_faltante_id', targetKey: 'personal_id'});
+db.absences.belongsTo(db.staff, {as: 'register', foreignKey: 'fk_registra_id', targetKey: 'personal_id'});
+db.absences.belongsTo(db.staff, {as: 'justifie', foreignKey: 'fk_justifica_id', targetKey: 'personal_id'});
+db.absences.hasMany(db.absencesControl, {as: 'control', foreignKey: 'fk_inasistencia_id', targetKey: 'inasistencia_id'});
+db.absencesControl.belongsTo(db.absences, {as: 'absence', foreignKey: 'fk_inasistencia_id', targetKey: 'inasistencia_id'});
+db.absencesControl.belongsTo(db.staff, {as: 'responsible', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
 
 // CONTROLLER - PERMISOS
 db.taxes.belongsTo(db.activities, {as: 'activities', foreignKey: 'fk_actividad_id', targetKey: 'actividad_id'});

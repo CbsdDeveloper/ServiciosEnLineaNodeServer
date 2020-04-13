@@ -1,5 +1,5 @@
 'use strict';
-const db = require('../../models');
+const db = require('../../../models');
 const medicineModel = db.medicines;
 const inventoryModel = db.inventoryMedicines;
 const sql = db.sequelize;
