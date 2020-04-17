@@ -25,11 +25,14 @@ module.exports = {
 			let rows = await periodModel.findAll({
 				offset: offset,
 				limit: limit,
+				order: [ sort ],
 				where: where,
 				include: [
 					{ 
 						model: markings, as: 'markings',
-						where: { marcacion_estado: [ 'ERROR' ] }
+						where: { marcacion_estado: [ 'ERROR' ] },
+						attributes: [ 'marcacion_id' ],
+						required: false
 					}
 				]
 			});

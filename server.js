@@ -1,11 +1,9 @@
 // DECLARACIÓN DE PROYECTOS
-// var compression = require('compression');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-// app.use(compression());
 
 // Add headers
 app.use(function (req, res, next) {
@@ -26,12 +24,12 @@ app.use(function (req, res, next) {
 require('./app/route/route.main.js')(app);
  
 // INICIALIZACIÓN DE SERVIDOR
-var server = app.listen(8081, function () {
+var server = app.listen((process.env.PORT || 81), function () {
 
   var host = server.address().address;
   var port = server.address().port;
  
-  console.log("App listening at http://%s:%s", host, port)
+  console.log("\n App listening at http://%s:%s", host, port);
   
   // pm2 start server --env production
 });

@@ -1,7 +1,12 @@
 'use strict';
 
+const moment = require('moment');
+const DATE_FORMAT = 'YYYY-MM-DD';
+const DATETIME_FORMAT = 'YYYY-MM-DD hh:mm';
+const TIMESTAMP_FORMAT = 'YYYY-MM-DD hh:mm:ss';
+
 const Sequelize = require('sequelize');
-const env = process.env.NODE_ENV || 'production';
+const env = process.env.NODE_ENV || 'development';
 // const env = 'production';
 const config = require(`${__dirname}/../config/config.json`)[env];
 const db = {};
@@ -11,6 +16,8 @@ let sequelize;
 if (config.use_env_variable) sequelize = new Sequelize(process.env[config.use_env_variable], config);
 else sequelize = new Sequelize(config.database, config.username, config.password, config.config);
 
+//require('pg').types.setTypeParser(1114, str => str);
+require('pg').types.setTypeParser(1114, str => moment(str).format('YYYY-MM-DD HH:mm:ss'));
 
 db.getCurrentDate=function(){
 	return new Date();
