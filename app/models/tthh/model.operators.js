@@ -1,33 +1,31 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-	const Model = sequelize.define('tb_jornadas_trabajo', {
-		jornada_id: { 
+	const Model = sequelize.define('tb_conductores', {
+		conductor_id: { 
 			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
-		}, 
-		
-		jornada_registro: {
+		},
+	
+		conductor_registro: { 
 			type: DataTypes.DATE,
 			defaultValue: DataTypes.NOW 
 		}, // timestamp without time zone default current_timestamp(0), -- FECHA DE MOVIMIENTO
-		jornada_estado: { 
-			type: DataTypes.STRING,
-			defaultValue: 'ACTIVO' 
+		conductor_estado: { 
+			type: DataTypes.STRING
 		}, // text default 'ACTIVO'::text, -- ESTADOS DE REGISTROS
 		
-		jornada_nombre: { 
-			type: DataTypes.STRING
-		}, // text not null, -- NOMBRE DE JORNADAS
-
-		jornada_diasminimo: { 
-			type: DataTypes.INTEGER
-		}, //
-		jornada_diasmaximo: { 
-			type: DataTypes.INTEGER
-		}, //
-
+		conductor_licencia_emision: { 
+			type: DataTypes.DATE
+		}, // date, -- FECHA DE INGRESO A LA INSTITUCION
+		conductor_licencia_validez: { 
+			type: DataTypes.DATE
+		}, // date, -- FECHA DE SALIDA
+		conductor_pdf: { 
+			type: DataTypes.DATE
+		} // date, -- FECHA DE ACTUALIZACIÓN
+		
 	}, {
 		schema: 'tthh',
 		underscored: true,

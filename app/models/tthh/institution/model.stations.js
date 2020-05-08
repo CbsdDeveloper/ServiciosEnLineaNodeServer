@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
 		estacion_nombre: { type: DataTypes.STRING },
 		estacion_nombre_alterno: { type: DataTypes.STRING },
 		
+		estacion_parroquia: { type: DataTypes.STRING },
 		estacion_principal: { type: DataTypes.STRING },
 		estacion_secudaria: { type: DataTypes.STRING },
 		estacion_longitud: { type: DataTypes.STRING },

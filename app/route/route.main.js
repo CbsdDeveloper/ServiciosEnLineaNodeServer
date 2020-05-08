@@ -33,7 +33,8 @@ module.exports = function(app) {
         selfProtectionMaintenance:  require('../controllers/prevention/controller.selfProtection.maintenance'),
         selfProtectionMeseri:       require('../controllers/prevention/controller.selfProtection.meseri'),
         brigades:                   require('../controllers/prevention/controller.brigades'),
-        brigadists:                 require('../controllers/prevention/controller.brigadists')
+        brigadists:                 require('../controllers/prevention/controller.brigadists'),
+        srcBiosecurity:             require('../controllers/prevention/biosecurity/controller.covid')
     };
     const subjefatureCtrl = {
         attended:                   require('../controllers/subjefature/controller.attended'),
@@ -43,11 +44,13 @@ module.exports = function(app) {
         aphSupplyMovements:         require('../controllers/subjefature/aph/controller.aph.supplycontrolmovements')
     };
     const tthhCtrl = {
-        wineries:                   require('../controllers/tthh/controller.wineries'),
+        wineries:                   require('../controllers/tthh/institution/controller.wineries'),
         workdays:                   require('../controllers/tthh/controller.workdays'),
-        leaderships:                require('../controllers/tthh/controller.leaderships'),
-        jobs:                       require('../controllers/tthh/controller.jobs'),
+        leaderships:                require('../controllers/tthh/institution/controller.leaderships'),
+        jobs:                       require('../controllers/tthh/institution/controller.jobs'),
         staff:                      require('../controllers/tthh/controller.staff'),
+        ppersonal:                  require('../controllers/tthh/controller.ppersonal'),
+        operators:                  require('../controllers/tthh/controller.operators'),
         biometric:                  require('../controllers/tthh/attendance/controller.biometric'),
         biometricPeriods:           require('../controllers/tthh/attendance/controller.biometricPeriods'),
         biometricMarkings:          require('../controllers/tthh/attendance/controller.biometricMarkings'),
@@ -56,7 +59,7 @@ module.exports = function(app) {
         absences:                   require('../controllers/tthh/attendance/controller.absences'),
         typeadvances:               require('../controllers/tthh/controller.typeadvances'),
         typecontracts:              require('../controllers/tthh/controller.typecontracts'),
-        stations:                   require('../controllers/tthh/controller.stations'),
+        stations:                   require('../controllers/tthh/institution/controller.stations'),
         academic:                   require('../controllers/tthh/controller.academicTraining'),
         medicines:                  require('../controllers/tthh/md/controller.medicines'),
         medicalrestRecipient:       require('../controllers/tthh/md/controller.medicalrest.recipients'),
@@ -76,6 +79,11 @@ module.exports = function(app) {
         activities:                 require('../controllers/financial/controller.activities'),
         entities:                   require('../controllers/financial/controller.entities'),
         typedocuments:              require('../controllers/financial/controller.typedocuments')
+    };
+    const administrativeCtrl = {
+        shelvings:              require('../controllers/administrative/archive/controller.shelvings'),
+        boxes:                  require('../controllers/administrative/archive/controller.boxes'),
+        folders:                require('../controllers/administrative/archive/controller.folders')
     };
     const planingCtrl = {
         programspoa:        require('../controllers/planing/controller.programspoa'),
@@ -114,6 +122,7 @@ module.exports = function(app) {
     app.get('/api/admin/profiles/:id', adminCtrl.profiles.findById);
     app.get('/api/admin/users', adminCtrl.users.findAll);
     // PREVENCION
+        // PLAN DE AUTOPROTECCION
     app.post('/api/prevention/plans/localId', preventionCtrl.plans.findByLocalId);
     app.post('/api/prevention/plans/planById', preventionCtrl.plans.findById);
     app.put('/api/prevention/plans/selfproteccion', preventionCtrl.plans.updateEntity);
@@ -130,6 +139,9 @@ module.exports = function(app) {
     app.post('/api/prevention/brigades/localId', preventionCtrl.brigades.findByLocal);
     app.post('/api/prevention/brigadists', preventionCtrl.brigadists.insertBrigadists);
     app.post('/api/prevention/brigadists/brigadeId', preventionCtrl.brigadists.findByBrigade);
+        // BIOSEGURIDAD - COVID19
+    app.post('/api/prevention/biosecurity/covid19/forms', preventionCtrl.srcBiosecurity.findResourcesByBiosecurity);
+    app.post('/api/prevention/biosecurity/covid19/register', preventionCtrl.srcBiosecurity.insertEntity);
     // SUBJEFATURA
     app.get('/api/subjefature/parts/attended/partId', subjefatureCtrl.attended.attendedByPrtId);
     app.post('/api/subjefature/parts/attended/partId/new', subjefatureCtrl.attended.newAttendedByPrtId);
@@ -164,6 +176,7 @@ module.exports = function(app) {
     app.get('/api/tthh/workdays', tthhCtrl.workdays.findAll);
     app.post('/api/tthh/workdays/detail', tthhCtrl.workdays.findByIdDetail);
     app.put('/api/tthh/workdays', tthhCtrl.workdays.updateEntity);
+    app.get('/api/tthh/institution/leaderships', tthhCtrl.leaderships.findAllLeaderships);
     app.get('/api/tthh/leaderships', tthhCtrl.leaderships.findAll);
     app.get('/api/tthh/jobs', tthhCtrl.jobs.findAll);
     app.get('/api/tthh/jobs/leaderships', tthhCtrl.jobs.findAllStaffByLeadership);
@@ -215,7 +228,15 @@ module.exports = function(app) {
     app.get('/api/paginate/admin/reports', adminCtrl.reports.paginationEntity);
     // PERMISOS
     app.get('/api/paginate/permits/entities', permitsCtrl.entities.paginationEntity);
-    // TALENTO HUMANO
+    // DIRECCION ADMINSTRATIVA
+    app.get('/api/paginate/administrative/archive/shelvings', administrativeCtrl.shelvings.paginationEntity);
+    app.get('/api/paginate/administrative/archive/boxes', administrativeCtrl.boxes.paginationEntity);
+    app.get('/api/paginate/administrative/archive/folders', administrativeCtrl.folders.paginationEntity);
+    // DIRECCION DE TALENTO HUMANO
+    app.get('/api/paginate/tthh/institution/stations', tthhCtrl.stations.paginationEntity);
+    app.get('/api/paginate/tthh/institution/leaderships', tthhCtrl.leaderships.paginationEntity);
+    app.get('/api/paginate/tthh/operators/byLeadership', tthhCtrl.operators.paginationByLeadership);
+    app.get('/api/paginate/tthh/staff/byLeadership', tthhCtrl.ppersonal.paginationByLeadership);
     app.get('/api/paginate/tthh/institution/wineries/list', tthhCtrl.wineries.paginationEntity);
     app.get('/api/paginate/tthh/workdays', tthhCtrl.workdays.paginationEntity);
     app.get('/api/paginate/tthh/typeadvances', tthhCtrl.typeadvances.paginationEntity);

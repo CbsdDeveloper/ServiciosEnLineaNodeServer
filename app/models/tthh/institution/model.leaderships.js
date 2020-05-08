@@ -14,12 +14,11 @@ module.exports = (sequelize, DataTypes) => {
 		}, // timestamp without time zone default current_timestamp(0), -- FECHA DE MOVIMIENTO
 		direccion_estado: { 
 			type: DataTypes.STRING,
-			defaultValue: 'ACTIVO' 
+			defaultValue: 'ACTIVO'
 		}, // text default 'ACTIVO'::text, -- ESTADOS DE REGISTROS
 		
 		direccion_codigo: { 
-			type: DataTypes.STRING,
-			defaultValue: 'ACTIVO' 
+			type: DataTypes.STRING
 		}, // text not null, -- SIGLAS DE DIRECCION
 		direccion_nombre: { 
 			type: DataTypes.STRING 
@@ -33,7 +32,13 @@ module.exports = (sequelize, DataTypes) => {
 		}, // date, -- FECHA DE CREACIÓN
 		direccion_baselegal: { 
 			type: DataTypes.STRING
-		} // text -- DOCUMENTO / BASE LEGAL DE MOVIMIENTO
+		}, // text -- DOCUMENTO / BASE LEGAL DE MOVIMIENTO
+		
+		direccion_tipo: { 
+			type: DataTypes.STRING,
+			defaultValue: 'DIRECCION'
+		} // text -- 
+
 	}, {
 		schema: 'tthh',
 		underscored: true,

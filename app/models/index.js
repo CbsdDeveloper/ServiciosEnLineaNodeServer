@@ -12,7 +12,6 @@ const config = require(`${__dirname}/../config/config.json`)[env];
 const db = {};
 
 let sequelize;
-
 if (config.use_env_variable) sequelize = new Sequelize(process.env[config.use_env_variable], config);
 else sequelize = new Sequelize(config.database, config.username, config.password, config.config);
 
@@ -86,6 +85,7 @@ db.cities             = require('../models/resources/model.cities')(sequelize, S
 db.towns              = require('../models/resources/model.towns')(sequelize, Sequelize);
 db.parishes           = require('../models/resources/model.parishes')(sequelize, Sequelize);
 db.persons            = require('../models/resources/model.persons')(sequelize, Sequelize);
+db.driverlicenses     = require('./resources/model.driverlicenses')(sequelize, Sequelize);
 // ADMINISTRACION
 db.labels             = require('../models/admin/model.labels')(sequelize, Sequelize);
 db.parameters         = require('../models/admin/model.parameters')(sequelize, Sequelize);
@@ -93,26 +93,21 @@ db.webmail            = require('../models/admin/model.webmail')(sequelize, Sequ
 db.reports			  = require('../models/admin/model.reports')(sequelize, Sequelize);
 db.profiles           = require('../models/admin/model.profiles')(sequelize, Sequelize);
 db.users              = require('../models/admin/model.users')(sequelize, Sequelize);
-db.stations           = require('../models/tthh/model.stations')(sequelize, Sequelize);
+db.stations           = require('./tthh/institution/model.stations')(sequelize, Sequelize);
 db.academicTraining   = require('../models/tthh/model.academicTraining')(sequelize, Sequelize);
-// PERMISOS
-db.activities         = require('../models/permits/model.activities')(sequelize, Sequelize);
-db.taxes			  = require('../models/permits/model.taxes')(sequelize, Sequelize);
-db.ciiu               = require('../models/permits/model.ciiu')(sequelize, Sequelize);
-db.entities           = require('../models/permits/model.entities')(sequelize, Sequelize);
-db.locals             = require('../models/permits/model.locals')(sequelize, Sequelize);
-db.employees          = require('../models/permits/model.employees')(sequelize, Sequelize);
-// TALENTO HUMANO
+// DIRECCION DE TALENTO HUMANO
 db.workdays           = require('../models/tthh/model.workdays')(sequelize, Sequelize);
 db.scheduleworkdays   = require('../models/tthh/model.scheduleworkdays')(sequelize, Sequelize);
-db.leaderships        = require('../models/tthh/model.leaderships')(sequelize, Sequelize);
-db.jobs               = require('../models/tthh/model.jobs')(sequelize, Sequelize);
+db.leaderships        = require('./tthh/institution/model.leaderships')(sequelize, Sequelize);
+db.jobs               = require('./tthh/institution/model.jobs')(sequelize, Sequelize);
 db.staff			  = require('../models/tthh/model.staff')(sequelize, Sequelize);
+db.ppersonal		  = require('../models/tthh/model.ppersonal')(sequelize, Sequelize);
+db.operators		  = require('../models/tthh/model.operators')(sequelize, Sequelize);
 db.biometricPeriods	  = require('./tthh/attendance/model.biometricPeriods')(sequelize, Sequelize);
 db.biometricMarkings  = require('./tthh/attendance/model.biometricMarkings')(sequelize, Sequelize);
 db.typeAdvances       = require('../models/tthh/model.typeadvances')(sequelize, Sequelize);
 db.typeContracts      = require('../models/tthh/model.typecontracts')(sequelize, Sequelize);
-db.wineries			  = require('./tthh/model.wineries')(sequelize, Sequelize);
+db.wineries			  = require('./tthh/institution/model.wineries')(sequelize, Sequelize);
 	// CONTROL DE ASISTENCIA
 db.absences			  = require('./tthh/attendance/model.absences')(sequelize, Sequelize);
 db.absencesControl	  = require('./tthh/attendance/model.absences.control')(sequelize, Sequelize);
@@ -128,6 +123,14 @@ db.psychosocialEvaluations			= require('./tthh/sos/model.psychosocial.evaluation
 db.psychosocialEvaluationsQuestions	= require('./tthh/sos/model.psychosocial.evaluation.questions')(sequelize, Sequelize);
 db.psychosocialTest					= require('./tthh/sos/model.psychosocial.test')(sequelize, Sequelize);
 db.psychosocialTestAnswers			= require('./tthh/sos/model.psychosocial.test.answers')(sequelize, Sequelize);
+// DIRECCION ADMINISTRATIVA
+	// ARCHIVO
+db.archiveshelving				= require('./administrative/archive/model.shelving')(sequelize, Sequelize);
+db.archiveboxes					= require('./administrative/archive/model.boxes')(sequelize, Sequelize);
+db.archivecategories			= require('./administrative/archive/model.categories')(sequelize, Sequelize);
+db.archiveclassification		= require('./administrative/archive/model.classification')(sequelize, Sequelize);
+db.archivefolder				= require('./administrative/archive/model.folder')(sequelize, Sequelize);
+db.archivedocuments				= require('./administrative/archive/model.documents')(sequelize, Sequelize);
 // PREVENCION
 db.plans              			= require('../models/prevention/model.plans')(sequelize, Sequelize);
 db.brigades           			= require('../models/prevention/model.brigades')(sequelize, Sequelize);
@@ -137,6 +140,8 @@ db.selfProtectionFactors     	= require('../models/prevention/model.selfprotecti
 db.selfProtectionPrevention  	= require('../models/prevention/model.selfprotection.prevention')(sequelize, Sequelize);
 db.selfProtectionMaintenance	= require('../models/prevention/model.selfprotection.maintenances')(sequelize, Sequelize);
 db.selfProtectionMeseri      	= require('../models/prevention/model.selfprotection.meseri')(sequelize, Sequelize);
+db.covid						= require('../models/prevention/biosecurity/model.covid')(sequelize, Sequelize);
+db.covidResources				= require('../models/prevention/biosecurity/model.covid.resources')(sequelize, Sequelize);
 // PLANIFICACION
 db.programspoa				= require('../models/planing/model.programs')(sequelize, Sequelize);
 db.poa						= require('../models/planing/model.poa')(sequelize, Sequelize);
@@ -151,13 +156,20 @@ db.financialProjects		= require('./financial/model.projects')(sequelize, Sequeli
 db.financialActivities		= require('./financial/model.activities')(sequelize, Sequelize);
 db.financialentities		= require('./financial/model.entities')(sequelize, Sequelize);
 db.financialtypedocuments	= require('./financial/model.typedocuments')(sequelize, Sequelize);
-
 db.contractingprocedures	= require('./financial/model.contractingprocedures')(sequelize, Sequelize);
-// SUBJEFATURA - APH
+	// PERMISOS
+db.activities         = require('../models/permits/model.activities')(sequelize, Sequelize);
+db.taxes			  = require('../models/permits/model.taxes')(sequelize, Sequelize);
+db.ciiu               = require('../models/permits/model.ciiu')(sequelize, Sequelize);
+db.entities           = require('../models/permits/model.entities')(sequelize, Sequelize);
+db.locals             = require('../models/permits/model.locals')(sequelize, Sequelize);
+db.employees          = require('../models/permits/model.employees')(sequelize, Sequelize);
+// SUBJEFATURA
+	// UNIDAD ATENCIÓN PREHOSPITALARIA
 db.aphSupplies					= require('./subjefature/aph/model.aph.supplies')(sequelize, Sequelize);
 db.aphSupplycontrol				= require('./subjefature/aph/model.aph.supplycontrol')(sequelize, Sequelize);
 db.aphSupplyMovements			= require('./subjefature/aph/model.aph.supplycontrolmovements')(sequelize, Sequelize);
-// SUBJEFATURA - PARTES
+	// PARTES
 db.parts					= require('../models/subjefature/model.parts')(sequelize, Sequelize);
 db.attended					= require('../models/subjefature/model.attended')(sequelize, Sequelize);
 db.partSupplies				= require('../models/subjefature/model.aphsupplies')(sequelize, Sequelize);
@@ -169,8 +181,6 @@ db.cities.belongsTo(db.states, {foreignKey: 'fk_state_id'});
 db.towns.belongsTo(db.states, {foreignKey: 'fk_state_id'});
 db.parishes.belongsTo(db.towns, {foreignKey: 'fk_town_id'});
 
-db.jobs.belongsTo(db.leaderships, {as: 'leadership', foreignKey: 'fk_direccion_id', targetKey: 'direccion_id'});
-
 db.users.belongsTo(db.profiles, {as: 'profile', foreignKey: 'fk_perfil_id', targetKey: 'perfil_id'});
 db.users.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 
@@ -181,15 +191,29 @@ db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona
 
 // SUBJEFATURA - GENERAL
 db.wineries.belongsTo(db.stations, {as: 'station', foreignKey: 'fk_estacion_id', targetKey: 'estacion_id'});
-// TTHH - DEPARTAMENTO MEDICO
+// DIRECCION DE TALENTO HUMANO
+	// INSTITUCION
+db.stations.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
+db.leaderships.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
+db.leaderships.belongsTo(db.leaderships, {as: 'leadership', foreignKey: 'fk_direccion_id', targetKey: 'direccion_id'});
+db.jobs.belongsTo(db.leaderships, {as: 'leadership', foreignKey: 'fk_direccion_id', targetKey: 'direccion_id'});
+db.jobs.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
+	// PARAMETRICACION
+db.workdays.hasMany(db.scheduleworkdays, {as: 'schedules', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
+db.scheduleworkdays.belongsTo(db.workdays, {as: 'workday', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
+db.typeContracts.belongsTo(db.typeAdvances, {as: 'advance', foreignKey: 'fk_tipoanticipo_id', targetKey: 'tanticipo_id'});
+	// PERSONAL
+db.staff.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+db.staff.belongsTo(db.stations, {as: 'station', foreignKey: 'fk_estacion_id', targetKey: 'estacion_id'});
+db.staff.belongsTo(db.workdays, {as: 'workday', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
+db.ppersonal.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+db.ppersonal.belongsTo(db.jobs, {as: 'job', foreignKey: 'fk_puesto_id', targetKey: 'puesto_id'});
+db.operators.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+db.operators.belongsTo(db.driverlicenses, {as: 'license', foreignKey: 'fk_licencia_id', targetKey: 'licencia_id'});
+	// DEPARTAMENTO MEDICO
 db.medicalrestRecipients.belongsTo(db.staff, {as: 'responsible', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
 db.medicalrestRecipients.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_destinatario_id', targetKey: 'personal_id'});
 db.inventoryMedicines.belongsTo(db.medicines, {as: 'medicine', foreignKey: 'fk_medicamento_id', targetKey: 'medicamento_id'});
-db.workdays.hasMany(db.scheduleworkdays, {as: 'schedules', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
-db.scheduleworkdays.belongsTo(db.workdays, {as: 'workday', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
-db.staff.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
-db.staff.belongsTo(db.workdays, {as: 'workday', foreignKey: 'fk_jornada_id', targetKey: 'jornada_id'});
-db.typeContracts.belongsTo(db.typeAdvances, {as: 'advance', foreignKey: 'fk_tipoanticipo_id', targetKey: 'tanticipo_id'});
 	// CONTROL DE ASISTENCIA
 db.biometricPeriods.hasMany(db.biometricMarkings, {as: 'markings', foreignKey: 'fk_periodo_id', targetKey: 'periodo_id'});
 db.biometricMarkings.belongsTo(db.biometricPeriods, {as: 'period', foreignKey: 'fk_periodo_id', targetKey: 'periodo_id'});
@@ -221,7 +245,6 @@ db.plans.belongsTo(db.academicTraining, {as: 'training', foreignKey: 'profesiona
 db.employees.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 db.employees.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
 db.employees.hasMany(db.brigadists, {as: 'brigade', foreignKey: 'fk_empleado_id', targetKey: 'empleado_id', onDelete: 'CASCADE', hooks:true});
-
 // BRIGADAS Y BRIGADISTAS
 db.brigades.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
 db.brigades.belongsTo(db.persons, {as: 'responsable', foreignKey: 'fk_responsable_id', targetKey: 'persona_id'});
@@ -229,12 +252,15 @@ db.brigades.belongsTo(db.persons, {as: 'junior', foreignKey: 'fk_subalterno_id',
 db.brigades.hasMany(db.brigadists, {as: 'brigadist', foreignKey: 'fk_brigada_id', targetKey: 'brigada_id'});
 db.brigadists.belongsTo(db.employees, {as: 'employee', foreignKey: 'fk_empleado_id', targetKey: 'empleado_id'});
 db.brigadists.belongsTo(db.brigades, {as: 'brigade', foreignKey: 'fk_brigada_id', targetKey: 'brigada_id'});
-
 // AUTOPROTECCION
 db.selfProtectionMaintenance.belongsTo(db.entities, {as: 'professional', foreignKey: 'mantenimiento_responsable_id', targetKey: 'entidad_id'});
-
 db.resources.hasMany(db.selfProtectionMaintenance, {as: 'maintenance', foreignKey: 'fk_recurso_id', targetKey: 'recurso_id'});
 db.selfProtectionMaintenance.belongsTo(db.resources, {as: 'resource', foreignKey: 'fk_recurso_id', targetKey: 'recurso_id'});
+// BIOSEGURIDAD
+db.covid.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
+db.covid.hasMany(db.covidResources, {as: 'resources', foreignKey: 'fk_bioseguridad_id', targetKey: 'bioseguridad_id'});
+db.covidResources.belongsTo(db.covid, {as: 'covid', foreignKey: 'fk_bioseguridad_id', targetKey: 'bioseguridad_id'});
+db.covidResources.belongsTo(db.resources, {as: 'src', foreignKey: 'fk_recurso_id', targetKey: 'recurso_id'});
 
 // PLANIFICACION
 db.poaprojects.belongsTo(db.programspoa, {as: 'program', foreignKey: 'fk_programa_id', targetKey: 'programa_id'});
@@ -278,6 +304,16 @@ db.attended.belongsTo(db.parts, {as: 'part', foreignKey: 'fk_parte_id', targetKe
 db.partSupplies.belongsTo(db.parts, {as: 'part', foreignKey: 'fk_parte_id', targetKey: 'parte_id'});
 db.partSupplies.belongsTo(db.aphSupplies, {as: 'supply', foreignKey: 'fk_insumo_id', targetKey: 'insumo_id'});
 db.partSupplies.belongsTo(db.wineries, {as: 'cellar', foreignKey: 'fk_bodega_id', targetKey: 'bodega_id'});
+
+// DIRECCION ADMINISTRATIVA
+	// ARCHIVO
+db.archiveboxes.belongsTo(db.archiveshelving, {as: 'shelving', foreignKey: 'fk_estanteria_id', targetKey: 'estanteria_id'});
+db.archivefolder.belongsTo(db.archiveboxes, {as: 'box', foreignKey: 'fk_caja_id', targetKey: 'caja_id'});
+db.archivedocuments.belongsTo(db.archivecategories, {as: 'category', foreignKey: 'fk_categoria_id', targetKey: 'categoria_id'});
+db.archivedocuments.belongsTo(db.archiveclassification, {as: 'classification', foreignKey: 'fk_clasificacion_id', targetKey: 'clasificacion_id'});
+db.archivedocuments.belongsTo(db.archivefolder, {as: 'folder', foreignKey: 'fk_folder_id', targetKey: 'folder_id'});
+db.archivedocuments.belongsTo(db.staff, {as: 'send', foreignKey: 'fk_envia_id', targetKey: 'personal_id'});
+db.archivedocuments.belongsTo(db.staff, {as: 'receive', foreignKey: 'fk_recibido_id', targetKey: 'personal_id'});
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
