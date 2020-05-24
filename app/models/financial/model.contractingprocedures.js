@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
 		
 		procedimiento_monto_minimo: {
 			type: DataTypes.DECIMAL(10,2)
-		}, //  numeric(10,2) default 0, -- 
+		}, // numeric(10,2) default 0, -- 
 		procedimiento_monto_maximo: {
 			type: DataTypes.DECIMAL(10,2)
 		} //  numeric(10,2) -- 

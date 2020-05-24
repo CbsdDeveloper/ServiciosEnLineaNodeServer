@@ -1,9 +1,11 @@
 'use strict';
 const db = require('../../models');
-const entityModel = db.entities;
-const partner = db.persons;
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
+
+const entityModel = db.entities;
+const partner = db.persons;
+const userMdl = db.users;
 
 module.exports = {
 
@@ -15,21 +17,31 @@ module.exports = {
 	*/
 	async paginationEntity(req, res){
 		try {
-			const { query: { currentPage, pageLimit, textFilter, sortData = 'entidad_razonsocial' } } = req;
+			const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
-			const where = {
-				$or: {
-					entidad_razonsocial: seq.where(seq.fn('LOWER', seq.col('entidad_razonsocial')), 'LIKE', '%' + filter + '%'),
-					entidad_ruc: seq.where(seq.fn('LOWER', seq.col('entidad_ruc')), 'LIKE', '%' + filter + '%')
-				}
-			};
+			const where = seq.or(
+				{ entidad_razonsocial: seq.where(seq.fn('LOWER', seq.col('entidad_razonsocial')), 'LIKE', '%' + filter + '%') },
+				{ entidad_ruc: seq.where(seq.fn('LOWER', seq.col('entidad_ruc')), 'LIKE', '%' + filter + '%') },
+				{ persona_doc_identidad: seq.where(seq.fn('LOWER', seq.col('persona_doc_identidad')), 'LIKE', '%' + filter + '%') },
+				{ persona_apellidos: seq.where(seq.fn('LOWER', seq.col('persona_apellidos')), 'LIKE', '%' + filter + '%') },
+				{ persona_nombres: seq.where(seq.fn('LOWER', seq.col('persona_nombres')), 'LIKE', '%' + filter + '%') }
+			);
 			const { rows, count } = await entityModel.findAndCountAll(
 				{
-					include: [ { model: partner, as: 'person' } ],
 					offset: offset,
 					limit: limit,
 					where: (filter != '')?where:{},
-					order: [ sort ]
+					order: [ sort ],
+					include: [ 
+						{ 
+							model: partner, as: 'person',
+							attributes: [ 'persona_id','persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo' ]
+						},
+						{ 
+							model: userMdl, as: 'user',
+							attributes: [ ['usuario_login','usuario'] ]
+						} 
+					]
 				});
 			const meta = paginate(currentPage, count, rows, pageLimit);
 			db.setDataTable(res,{ rows, meta },'ENTIDADES COMERCIALES');
@@ -54,7 +66,7 @@ module.exports = {
 				{ model: partner, as: 'person' }
 			]
 		}).then(data => {
-			db.setJSON(res,data,'ENTIDAD POR ID');
+			db.setEmpty(res,'ENTIDAD POR ID',true,data);
 		}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 	},
 

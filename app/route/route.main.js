@@ -21,9 +21,14 @@ module.exports = function(app) {
     };
     const permitsCtrl = {
         activities:     require('../controllers/permits/controller.activities'),
+        taxes:     require('../controllers/permits/controller.taxes'),
+        ciiu:     require('../controllers/permits/controller.ciiu'),
         entities:       require('../controllers/permits/controller.entities'),
         locals:         require('../controllers/permits/controller.locals'),
-        employees:      require('../controllers/permits/controller.employees')
+        employees:      require('../controllers/permits/controller.employees'),
+        selfInspections:require('../controllers/permits/controller.selfInspections'),
+        permits:        require('../controllers/permits/controller.permits'),
+        duplicates:     require('../controllers/permits/controller.duplicates')
     };
     const preventionCtrl = {
         plans:                      require('../controllers/prevention/controller.plans'),
@@ -155,6 +160,7 @@ module.exports = function(app) {
     app.post('/api/subjefature/aph/suppliesinventory/movements/list', subjefatureCtrl.aphSupplyMovements.suppliesByInventoryId);
     app.post('/api/subjefature/aph/supplies/inventory/single', subjefatureCtrl.aphSupplyMovements.insertInventory);
     // PERMISOS
+        // ENTIDADES
     app.get('/api/permits/commercialActivities', permitsCtrl.activities.findCommercialActivities);
     app.get('/api/permits/entities/:entityRuc', permitsCtrl.entities.findByEntity);
     app.post('/api/permits/entities/entityId', permitsCtrl.entities.findById);
@@ -163,11 +169,12 @@ module.exports = function(app) {
     app.post('/api/permits/entities/enitiyByRUC', permitsCtrl.entities.findByRUC);
     app.post('/api/permits/locals/localId', permitsCtrl.locals.findById);
     app.put('/api/permits/locals', permitsCtrl.locals.updateEntity);
-    
     app.post('/api/permits/employees/localId', permitsCtrl.employees.findByLocal);
     app.put('/api/permits/employees', permitsCtrl.employees.updateEntity);
     app.delete('/api/permits/employees/:employeeId', permitsCtrl.employees.deleteEntity);
     app.delete('/api/permits/employees/localId/all/:localId', permitsCtrl.employees.deleteByLocal);
+        // AUTOINSPECCIONES Y PERMISOS    
+
     // DIR. TALENTO HUMANO
     app.get('/api/tthh/wineries', tthhCtrl.wineries.findAll);
     app.get('/api/tthh/typeadvances/list', tthhCtrl.typeadvances.listEntity);
@@ -227,7 +234,17 @@ module.exports = function(app) {
     app.get('/api/paginate/admin/webmail', adminCtrl.webmail.paginationEntity);
     app.get('/api/paginate/admin/reports', adminCtrl.reports.paginationEntity);
     // PERMISOS
+    app.get('/api/paginate/permits/aconomic/activities', permitsCtrl.activities.paginationEntity);
+    app.get('/api/paginate/permits/taxes', permitsCtrl.taxes.paginationEntity);
+    app.get('/api/paginate/permits/ciiu', permitsCtrl.ciiu.paginationEntity);
     app.get('/api/paginate/permits/entities', permitsCtrl.entities.paginationEntity);
+    app.get('/api/paginate/permits/economicActivities', permitsCtrl.locals.paginationEntity);
+    app.get('/api/paginate/permits/selfInspections', permitsCtrl.selfInspections.paginationEntity);
+    app.get('/api/paginate/permits/anuals/permits', permitsCtrl.permits.paginationEntity);
+    app.get('/api/paginate/permits/anuals/permits/localId', permitsCtrl.permits.paginateByLocal);
+    app.get('/api/paginate/permits/duplicates', permitsCtrl.duplicates.paginationEntity);
+    // UNIDAD DE PREVENCION E INGENIERIA DEL FUEGO
+    app.get('/api/paginate/prevention/plans/selfprotections/localId', preventionCtrl.plans.paginateByLocal);
     // DIRECCION ADMINSTRATIVA
     app.get('/api/paginate/administrative/archive/shelvings', administrativeCtrl.shelvings.paginationEntity);
     app.get('/api/paginate/administrative/archive/boxes', administrativeCtrl.boxes.paginationEntity);

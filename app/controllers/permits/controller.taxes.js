@@ -3,7 +3,8 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const activityModel = db.activities;
+const taxeModel = db.taxes;
+const activityMdl = db.activities;
 
 module.exports = {
 
@@ -18,31 +19,30 @@ module.exports = {
 			const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
 			const where = seq.or(
+				{ tasa_codigo: seq.where(seq.fn('LOWER', seq.col('tasa_codigo')), 'LIKE', '%' + filter + '%') },
+				{ tasa_nombre: seq.where(seq.fn('LOWER', seq.col('tasa_nombre')), 'LIKE', '%' + filter + '%') },
 				{ actividad_codigo: seq.where(seq.fn('LOWER', seq.col('actividad_codigo')), 'LIKE', '%' + filter + '%') },
 				{ actividad_nombre: seq.where(seq.fn('LOWER', seq.col('actividad_nombre')), 'LIKE', '%' + filter + '%') }
 			);
-			const { rows, count } = await activityModel.findAndCountAll(
+			const { rows, count } = await taxeModel.findAndCountAll(
 				{
 					offset: offset,
 					limit: limit,
 					where: (filter != '')?where:{},
-					order: [ sort ]
+					order: [ sort ],
+					include: [
+						{
+							model: activityMdl, as: 'activity',
+							attributes: [ 'actividad_id','actividad_codigo','actividad_nombre' ]
+						}
+					]
 				});
 			const meta = paginate(currentPage, count, rows, pageLimit);
-			db.setDataTable(res,{ rows, meta },'CLASIFICACION DE ACTIVIDADES COMERCIALES');
+			db.setDataTable(res,{ rows, meta },'CLASIFICACION DE TASAS DE ACTIVIDADES COMERCIALES');
 		} catch (error) {
-			db.setEmpty(res,'CLASIFICACION DE ACTIVIDADES COMERCIALES',false,error);
+			db.setEmpty(res,'CLASIFICACION DE TASAS DE ACTIVIDADES COMERCIALES',false,error);
 		}
 
-	},
-
-	// LISTADO DE ACTIVIDADES
-	findCommercialActivities(req, res){
-		activityModel.findAll().then(data => {
-			db.setJSON(res,data,'LISTADO DE ACTIVIDADES');
-		}).catch(err => {
-			res.status(500).json({msg: "error", details: err});
-		});
 	}
 
 }

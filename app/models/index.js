@@ -158,12 +158,15 @@ db.financialentities		= require('./financial/model.entities')(sequelize, Sequeli
 db.financialtypedocuments	= require('./financial/model.typedocuments')(sequelize, Sequelize);
 db.contractingprocedures	= require('./financial/model.contractingprocedures')(sequelize, Sequelize);
 	// PERMISOS
-db.activities         = require('../models/permits/model.activities')(sequelize, Sequelize);
-db.taxes			  = require('../models/permits/model.taxes')(sequelize, Sequelize);
-db.ciiu               = require('../models/permits/model.ciiu')(sequelize, Sequelize);
-db.entities           = require('../models/permits/model.entities')(sequelize, Sequelize);
-db.locals             = require('../models/permits/model.locals')(sequelize, Sequelize);
-db.employees          = require('../models/permits/model.employees')(sequelize, Sequelize);
+db.activities			= require('../models/permits/model.activities')(sequelize, Sequelize);
+db.taxes				= require('../models/permits/model.taxes')(sequelize, Sequelize);
+db.ciiu					= require('../models/permits/model.ciiu')(sequelize, Sequelize);
+db.entities				= require('../models/permits/model.entities')(sequelize, Sequelize);
+db.locals				= require('../models/permits/model.locals')(sequelize, Sequelize);
+db.employees			= require('../models/permits/model.employees')(sequelize, Sequelize);
+db.selfInspections		= require('../models/permits/model.selfinspections')(sequelize, Sequelize);
+db.permitsLocals		= require('../models/permits/model.permits')(sequelize, Sequelize);
+db.duplicates			= require('../models/permits/model.duplicates')(sequelize, Sequelize);
 // SUBJEFATURA
 	// UNIDAD ATENCIÓN PREHOSPITALARIA
 db.aphSupplies					= require('./subjefature/aph/model.aph.supplies')(sequelize, Sequelize);
@@ -185,6 +188,7 @@ db.users.belongsTo(db.profiles, {as: 'profile', foreignKey: 'fk_perfil_id', targ
 db.users.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 
 db.entities.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_representante_id', targetKey: 'persona_id'});
+db.entities.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
 
 db.persons.hasMany(db.academicTraining, {as: 'training', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
@@ -229,13 +233,26 @@ db.absencesControl.belongsTo(db.absences, {as: 'absence', foreignKey: 'fk_inasis
 db.absencesControl.belongsTo(db.staff, {as: 'responsible', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
 
 // CONTROLLER - PERMISOS
-db.taxes.belongsTo(db.activities, {as: 'activities', foreignKey: 'fk_actividad_id', targetKey: 'actividad_id'});
-db.ciiu.belongsTo(db.taxes, {as: 'taxes', foreignKey: 'fk_tasa_id', targetKey: 'tasa_id'});
+db.taxes.belongsTo(db.activities, {as: 'activity', foreignKey: 'fk_actividad_id', targetKey: 'actividad_id'});
+db.ciiu.belongsTo(db.taxes, {as: 'taxe', foreignKey: 'fk_tasa_id', targetKey: 'tasa_id'});
 db.locals.belongsTo(db.entities, {as: 'entity', foreignKey: 'fk_entidad_id', targetKey: 'entidad_id'});
+db.locals.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
 db.locals.belongsTo(db.ciiu, {as: 'ciiu', foreignKey: 'fk_ciiu_id', targetKey: 'ciiu_id'});
 db.locals.hasOne(db.coordinates, {as: 'coordinates', constraints: false, foreignKey: 'coordenada_entidad_id', targetKey: 'local_id'});
+db.selfInspections.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
+db.permitsLocals.belongsTo(db.selfInspections, {as: 'selfInspection', foreignKey: 'fk_autoinspeccion_id', targetKey: 'autoinspeccion_id'});
+db.permitsLocals.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
+
+db.duplicates.belongsTo(db.permitsLocals, {as: 'permit', foreignKey: 'fk_permiso_id', targetKey: 'permiso_id'});
+db.duplicates.belongsTo(db.users, {as: 'requesting', foreignKey: 'fk_usuario_solicita', targetKey: 'usuario_id'});
+db.duplicates.belongsTo(db.users, {as: 'approving', foreignKey: 'fk_usuario_aprueba', targetKey: 'usuario_id'});
+db.duplicates.belongsTo(db.users, {as: 'downloading', foreignKey: 'fk_usuario_imprime', targetKey: 'usuario_id'});
+db.duplicates.belongsTo(db.ppersonal, {as: 'jtprequest', foreignKey: 'jtp_solicitud', targetKey: 'ppersonal_id'});
+db.duplicates.belongsTo(db.ppersonal, {as: 'jtpapprove', foreignKey: 'jtp_aprueba', targetKey: 'ppersonal_id'});
 
 // LOCALES COMERCIALES
+db.plans.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
+db.plans.belongsTo(db.users, {as: 'inspector', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
 db.plans.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
 db.plans.belongsTo(db.entities, {as: 'billing', foreignKey: 'facturacion_id', targetKey: 'entidad_id'});
 db.plans.belongsTo(db.persons, {as: 'responsable', foreignKey: 'fk_responsable_tramite', targetKey: 'persona_id'});
