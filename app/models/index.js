@@ -76,25 +76,29 @@ db.cloneObjArray=function(obj,params){
 
 // DECLARACION DE MODELOS
 // RESOURCES
-db.resources          = require('../models/resources/model.resources')(sequelize, Sequelize);
-db.coordinates        = require('../models/resources/model.coordinates')(sequelize, Sequelize);
-db.geojson            = require('../models/resources/model.geojson')(sequelize, Sequelize);
-db.countries          = require('../models/resources/model.countries')(sequelize, Sequelize);
-db.states             = require('../models/resources/model.states')(sequelize, Sequelize);
-db.cities             = require('../models/resources/model.cities')(sequelize, Sequelize);
-db.towns              = require('../models/resources/model.towns')(sequelize, Sequelize);
-db.parishes           = require('../models/resources/model.parishes')(sequelize, Sequelize);
-db.persons            = require('../models/resources/model.persons')(sequelize, Sequelize);
-db.driverlicenses     = require('./resources/model.driverlicenses')(sequelize, Sequelize);
+db.rsc = {};
+db.resources			= require('../models/resources/model.resources')(sequelize, Sequelize);
+db.coordinates			= require('../models/resources/model.coordinates')(sequelize, Sequelize);
+db.geojson				= require('../models/resources/model.geojson')(sequelize, Sequelize);
+db.countries			= require('../models/resources/model.countries')(sequelize, Sequelize);
+db.states				= require('../models/resources/model.states')(sequelize, Sequelize);
+db.cities				= require('../models/resources/model.cities')(sequelize, Sequelize);
+db.towns				= require('../models/resources/model.towns')(sequelize, Sequelize);
+db.parishes				= require('../models/resources/model.parishes')(sequelize, Sequelize);
+db.persons				= require('../models/resources/model.persons')(sequelize, Sequelize);
+db.driverlicenses		= require('./resources/model.driverlicenses')(sequelize, Sequelize);
+db.rsc.forms			= require('./resources/model.forms')(sequelize, Sequelize);
+db.rsc.formSections		= require('./resources/model.forms.sections')(sequelize, Sequelize);
+db.rsc.formQuestions	= require('./resources/model.forms.questions')(sequelize, Sequelize);
 // ADMINISTRACION
-db.labels             = require('../models/admin/model.labels')(sequelize, Sequelize);
-db.parameters         = require('../models/admin/model.parameters')(sequelize, Sequelize);
-db.webmail            = require('../models/admin/model.webmail')(sequelize, Sequelize);
-db.reports			  = require('../models/admin/model.reports')(sequelize, Sequelize);
-db.profiles           = require('../models/admin/model.profiles')(sequelize, Sequelize);
-db.users              = require('../models/admin/model.users')(sequelize, Sequelize);
-db.stations           = require('./tthh/institution/model.stations')(sequelize, Sequelize);
-db.academicTraining   = require('../models/tthh/model.academicTraining')(sequelize, Sequelize);
+db.labels				= require('../models/admin/model.labels')(sequelize, Sequelize);
+db.parameters			= require('../models/admin/model.parameters')(sequelize, Sequelize);
+db.webmail				= require('../models/admin/model.webmail')(sequelize, Sequelize);
+db.reports				= require('../models/admin/model.reports')(sequelize, Sequelize);
+db.profiles				= require('../models/admin/model.profiles')(sequelize, Sequelize);
+db.users				= require('../models/admin/model.users')(sequelize, Sequelize);
+db.stations				= require('./tthh/institution/model.stations')(sequelize, Sequelize);
+db.academicTraining		= require('../models/tthh/model.academicTraining')(sequelize, Sequelize);
 // DIRECCION DE TALENTO HUMANO
 db.workdays           = require('../models/tthh/model.workdays')(sequelize, Sequelize);
 db.scheduleworkdays   = require('../models/tthh/model.scheduleworkdays')(sequelize, Sequelize);
@@ -115,6 +119,11 @@ db.absencesControl	  = require('./tthh/attendance/model.absences.control')(seque
 db.medicines          				= require('./tthh/md/model.medicines')(sequelize, Sequelize);
 db.inventoryMedicines 				= require('./tthh/md/model.inventory')(sequelize, Sequelize);
 db.medicalrestRecipients 			= require('./tthh/md/model.medicalrest.recipients')(sequelize, Sequelize);
+	// EVAUACIONES
+db.surveysEvaluations				= require('./tthh/surveys/model.evaluations')(sequelize, Sequelize);
+db.surveysEvaluationsQuestions		= require('./tthh/surveys/model.evaluation.questions')(sequelize, Sequelize);
+db.surveysStaffEvaluations			= require('./tthh/surveys/model.staff.evaluation')(sequelize, Sequelize);
+db.surveysStaffEvaluationsAnswers	= require('./tthh/surveys/model.staff.evaluation.answers')(sequelize, Sequelize);
 	// SOS
 db.psychosocialforms				= require('./tthh/sos/model.psychosocial.forms')(sequelize, Sequelize);
 db.psychosocialformsSections		= require('./tthh/sos/model.psychosocial.sections')(sequelize, Sequelize);
@@ -192,6 +201,19 @@ db.entities.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', target
 
 db.persons.hasMany(db.academicTraining, {as: 'training', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+
+db.resources.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
+
+db.rsc.forms.belongsTo(db.staff, {as: 'user', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+
+db.rsc.formSections.belongsTo(db.staff, {as: 'user', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+db.rsc.formSections.belongsTo(db.rsc.forms, {as: 'form', foreignKey: 'fk_formulario_id', targetKey: 'formulario_id'});
+db.rsc.formSections.hasMany(db.rsc.formQuestions, {as: 'questions', foreignKey: 'fk_seccion_id', targetKey: 'seccion_id'});
+
+db.rsc.formQuestions.belongsTo(db.staff, {as: 'user', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+db.rsc.formQuestions.belongsTo(db.rsc.formSections, {as: 'section', foreignKey: 'fk_seccion_id', targetKey: 'seccion_id'});
+db.rsc.formQuestions.belongsTo(db.resources, {as: 'src', foreignKey: 'fk_pregunta_id', targetKey: 'recurso_id'});
+db.rsc.formQuestions.belongsTo(db.resources, {as: 'rating', foreignKey: 'fk_sistemacalificacion_id', targetKey: 'recurso_id'});
 
 // SUBJEFATURA - GENERAL
 db.wineries.belongsTo(db.stations, {as: 'station', foreignKey: 'fk_estacion_id', targetKey: 'estacion_id'});
@@ -283,12 +305,25 @@ db.covidResources.belongsTo(db.resources, {as: 'src', foreignKey: 'fk_recurso_id
 db.poaprojects.belongsTo(db.programspoa, {as: 'program', foreignKey: 'fk_programa_id', targetKey: 'programa_id'});
 db.poaprojects.belongsTo(db.poa, {as: 'poa', foreignKey: 'fk_poa_id', targetKey: 'poa_id'});
 
+// EVALUACIONES DE TALENTO HUMANO
+db.surveysEvaluations.belongsTo(db.rsc.forms, {as: 'form', foreignKey: 'fk_formulario_id', targetKey: 'formulario_id'});
+//db.surveysEvaluations.belongsToMany(db.surveyFormsQuestions, {through: 'tb_evaluacionespersonal_preguntas', foreignKey: 'fk_evaluacion_id'});
+db.surveysEvaluationsQuestions.belongsTo(db.rsc.formQuestions, {as: 'question', foreignKey: 'fk_pregunta_id', targetKey: 'pregunta_id'});
+db.surveysEvaluationsQuestions.belongsTo(db.surveysEvaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id', targetKey: 'evaluacion_id'});
+
+db.surveysStaffEvaluations.belongsTo(db.surveysEvaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id', targetKey: 'evaluacion_id'});
+db.surveysStaffEvaluations.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_evaluado_id', targetKey: 'personal_id'});
+db.surveysStaffEvaluations.belongsTo(db.staff, {as: 'personal', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+db.surveysStaffEvaluationsAnswers.belongsTo(db.surveysStaffEvaluations, {as: 'test', foreignKey: 'fk_test_id', targetKey: 'test_id'});
+db.surveysStaffEvaluationsAnswers.belongsTo(db.rsc.formQuestions, {as: 'question', foreignKey: 'fk_pregunta_id', targetKey: 'pregunta_id'});
+
 // EVALUACION DE RIESGO PSICOSOCIAL
 db.psychosocialformsSections.belongsTo(db.psychosocialforms, {as: 'form', foreignKey: 'fk_formulario_id', targetKey: 'formulario_id'});
 db.psychosocialformsSections.hasMany(db.psychosocialformsQuestions, {as: 'questions', foreignKey: 'fk_seccion_id', targetKey: 'seccion_id'});
 db.psychosocialformsQuestions.belongsTo(db.psychosocialformsSections, {as: 'section', foreignKey: 'fk_seccion_id', targetKey: 'seccion_id'});
 db.psychosocialformsQuestions.belongsTo(db.resources, {as: 'question', foreignKey: 'fk_pregunta_id', targetKey: 'recurso_id'});
 db.psychosocialformsQuestions.belongsTo(db.resources, {as: 'ranking', foreignKey: 'fk_sistemacalificacion_id', targetKey: 'recurso_id'});
+
 db.psychosocialEvaluations.belongsTo(db.psychosocialforms, {as: 'form', foreignKey: 'fk_formulario_id', targetKey: 'formulario_id'});
 db.psychosocialformsQuestions.belongsToMany(db.psychosocialEvaluations, {through: 'tb_evaluacionesriesgopsicosocial_preguntas', foreignKey: 'fk_pregunta_id'});
 db.psychosocialEvaluations.belongsToMany(db.psychosocialformsQuestions, {through: 'tb_evaluacionesriesgopsicosocial_preguntas', foreignKey: 'fk_evaluacion_id'});
@@ -297,7 +332,6 @@ db.psychosocialEvaluationsQuestions.belongsTo(db.psychosocialEvaluations, {as: '
 
 db.psychosocialTest.belongsTo(db.psychosocialEvaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id', targetKey: 'evaluacion_id'});
 db.psychosocialTest.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_evaluado_id', targetKey: 'personal_id'});
-
 db.psychosocialTestAnswers.belongsTo(db.psychosocialTest, {as: 'test', foreignKey: 'fk_test_id', targetKey: 'test_id'});
 db.psychosocialTestAnswers.belongsTo(db.psychosocialformsQuestions, {as: 'question', foreignKey: 'fk_pregunta_id', targetKey: 'pregunta_id'});
 

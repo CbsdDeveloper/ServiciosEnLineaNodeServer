@@ -83,7 +83,7 @@ module.exports = {
 							include:[
 								{
 									model: taxes,
-									as: 'taxes'
+									as: 'taxe'
 								}
 							]
 						}

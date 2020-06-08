@@ -40,30 +40,29 @@ module.exports = {
 			const where = seq.or(
 				{ direccion_tipo: seq.where(seq.fn('LOWER', seq.col('direccion_tipo')), 'LIKE', '%' + filter + '%') },
 				{ direccion_codigo: seq.where(seq.fn('LOWER', seq.col('direccion_codigo')), 'LIKE', '%' + filter + '%') },
-				{ direccion_nombre: seq.where(seq.fn('LOWER', seq.col('direccion_nombre')), 'LIKE', '%' + filter + '%') },
-				{ direccion_baselegal: seq.where(seq.fn('LOWER', seq.col('direccion_baselegal')), 'LIKE', '%' + filter + '%') }
+				{ direccion_nombre: seq.where(seq.fn('LOWER', seq.col('direccion_nombre')), 'LIKE', '%' + filter + '%') }
 			);
-			const { rows, count } = await model.findAndCountAll(
-				{
-					offset: offset,
-					limit: limit,
-					where: (filter != '')?where:{},
-					order: [ sort ],
-					include: [
-						{
-							model: model, as: 'leadership', required: false, attributes: []
-						},
-						{
-							model: userMdl, as: 'user',
-							attributes: [ ['usuario_login','usuario'] ]
-						}
-					]
-				});
+			const { rows, count } = await model.findAndCountAll({
+				offset: offset,
+				limit: limit,
+				where: (filter != '')?where:{},
+				order: [ sort ],
+				include: [
+					{
+						model: model, as: 'leadership', 
+						required: false, 
+						attributes: []
+					},
+					{
+						model: userMdl, as: 'user',
+						attributes: [ ['usuario_login','usuario'] ]
+					}
+				]
+			});
 			const meta = paginate(currentPage, count, rows, pageLimit);
 			db.setDataTable(res,{ rows, meta },'TTHH - LISTADO DE DIRECCIONES');
 
 		} catch (error) { db.setEmpty(res,'TTHH - LISTADO DE DIRECCIONES',false,error); }
-
 	}
 
 };

@@ -9,7 +9,10 @@ module.exports = function(app) {
         persons:        require('../controllers/resources/controller.persons'),
         coordinates:    require('../controllers/resources/controller.coordinates'),
         geojson:        require('../controllers/resources/controller.geojson'),
-        resources:      require('../controllers/resources/controller.resources')
+        resources:      require('../controllers/resources/controller.resources'),
+        forms:          require('../controllers/resources/controller.forms'),
+        formSections:   require('../controllers/resources/controller.forms.sections'),
+        formQuestions:  require('../controllers/resources/controller.forms.questions')
     };
     const adminCtrl = {
         labels:         require('../controllers/admin/controller.labels'),
@@ -71,7 +74,10 @@ module.exports = function(app) {
         psychosocialforms:          require('../controllers/tthh/sos/controller.psychosocial.forms'),
         psychosocialsections:       require('../controllers/tthh/sos/controller.psychosocial.sections'),
         psychosocialevaluations:    require('../controllers/tthh/sos/controller.psychosocial.evaluations'),
-        psychosocialtest:           require('../controllers/tthh/sos/controller.psychosocial.test')
+        psychosocialtest:           require('../controllers/tthh/sos/controller.psychosocial.test'),
+
+        surveysEvaluations:         require('../controllers/tthh/surveys/controller.evaluations'),
+        surveysEvaluationsStaff:    require('../controllers/tthh/surveys/controller.staff.evaluations')
     };
     const financialCtrl = {
         contractingprocedures:      require('../controllers/financial/controller.contractingprocedures'),
@@ -109,7 +115,79 @@ module.exports = function(app) {
         prevention:     require('../controllers/controller.prevencion.js')
     };
 
-// DEFINICION DE RUTAS
+    /*
+     * SERVICIOS PARA PAGINAR RESULTADOS
+     */
+    // RESOURCES
+    app.get('/api/paginate/resources/surveys/forms', resourcesCtrl.forms.paginationEntity);
+    app.get('/api/paginate/resources/surveys/formsections', resourcesCtrl.formSections.paginationEntity);
+    app.get('/api/paginate/resources/surveys/formsquestions', resourcesCtrl.formQuestions.paginationEntity);
+    
+    app.get('/api/paginate/resources/resources/tthh/surveys/ratingsystem', resourcesCtrl.resources.paginationRatingSystems);
+    app.get('/api/paginate/resources/resources/tthh/surveys/questions', resourcesCtrl.resources.paginationQuestions);
+    app.get('/api/paginate/resources/resources/tthh/surveys/forms', resourcesCtrl.forms.paginationEntity);
+    app.get('/api/paginate/resources/resources/tthh/surveys/forms/sections', resourcesCtrl.formSections.paginationEntity);
+    
+    // ADMIN
+    app.get('/api/paginate/admin/labels', adminCtrl.labels.paginationEntity);
+    app.get('/api/paginate/admin/parameters', adminCtrl.parameters.paginationEntity);
+    app.get('/api/paginate/admin/webmail', adminCtrl.webmail.paginationEntity);
+    app.get('/api/paginate/admin/reports', adminCtrl.reports.paginationEntity);
+    // PERMISOS
+    app.get('/api/paginate/permits/aconomic/activities', permitsCtrl.activities.paginationEntity);
+    app.get('/api/paginate/permits/taxes', permitsCtrl.taxes.paginationEntity);
+    app.get('/api/paginate/permits/ciiu', permitsCtrl.ciiu.paginationEntity);
+    app.get('/api/paginate/permits/entities', permitsCtrl.entities.paginationEntity);
+    app.get('/api/paginate/permits/economicActivities', permitsCtrl.locals.paginationEntity);
+    app.get('/api/paginate/permits/selfInspections', permitsCtrl.selfInspections.paginationEntity);
+    app.get('/api/paginate/permits/anuals/permits', permitsCtrl.permits.paginationEntity);
+    app.get('/api/paginate/permits/anuals/permits/localId', permitsCtrl.permits.paginateByLocal);
+    app.get('/api/paginate/permits/duplicates', permitsCtrl.duplicates.paginationEntity);
+    // UNIDAD DE PREVENCION E INGENIERIA DEL FUEGO
+    app.get('/api/paginate/prevention/plans/selfprotections/localId', preventionCtrl.plans.paginateByLocal);
+    // DIRECCION ADMINSTRATIVA
+    app.get('/api/paginate/administrative/archive/shelvings', administrativeCtrl.shelvings.paginationEntity);
+    app.get('/api/paginate/administrative/archive/boxes', administrativeCtrl.boxes.paginationEntity);
+    app.get('/api/paginate/administrative/archive/folders', administrativeCtrl.folders.paginationEntity);
+    // DIRECCION DE TALENTO HUMANO
+    app.get('/api/paginate/tthh/institution/stations', tthhCtrl.stations.paginationEntity);
+    app.get('/api/paginate/tthh/institution/leaderships', tthhCtrl.leaderships.paginationEntity);
+    app.get('/api/paginate/tthh/operators/byLeadership', tthhCtrl.operators.paginationByLeadership);
+    app.get('/api/paginate/tthh/staff/byLeadership', tthhCtrl.ppersonal.paginationByLeadership);
+    app.get('/api/paginate/tthh/institution/wineries/list', tthhCtrl.wineries.paginationEntity);
+    app.get('/api/paginate/tthh/workdays', tthhCtrl.workdays.paginationEntity);
+    app.get('/api/paginate/tthh/typeadvances', tthhCtrl.typeadvances.paginationEntity);
+    app.get('/api/paginate/tthh/typecontracts', tthhCtrl.typecontracts.paginationEntity);
+        // CONTROL DE ASISTENCIA
+    app.get('/api/paginate/tthh/attendance/biometriccodes', tthhCtrl.biometric.paginationEntity);
+    app.get('/api/paginate/tthh/attendance/biometricperiods', tthhCtrl.biometricPeriods.paginationEntity);
+    app.get('/api/paginate/tthh/attendance/biometricmarkings', tthhCtrl.biometricMarkings.paginationEntity);
+    app.get('/api/paginate/tthh/attendance/biometricperiods/nomarkings', tthhCtrl.biometricMarkings.paginationNomarkingByPeriod);
+    app.get('/api/paginate/tthh/attendance/biometricperiods/staff', tthhCtrl.biometricMarkings.paginationStaffNomarkings);
+    app.get('/api/paginate/tthh/attendance/biometricperiods/staff/nomarkings', tthhCtrl.biometricMarkings.paginationNomarkingsByStaff);
+    app.get('/api/paginate/tthh/attendance/ranches', tthhCtrl.ranches.paginationEntity);
+    app.get('/api/paginate/tthh/attendance/arrears', tthhCtrl.arrears.paginationEntity);
+    app.get('/api/paginate/tthh/attendance/absences', tthhCtrl.absences.paginationEntity);
+        // DEP. MEDICO
+    app.get('/api/paginate/tthh/md/medicalrest/recipients/list', tthhCtrl.medicalrestRecipient.paginationEntity);
+    // SUBJEFATURA
+    app.get('/api/paginate/subjefature/aph/supplies/list', subjefatureCtrl.aphSupplies.paginationEntity);
+    app.get('/api/paginate/subjefature/aph/supplies/all/stock/list', subjefatureCtrl.aphSupplies.paginationStockSupplies);
+    app.get('/api/paginate/subjefature/aph/supplies/stock/wineries/list', subjefatureCtrl.aphSupplies.paginationSuppliesStockWineries);
+    app.get('/api/paginate/subjefature/aph/supplies/stock/stations/list', subjefatureCtrl.aphSupplies.paginationSuppliesStockStations);
+    app.get('/api/paginate/subjefature/aph/control/supplies', subjefatureCtrl.aphSupplycontrol.paginationEntity);
+    // FINANCIERO
+    app.get('/api/paginate/financial/budgetclassifier', financialCtrl.budgetclassifier.paginationEntity);
+    app.get('/api/paginate/financial/retentionclassifier', financialCtrl.retentionclassifier.paginationEntity);
+    app.get('/api/paginate/financial/accountcatalog', financialCtrl.accountcatalog.paginationEntity);
+    app.get('/api/paginate/financial/programs', financialCtrl.programs.paginationEntity);
+    app.get('/api/paginate/financial/subprograms', financialCtrl.subprograms.paginationEntity);
+    app.get('/api/paginate/financial/projects', financialCtrl.projects.paginationEntity);
+    app.get('/api/paginate/financial/activities', financialCtrl.activities.paginationEntity);
+    app.get('/api/paginate/financial/entities', financialCtrl.entities.paginationEntity);
+    app.get('/api/paginate/financial/typedocuments', financialCtrl.typedocuments.paginationEntity);
+
+
     /*
      * CONTROLLERS DE MODELOS
      */
@@ -122,6 +200,10 @@ module.exports = function(app) {
     app.post('/api/resources/coordinates/entityId', resourcesCtrl.coordinates.findByEntity);
     app.get('/api/resources/resources/plans/factors', resourcesCtrl.resources.findResourcesFactorsForPlans);
     app.get('/api/resources/resources/plans/prevention', resourcesCtrl.resources.findResourcesPreventionForPlans);
+    
+    app.post('/api/resources/surveys/forms/entityById', resourcesCtrl.forms.findById);
+    // app.post('/api/resources/surveys/forms/sections/entityById', resourcesCtrl.psychosocialsections.findById);
+    
     // ADMIN
     app.get('/api/admin/profiles', adminCtrl.profiles.findAll);
     app.get('/api/admin/profiles/:id', adminCtrl.profiles.findById);
@@ -199,6 +281,9 @@ module.exports = function(app) {
     app.put('/api/tthh/attendance/biometric/staff/markings', tthhCtrl.biometricMarkings.updateEntity);
     app.put('/api/tthh/attendance/biometric/staff/markings/list', tthhCtrl.biometricMarkings.updateEntityList);
     app.delete('/api/tthh/attendance/biometric/staff/markings/remove/periodId', tthhCtrl.biometricMarkings.deleteByPeriodoId);
+        // EVALUACIONES - SURVEYS
+    app.post('/api/tthh/surveys/evaluations/questionnaire/questions', tthhCtrl.surveysEvaluations.questionnaireByEvaluation);
+    app.post('/api/tthh/surveys/evaluations/new/staff', tthhCtrl.surveysEvaluationsStaff.insertSurveyEvaluarion);
         // DEP. MEDICO
     app.get('/api/tthh/md/pharmacy/supplies', tthhCtrl.medicines.findAll);
     app.get('/api/tthh/md/pharmacy/supplies/inventory', tthhCtrl.medicines.findInventory);
@@ -223,69 +308,6 @@ module.exports = function(app) {
     // FINANCIERO - RECAUDACION
     app.get('/api/financial/priorcontrol/contractingprocedures', financialCtrl.contractingprocedures.findAll);
     app.get('/api/financial/priorcontrol/processcontracts/processId', financialCtrl.contractingprocedures.findById);
-
-
-    /*
-     * SERVICIOS PARA PAGINAR RESULTADOS
-     */
-    // ADMIN
-    app.get('/api/paginate/admin/labels', adminCtrl.labels.paginationEntity);
-    app.get('/api/paginate/admin/parameters', adminCtrl.parameters.paginationEntity);
-    app.get('/api/paginate/admin/webmail', adminCtrl.webmail.paginationEntity);
-    app.get('/api/paginate/admin/reports', adminCtrl.reports.paginationEntity);
-    // PERMISOS
-    app.get('/api/paginate/permits/aconomic/activities', permitsCtrl.activities.paginationEntity);
-    app.get('/api/paginate/permits/taxes', permitsCtrl.taxes.paginationEntity);
-    app.get('/api/paginate/permits/ciiu', permitsCtrl.ciiu.paginationEntity);
-    app.get('/api/paginate/permits/entities', permitsCtrl.entities.paginationEntity);
-    app.get('/api/paginate/permits/economicActivities', permitsCtrl.locals.paginationEntity);
-    app.get('/api/paginate/permits/selfInspections', permitsCtrl.selfInspections.paginationEntity);
-    app.get('/api/paginate/permits/anuals/permits', permitsCtrl.permits.paginationEntity);
-    app.get('/api/paginate/permits/anuals/permits/localId', permitsCtrl.permits.paginateByLocal);
-    app.get('/api/paginate/permits/duplicates', permitsCtrl.duplicates.paginationEntity);
-    // UNIDAD DE PREVENCION E INGENIERIA DEL FUEGO
-    app.get('/api/paginate/prevention/plans/selfprotections/localId', preventionCtrl.plans.paginateByLocal);
-    // DIRECCION ADMINSTRATIVA
-    app.get('/api/paginate/administrative/archive/shelvings', administrativeCtrl.shelvings.paginationEntity);
-    app.get('/api/paginate/administrative/archive/boxes', administrativeCtrl.boxes.paginationEntity);
-    app.get('/api/paginate/administrative/archive/folders', administrativeCtrl.folders.paginationEntity);
-    // DIRECCION DE TALENTO HUMANO
-    app.get('/api/paginate/tthh/institution/stations', tthhCtrl.stations.paginationEntity);
-    app.get('/api/paginate/tthh/institution/leaderships', tthhCtrl.leaderships.paginationEntity);
-    app.get('/api/paginate/tthh/operators/byLeadership', tthhCtrl.operators.paginationByLeadership);
-    app.get('/api/paginate/tthh/staff/byLeadership', tthhCtrl.ppersonal.paginationByLeadership);
-    app.get('/api/paginate/tthh/institution/wineries/list', tthhCtrl.wineries.paginationEntity);
-    app.get('/api/paginate/tthh/workdays', tthhCtrl.workdays.paginationEntity);
-    app.get('/api/paginate/tthh/typeadvances', tthhCtrl.typeadvances.paginationEntity);
-    app.get('/api/paginate/tthh/typecontracts', tthhCtrl.typecontracts.paginationEntity);
-        // CONTROL DE ASISTENCIA
-    app.get('/api/paginate/tthh/attendance/biometriccodes', tthhCtrl.biometric.paginationEntity);
-    app.get('/api/paginate/tthh/attendance/biometricperiods', tthhCtrl.biometricPeriods.paginationEntity);
-    app.get('/api/paginate/tthh/attendance/biometricmarkings', tthhCtrl.biometricMarkings.paginationEntity);
-    app.get('/api/paginate/tthh/attendance/biometricperiods/nomarkings', tthhCtrl.biometricMarkings.paginationNomarkingByPeriod);
-    app.get('/api/paginate/tthh/attendance/biometricperiods/staff', tthhCtrl.biometricMarkings.paginationStaffNomarkings);
-    app.get('/api/paginate/tthh/attendance/biometricperiods/staff/nomarkings', tthhCtrl.biometricMarkings.paginationNomarkingsByStaff);
-    app.get('/api/paginate/tthh/attendance/ranches', tthhCtrl.ranches.paginationEntity);
-    app.get('/api/paginate/tthh/attendance/arrears', tthhCtrl.arrears.paginationEntity);
-    app.get('/api/paginate/tthh/attendance/absences', tthhCtrl.absences.paginationEntity);
-        // DEP. MEDICO
-    app.get('/api/paginate/tthh/md/medicalrest/recipients/list', tthhCtrl.medicalrestRecipient.paginationEntity);
-    // SUBJEFATURA
-    app.get('/api/paginate/subjefature/aph/supplies/list', subjefatureCtrl.aphSupplies.paginationEntity);
-    app.get('/api/paginate/subjefature/aph/supplies/all/stock/list', subjefatureCtrl.aphSupplies.paginationStockSupplies);
-    app.get('/api/paginate/subjefature/aph/supplies/stock/wineries/list', subjefatureCtrl.aphSupplies.paginationSuppliesStockWineries);
-    app.get('/api/paginate/subjefature/aph/supplies/stock/stations/list', subjefatureCtrl.aphSupplies.paginationSuppliesStockStations);
-    app.get('/api/paginate/subjefature/aph/control/supplies', subjefatureCtrl.aphSupplycontrol.paginationEntity);
-    // FINANCIERO
-    app.get('/api/paginate/financial/budgetclassifier', financialCtrl.budgetclassifier.paginationEntity);
-    app.get('/api/paginate/financial/retentionclassifier', financialCtrl.retentionclassifier.paginationEntity);
-    app.get('/api/paginate/financial/accountcatalog', financialCtrl.accountcatalog.paginationEntity);
-    app.get('/api/paginate/financial/programs', financialCtrl.programs.paginationEntity);
-    app.get('/api/paginate/financial/subprograms', financialCtrl.subprograms.paginationEntity);
-    app.get('/api/paginate/financial/projects', financialCtrl.projects.paginationEntity);
-    app.get('/api/paginate/financial/activities', financialCtrl.activities.paginationEntity);
-    app.get('/api/paginate/financial/entities', financialCtrl.entities.paginationEntity);
-    app.get('/api/paginate/financial/typedocuments', financialCtrl.typedocuments.paginationEntity);
 
 
     /*

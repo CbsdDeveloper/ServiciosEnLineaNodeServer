@@ -1,4 +1,5 @@
 'use strict';
+const { dateFormat, now, format } = require('../../../config/parseDate');
 const db = require('../../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
@@ -52,7 +53,7 @@ module.exports = {
 			// DATOS DE ACTUALIZACIÓN
 			data.fk_personal_id = staff.personal_id;
 			// data.insumo_registro = new Date();
-			data.insumo_registro = new Date();
+			data.insumo_registro = dateFormat(now, format.dateTime);
 
 			// ACTUALIZAR MODELO
 			await model.update( data, { where: { insumo_id: data.insumo_id } } );
