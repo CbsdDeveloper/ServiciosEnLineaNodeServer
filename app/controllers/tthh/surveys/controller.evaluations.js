@@ -1,11 +1,12 @@
 'use strict';
 const db = require('../../../models');
+const seq = db.sequelize;
+const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
 const evaluationModel = db.surveysEvaluations;
 const evaluationQuestionsMdl = db.surveysEvaluationsQuestions;
-const staffEvaluationMdl = db.surveysStaffEvaluations;
-const staffAnswerMdl = db.surveysStaffEvaluationsAnswers;
 
+const formMdl = db.rsc.forms;
 const formSectionsMdl = db.rsc.formSections;
 const formQuestionsMdl = db.rsc.formQuestions;
 const resourceMdl = db.resources;
@@ -54,9 +55,48 @@ module.exports ={
 				sectionsList[seccionName].questions.push(v);
 			});
 
-			db.setEmpty(res,'CUESIONARIO PARA EVALUACIONES DE TTHH',true,sectionsList);
+			// INFORMACION DE FORMULARIO
+			let evaluation = await evaluationModel.findOne({
+				where: {
+					evaluacion_id: req.body.evaluationId
+				},
+				include: [
+					{
+						model: formMdl, as: 'form'
+					}
+				]
+			});
+
+
+			// RETORNAR MENSAJE
+			db.setEmpty(res,'CUESIONARIO PARA EVALUACIONES DE TTHH',true,{sectionsList, evaluation});
 
 		}).catch(err => { res.status(500).json({msg: "error", details: err}); });
+
+	},
+
+	/**
+	 * @function paginationEntity
+	 * @param {Object} req - server request
+	 * @param {Object} res - server response
+	 * @returns {Object} - custom response
+	*/
+	async paginationEntity(req, res){
+		try {
+			const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
+			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
+			const { rows, count } = await evaluationModel.findAndCountAll(
+				{
+					include: [{ all: true }],
+					offset: offset,
+					limit: limit,
+					order: [ sort ]
+				});
+			const meta = paginate(currentPage, count, rows, pageLimit);
+			db.setDataTable(res,{ rows, meta },'LISTADO DE EVALUACIONES');
+		} catch (error) {
+			db.setEmpty(res,'LISTADO DE EVALUACIONES',false,error);
+		}
 
 	}
 

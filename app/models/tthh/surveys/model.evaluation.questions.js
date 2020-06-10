@@ -6,7 +6,12 @@ module.exports = (sequelize, DataType) => {
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
-		}
+		},
+
+		question_alerta: {
+			type: DataType.STRING
+		} //
+
 	}, {
 		schema: 'tthh',
 		underscored: true,

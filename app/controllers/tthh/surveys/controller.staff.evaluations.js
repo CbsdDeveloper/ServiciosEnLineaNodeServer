@@ -45,7 +45,7 @@ module.exports ={
 			}
 
 		}).then(result => {
-			db.setEmpty(res,'¡Evaluación registrada correctamente!',true,result); 
+			db.setEmpty(res,'¡Evaluación registrada correctamente!',true,result);
 		}).catch(err => {
 			db.setEmpty(res,'¡Error en el proceso!',false,err); 
 		});

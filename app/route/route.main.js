@@ -127,6 +127,7 @@ module.exports = function(app) {
     app.get('/api/paginate/resources/resources/tthh/surveys/questions', resourcesCtrl.resources.paginationQuestions);
     app.get('/api/paginate/resources/resources/tthh/surveys/forms', resourcesCtrl.forms.paginationEntity);
     app.get('/api/paginate/resources/resources/tthh/surveys/forms/sections', resourcesCtrl.formSections.paginationEntity);
+    app.get('/api/paginate/resources/resources/tthh/surveys/evaluations', tthhCtrl.surveysEvaluations.paginationEntity);
     
     // ADMIN
     app.get('/api/paginate/admin/labels', adminCtrl.labels.paginationEntity);

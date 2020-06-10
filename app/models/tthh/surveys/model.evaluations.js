@@ -17,6 +17,10 @@ module.exports = (sequelize, DataType) => {
 			defaultValue: 'ACTIVO' 
 		}, // text default 'ACTIVO'::text, -- ESTADOS DE REGISTROS
 		
+		evaluacion_codigo: { 
+			type: DataType.STRING
+		}, //
+
 		evaluacion_inicio: { 
 			type: DataType.DATE
 		}, // text not null, -- NOMBRE DE PUESTO
@@ -24,6 +28,9 @@ module.exports = (sequelize, DataType) => {
 			type: DataType.DATE
 		}, // text not null, -- NOMBRE DE PUESTO
 		evaluacion_instrucciones: { 
+			type: DataType.STRING
+		}, //
+		evaluacion_firmaresponsabilidad: { 
 			type: DataType.STRING
 		} //
 		
