@@ -40,12 +40,7 @@ module.exports = {
 						},
 						{
 							model: questionsMdl, as: 'questions',
-							order: [ ['pregunta_index'] ],
-							include: [
-								{
-									model: resourceMdl, as: 'src'
-								}
-							]
+							order: [ ['pregunta_index'] ]
 						},
 						{
 							model: staffMdl, as: 'user',

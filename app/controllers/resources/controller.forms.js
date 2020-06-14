@@ -50,7 +50,6 @@ module.exports = {
 
 	},
 
-
 	/*
 	 * INFORMACION DE REGISTRO
 	 */
@@ -59,22 +58,6 @@ module.exports = {
 			db.setEmpty(res,'INFORMACION DE ENTIDAD',true,data);
 		}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 	}
-
-
-	/*
-	findById = (req, res) => {
-		psychosocialsectionsModel.findByPk(req.body.entityId,{
-			include: [
-				{
-				  model: psychosocialformsModel,
-				  as: 'form'
-				}
-			]
-		}).then(data => {
-			db.setEmpty(res,'INFORMACION DE ENTIDAD - SECCION DE FORMULARIO > ' + data.formulario_nombre,true,data);
-		}).catch(err => { res.status(500).json({msg: "error", details: err}); });
-	}
-	*/
 
 
 }

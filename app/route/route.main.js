@@ -119,12 +119,7 @@ module.exports = function(app) {
      * SERVICIOS PARA PAGINAR RESULTADOS
      */
     // RESOURCES
-    app.get('/api/paginate/resources/surveys/forms', resourcesCtrl.forms.paginationEntity);
-    app.get('/api/paginate/resources/surveys/formsections', resourcesCtrl.formSections.paginationEntity);
-    app.get('/api/paginate/resources/surveys/formsquestions', resourcesCtrl.formQuestions.paginationEntity);
-    
     app.get('/api/paginate/resources/resources/tthh/surveys/ratingsystem', resourcesCtrl.resources.paginationRatingSystems);
-    app.get('/api/paginate/resources/resources/tthh/surveys/questions', resourcesCtrl.resources.paginationQuestions);
     app.get('/api/paginate/resources/resources/tthh/surveys/forms', resourcesCtrl.forms.paginationEntity);
     app.get('/api/paginate/resources/resources/tthh/surveys/forms/sections', resourcesCtrl.formSections.paginationEntity);
     app.get('/api/paginate/resources/resources/tthh/surveys/evaluations', tthhCtrl.surveysEvaluations.paginationEntity);
@@ -203,7 +198,8 @@ module.exports = function(app) {
     app.get('/api/resources/resources/plans/prevention', resourcesCtrl.resources.findResourcesPreventionForPlans);
     
     app.post('/api/resources/surveys/forms/entityById', resourcesCtrl.forms.findById);
-    // app.post('/api/resources/surveys/forms/sections/entityById', resourcesCtrl.psychosocialsections.findById);
+
+    app.get('/api/resources/surveys/ratingsystem/list', resourcesCtrl.resources.getRatingsystem);
     
     // ADMIN
     app.get('/api/admin/profiles', adminCtrl.profiles.findAll);
@@ -283,6 +279,7 @@ module.exports = function(app) {
     app.put('/api/tthh/attendance/biometric/staff/markings/list', tthhCtrl.biometricMarkings.updateEntityList);
     app.delete('/api/tthh/attendance/biometric/staff/markings/remove/periodId', tthhCtrl.biometricMarkings.deleteByPeriodoId);
         // EVALUACIONES - SURVEYS
+    app.post('/api/tthh/surveys/evaluations/entityById', tthhCtrl.surveysEvaluations.findById);
     app.post('/api/tthh/surveys/evaluations/questionnaire/questions', tthhCtrl.surveysEvaluations.questionnaireByEvaluation);
     app.post('/api/tthh/surveys/evaluations/new/staff', tthhCtrl.surveysEvaluationsStaff.insertSurveyEvaluarion);
         // DEP. MEDICO

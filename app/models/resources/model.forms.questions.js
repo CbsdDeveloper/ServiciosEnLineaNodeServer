@@ -18,8 +18,27 @@ module.exports = (sequelize, DataTypes) => {
 		}, // text default 'ACTIVO'::text, -- ACTIVO, ELIMINADO
 		
 		pregunta_index:{
-			type: DataTypes.INTEGER
-		} //
+			type: DataTypes.INTEGER,
+			defaultValue: 0
+		}, //
+		pregunta_descripcion:{
+			type: DataTypes.STRING
+		}, // text, -- 
+		pregunta_detalle:{
+			type: DataTypes.STRING
+		}, // text, -- 
+
+		pregunta_seleccion_descripcion:{
+			type: DataTypes.STRING
+		}, // text, -- 
+		
+		pregunta_alerta:{
+			type: DataTypes.STRING,
+			defaultValue: 'NO'
+		}, // text default 'NO'::text, -- 
+		pregunta_alerta_respuesta:{
+			type: DataTypes.STRING
+		}, // text -- 
 
 	}, {
 		schema: 'resources',

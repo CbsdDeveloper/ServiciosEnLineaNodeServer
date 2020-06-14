@@ -94,39 +94,15 @@ module.exports = {
 	},
 
 	/**
-	 * @function paginationEntity
-	 * @param {Object} req - server request
-	 * @param {Object} res - server response
-	 * @returns {Object} - custom response
+	 * LISTADO DE RECURSOS - SISTEMAS DE CALIFICACION DE EVALUACIONES
 	*/
-	async paginationQuestions(req, res){
-		try {
-			const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
-			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
-			const where = seq.or(
-				{ recurso_nombre: seq.where(seq.fn('LOWER', seq.col('recurso_nombre')), 'LIKE', '%' + filter + '%') }
-			);
-			const { rows, count } = await resourceModel.findAndCountAll(
-				{
-					offset: offset,
-					limit: limit,
-					where: {
-						recurso_clasificacion: 'EVALUACIÓN COVID19'
-					},
-					order: [ sort ],
-					include: [
-						{
-							model: userMdl, as: 'user',
-							attributes: [ [ 'usuario_login', 'usuario' ] ]
-						}
-					]
-				});
-			const meta = paginate(currentPage, count, rows, pageLimit);
-			db.setDataTable(res,{ rows, meta },'CLASIFICACION DE FORMULARIOS');
-		} catch (error) {
-			db.setEmpty(res,'CLASIFICACION DE FORMULARIOS',false,error);
-		}
-
+	async getRatingsystem(req, res){
+		let data = await resourceModel.findAll(
+			{
+				where: { recurso_clasificacion: 'SISTEMA DE CALIFICACION PARA EVALUACIONES' },
+				order: [ ['recurso_nombre'] ]
+			});
+		db.setEmpty(res,'SISTEMA DE CALIFICACION PARA EVALUACIONES',true,data);
 	}
 
 }

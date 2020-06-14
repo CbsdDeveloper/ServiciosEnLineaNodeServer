@@ -121,7 +121,6 @@ db.inventoryMedicines 				= require('./tthh/md/model.inventory')(sequelize, Sequ
 db.medicalrestRecipients 			= require('./tthh/md/model.medicalrest.recipients')(sequelize, Sequelize);
 	// EVAUACIONES
 db.surveysEvaluations				= require('./tthh/surveys/model.evaluations')(sequelize, Sequelize);
-db.surveysEvaluationsQuestions		= require('./tthh/surveys/model.evaluation.questions')(sequelize, Sequelize);
 db.surveysStaffEvaluations			= require('./tthh/surveys/model.staff.evaluation')(sequelize, Sequelize);
 db.surveysStaffEvaluationsAnswers	= require('./tthh/surveys/model.staff.evaluation.answers')(sequelize, Sequelize);
 	// SOS
@@ -212,7 +211,6 @@ db.rsc.formSections.hasMany(db.rsc.formQuestions, {as: 'questions', foreignKey: 
 
 db.rsc.formQuestions.belongsTo(db.staff, {as: 'user', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
 db.rsc.formQuestions.belongsTo(db.rsc.formSections, {as: 'section', foreignKey: 'fk_seccion_id', targetKey: 'seccion_id'});
-db.rsc.formQuestions.belongsTo(db.resources, {as: 'src', foreignKey: 'fk_pregunta_id', targetKey: 'recurso_id'});
 db.rsc.formQuestions.belongsTo(db.resources, {as: 'rating', foreignKey: 'fk_sistemacalificacion_id', targetKey: 'recurso_id'});
 
 // SUBJEFATURA - GENERAL
@@ -307,9 +305,8 @@ db.poaprojects.belongsTo(db.poa, {as: 'poa', foreignKey: 'fk_poa_id', targetKey:
 
 // EVALUACIONES DE TALENTO HUMANO
 db.surveysEvaluations.belongsTo(db.rsc.forms, {as: 'form', foreignKey: 'fk_formulario_id', targetKey: 'formulario_id'});
-//db.surveysEvaluations.belongsToMany(db.surveyFormsQuestions, {through: 'tb_evaluacionespersonal_preguntas', foreignKey: 'fk_evaluacion_id'});
-db.surveysEvaluationsQuestions.belongsTo(db.rsc.formQuestions, {as: 'question', foreignKey: 'fk_pregunta_id', targetKey: 'pregunta_id'});
-db.surveysEvaluationsQuestions.belongsTo(db.surveysEvaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id', targetKey: 'evaluacion_id'});
+db.surveysEvaluations.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
+db.surveysEvaluations.hasMany(db.surveysStaffEvaluations, {as: 'evaluations', foreignKey: 'fk_evaluacion_id', targetKey: 'evaluacion_id'});
 
 db.surveysStaffEvaluations.belongsTo(db.surveysEvaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id', targetKey: 'evaluacion_id'});
 db.surveysStaffEvaluations.belongsTo(db.staff, {as: 'staff', foreignKey: 'fk_evaluado_id', targetKey: 'personal_id'});

@@ -29,7 +29,7 @@ module.exports = (sequelize, DataType) => {
 		evaluado_cargo: { 
 			type: DataType.STRING
 		}, // text, -- 
-		evaluado_fecha: { 
+		evaluado_fechainscripcion: { 
 			type: DataType.DATE
 		}, // timestamp without time zone default current_timestamp(0) -- 
 		evaluado_fechaevaluacion: { 

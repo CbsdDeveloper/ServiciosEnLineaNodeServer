@@ -4,72 +4,108 @@ const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
 const evaluationModel = db.surveysEvaluations;
-const evaluationQuestionsMdl = db.surveysEvaluationsQuestions;
+
+const evaluationStaffMdl = db.surveysStaffEvaluations;
 
 const formMdl = db.rsc.forms;
 const formSectionsMdl = db.rsc.formSections;
 const formQuestionsMdl = db.rsc.formQuestions;
 const resourceMdl = db.resources;
 
+const staffMdl = db.staff;
+const personMdl = db.persons;
+
 module.exports ={
-	
-	// LISTADO DE SECCIONES Y PREGUNTAS DE UN FORMULARIO
-	questionnaireByEvaluation(req, res){
+
+	/*
+	 * INFORMACION DE EVALUACION
+	 */
+	async findById(req, res){
+
+		// INFORMACION DE EVALUACION
+		let entity = await evaluationModel.findOne({
+			where: {
+				evaluacion_id: req.body.id
+			},
+			include: [
+				{
+					model: formMdl, as: 'form' 
+				},
+				{
+					model: evaluationStaffMdl, as: 'evaluations',
+					required: false,
+					attributes: [ 'test_id','test_estado','evaluado_fechaevaluacion','evaluado_fechainscripcion','evaluado_correo','evaluado_telefonos','evaluado_edad','evaluado_cargo' ],
+					include: [
+						{
+							model: staffMdl, as: 'staff',
+							attributes: [ 'personal_id','personal_correo_institucional' ],
+							include: [
+								{
+									model: personMdl, as: 'person', 
+									attributes: [ 'persona_apellidos','persona_nombres','persona_imagen' ]
+								}
+							]
+						}
+					]
+				}
+			],
+			order: [ 
+				[ 
+					{ model: evaluationStaffMdl, as: 'evaluations' }, 'evaluado_fechainscripcion','DESC' 
+				] 
+			]
+		});
+
+		var filterParams = { 
+			replacements: req.body, 
+			type: seq.QueryTypes.SELECT
+		};
+		let alerts = await seq.query("SELECT * FROM tthh.vw_evaluacionpersonal_alerta WHERE fk_evaluacion_id = :id ORDER BY evaluado_fechainscripcion DESC", filterParams).catch(error => { throw error});
+
+		// RETORNAR MENSAJE
+		db.setEmpty(res,'INFORMACION DE EVALUACIONE PARA PERSONAL',true, { entity, alerts } );
 		
+	},
+	
+	/*
+	 * LISTADO DE SECCIONES Y PREGUNTAS DE UN FORMULARIO
+	 */
+	async questionnaireByEvaluation(req, res, next){
+
+		// VALIDAR ESTADO DE EVALUACION DEL PERSONAL
+		let test = await evaluationStaffMdl.findByPk(req.body.testId);
+		if(test.test_estado=='TEST REALIZADA') db.endConection(res,next,'¡Lo sentimos, esta evaluación solo se puede realizar una vez!',false);
+		
+		// INFORMACION DE EVALUACION E FORMULARIO
+		let evaluation = await evaluationModel.findOne({
+			where: {
+				evaluacion_id: req.body.evaluationId
+			},
+			include: [
+				{ model: formMdl, as: 'form' }
+			]
+		});
+
 		// BUSCAR LISTADO DE PREGUNTAS
-		evaluationQuestionsMdl.findAll({
-			where: { fk_evaluacion_id: req.body.evaluationId },
+		formSectionsMdl.findAll({
+			where: { fk_formulario_id: evaluation.fk_formulario_id },
 			include:[
 				{
 					model: formQuestionsMdl,
-					as: 'question',
+					as: 'questions',
 					include: [
-						{ model: formSectionsMdl, as: 'section' },
-						{ model: resourceMdl, as: 'src' },
 						{ model: resourceMdl, as: 'rating' }
 					]
 				}
 			],
 			order:[
-				[ { model: formQuestionsMdl, as: 'question' }, { model: formSectionsMdl, as: 'section' }, 'seccion_index', 'asc' ],
-				[ { model: formQuestionsMdl, as: 'question' }, 'pregunta_index', 'asc' ]
+				[ 'seccion_index', 'asc' ],
+				[ { model: formQuestionsMdl, as: 'questions' }, 'pregunta_index', 'asc' ]
 			]
-		}).then(async(list) => {
-
-			let sectionsList = await { };
-			let seccionName;
-
-			list.forEach((v) => {
-				// NOMBRE DE SECCION
-				seccionName = v.question.section.seccion_nombre;
-				// INGRESAR LISTADO DE EMPLEADOS
-				if(!sectionsList[seccionName]){
-					sectionsList[seccionName] = {
-						section: v.question.section,
-						questions: []
-					};
-				}
-				// PARSE RANKING
-				v.question.rating.recurso_descripcion=JSON.parse(v.question.rating.recurso_descripcion);
-				// INSERTAR DATO
-				sectionsList[seccionName].questions.push(v);
-			});
-
-			// INFORMACION DE FORMULARIO
-			let evaluation = await evaluationModel.findOne({
-				where: {
-					evaluacion_id: req.body.evaluationId
-				},
-				include: [
-					{
-						model: formMdl, as: 'form'
-					}
-				]
-			});
-
+		}).then(async(sectionsList) => {
 
 			// RETORNAR MENSAJE
-			db.setEmpty(res,'CUESIONARIO PARA EVALUACIONES DE TTHH',true,{sectionsList, evaluation});
+			db.setEmpty(res,'CUESIONARIO PARA EVALUACIONES DE TTHH',true,{evaluation, sectionsList});
 
 		}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 
@@ -87,7 +123,21 @@ module.exports ={
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
 			const { rows, count } = await evaluationModel.findAndCountAll(
 				{
-					include: [{ all: true }],
+					include: [
+						{ 
+							model: formMdl, as: 'form' 
+						},
+						{ 
+							model: staffMdl, as: 'staff', 
+							attributes: [ 'personal_id','personal_correo_institucional' ],
+							include: [
+								{
+									model: personMdl, as: 'person', 
+									attributes: [ 'persona_apellidos','persona_nombres' ] 
+								}
+							]
+						}
+					],
 					offset: offset,
 					limit: limit,
 					order: [ sort ]

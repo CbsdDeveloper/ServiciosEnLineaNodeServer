@@ -22,10 +22,10 @@ module.exports ={
 			// ENCONTRAR O CREAR EVALUACIÓN
 			await testModel.update(
 				{
-					evaluado_fechaevaluacion: dateFormat(now, format.dateTime),
+					evaluado_fechaevaluacion: dateFormat(new Date(), format.dateTime),
 					test_estado: 'TEST REALIZADA',
 					fk_personal_id: req.body.fk_personal_id,
-					test_registro: dateFormat(now, format.dateTime)
+					test_registro: dateFormat(new Date(), format.dateTime)
 				},
 				{ where: strWhr }
 			);

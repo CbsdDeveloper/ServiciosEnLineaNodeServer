@@ -5,7 +5,6 @@ const { calculateLimitAndOffset, paginate } = require('../../config/pagination')
 
 const questionModel = db.rsc.formQuestions;
 const sectionMdl = db.rsc.formSections;
-const formMdl = db.rsc.forms;
 
 const staffMdl = db.staff;
 const personMdl = db.persons;
@@ -23,7 +22,6 @@ module.exports = {
 			const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
 			const where = seq.or(
-				{ recurso_nombre: seq.where(seq.fn('LOWER', seq.col('recurso_nombre')), 'LIKE', '%' + filter + '%') },
 				{ seccion_nombre: seq.where(seq.fn('LOWER', seq.col('seccion_nombre')), 'LIKE', '%' + filter + '%') }
 			);
 			const { rows, count } = await questionModel.findAndCountAll(
