@@ -10,7 +10,7 @@
       "dialectOptions": {
         "useUTC": false
       },
-      "timezone": "+07:00",
+      "timezone": "-05:00",
 
       "port": 5432,
       "pool": {

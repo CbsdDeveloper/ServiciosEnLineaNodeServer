@@ -240,12 +240,13 @@ module.exports = function(app) {
     app.post('/api/subjefature/aph/supplies/inventory/single', subjefatureCtrl.aphSupplyMovements.insertInventory);
     // PERMISOS
         // ENTIDADES
-    app.get('/api/permits/commercialActivities', permitsCtrl.activities.findCommercialActivities);
+    app.post('/api/permits/entities/session/summary', permitsCtrl.entities.getSummaryByEntity);
+    app.get('/api/permits/entities/resumen/:entityRuc', permitsCtrl.entities.summaryByRuc);
     app.get('/api/permits/entities/:entityRuc', permitsCtrl.entities.findByEntity);
     app.post('/api/permits/entities/entityId', permitsCtrl.entities.findById);
-    app.get('/api/permits/entities/resumen/:entityRuc', permitsCtrl.entities.summaryByRuc);
     app.post('/api/permits/entities/login', permitsCtrl.entities.findByRUC);
     app.post('/api/permits/entities/enitiyByRUC', permitsCtrl.entities.findByRUC);
+    app.get('/api/permits/commercialActivities', permitsCtrl.activities.findCommercialActivities);
     app.post('/api/permits/locals/localId', permitsCtrl.locals.findById);
     app.put('/api/permits/locals', permitsCtrl.locals.updateEntity);
     app.post('/api/permits/employees/localId', permitsCtrl.employees.findByLocal);

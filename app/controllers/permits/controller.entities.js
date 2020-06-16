@@ -137,6 +137,29 @@ module.exports = {
 		});
 	},
 
+	/*
+	 * DATOS - SESSION DE ENTIDAD
+	 */
+	getSummaryByEntity(req, res){
+		// CONDICIONALES DE BUSQUEDA
+		var filterParams = { 
+			replacements: req.body, 
+			type: seq.QueryTypes.SELECT
+		};
+
+		// CONSULTAR ACTIVIDADES ECONOMICAS
+		seq.query("SELECT * FROM prevencion.vw_resumen_entidad WHERE entidad_id = :tokenId", filterParams).then(function (summary) {
+
+			// RETORNAR LISTADO
+			res.status(200).json({
+				estado: true,
+				mensaje: 'RESUMEN DE ENTIDAD',
+				data: summary[0]
+			});
+
+		}).catch(err => { res.status(500).json({msg: "error", details: err}); });
+	},
+
 	// Find a Customer by Id
 	summaryByRuc(req, res){
 		// CONDICIONALES DE BUSQUEDA
