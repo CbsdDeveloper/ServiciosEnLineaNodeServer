@@ -4,14 +4,15 @@ const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
 const localModel = db.locals;
-const coordinates = db.coordinates;
-const ciiu = db.ciiu;
-const taxes = db.taxes;
+
+const coordinatesMdl = db.coordinates;
+const ciiuMdl = db.ciiu;
+const taxesMdl = db.taxes;
+const activityMdl = db.activities;
+const entityMdl = db.entities;
+const personMdl = db.persons;
 
 const userMdl = db.users;
-const entityMdl = db.entities;
-// VARIABLES GLOBALES
-var strWhr;
 
 module.exports = {
 
@@ -38,7 +39,7 @@ module.exports = {
 					order: [ sort ],
 					include: [
 						{ 
-							model: ciiu, as: 'ciiu',
+							model: ciiuMdl, as: 'ciiu',
 							attributes: [ 'ciiu_id','ciiu_codigo','ciiu_nombre' ]
 						},
 						{ 
@@ -59,10 +60,12 @@ module.exports = {
 
 	},
 
-	// BUSCAR LOCAL POR ID
+	/*
+	 * BUSCAR LOCAL POR ID
+	 */
 	findById(req, res){
 		// CONDICIONAL
-		strWhr = { local_id: req.body.localId };
+		let strWhr = { local_id: req.body.localId };
 		// CONSUTAR SI EXISTE EL REGISTRO
 		localModel.count({
 			where: strWhr
@@ -72,18 +75,15 @@ module.exports = {
 				localModel.findOne({
 					include:[
 						{ 
-							model: coordinates, 
-							as: 'coordinates', 
+							model: coordinatesMdl, as: 'coordinates', 
 							required: false, 
 							where: { coordenada_entidad: 'locales'}
 						},
 						{ 
-							model: ciiu, 
-							as: 'ciiu', 
+							model: ciiuMdl, as: 'ciiu', 
 							include:[
 								{
-									model: taxes,
-									as: 'taxe'
+									model: taxesMdl, as: 'taxe'
 								}
 							]
 						}
@@ -103,7 +103,77 @@ module.exports = {
 		});
 	},
 
-	// ACTUALIZAR REGISTROS
+	/*
+	 * BUSCAR LOCAL POR ID
+	 */
+	async detailById(req, res){
+		// CONSULTA
+		let data = await localModel.findOne({
+			where: { local_id: req.body.localId },
+			include: [
+				{
+					model: entityMdl, as: 'entity',
+					attributes: [ 'entidad_ruc','entidad_razonsocial','entidad_contribuyente','entidad_correo','entidad_usuario_creacion' ],
+					include: [
+						{
+							model: personMdl, as: 'person',
+							attributes: [ 'persona_apellidos','persona_nombres','persona_correo','persona_doc_identidad' ]
+						}
+					]
+				},
+				{ 
+					model: ciiuMdl, as: 'ciiu', 
+					include:[
+						{
+							model: taxesMdl, as: 'taxe',
+							include: [
+								{
+									model: activityMdl, as: 'activity'
+								}
+							]
+						}
+					]
+				}
+			]
+		});
+		// RETORNAR CONSULTA
+		db.setEmpty(res,'DETALLE DE ACTIVIDAD ECONOMICA',true,data);
+	},
+
+	/*
+	 * ACTIVIDADES ECONOMICAS DE UNA ENTIDAD
+	 */
+	async findByEntityId(req, res){
+		// CONSULTA
+		let data = await localModel.findAll({
+			where: { fk_entidad_id: req.body.entityId },
+			include: [
+				{
+					model: ciiuMdl, as: 'ciiu', 
+					include:[
+						{
+							model: taxesMdl, as: 'taxe',
+							include: [
+								{
+									model: activityMdl, as: 'activity'
+								}
+							]
+						}
+					]
+				},
+				{
+					model: userMdl, as: 'user',
+					attributes: [ [ 'usuario_login','usuario' ] ]
+				}
+			]
+		});
+		// RETORNAR CONSULTA
+		db.setEmpty(res,'ACTIVIDADES ECONOMICAS DE UN RUC',true,data);
+	},
+
+	/*
+	 * ACTUALIZAR REGISTROS
+	 */
 	updateEntity(req, res){
 		// ACTUALIZAR DATOS DE LOCAL
 		localModel.update(

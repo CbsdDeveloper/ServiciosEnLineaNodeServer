@@ -76,7 +76,14 @@ db.cloneObjArray=function(obj,params){
 
 // DECLARACION DE MODELOS
 // RESOURCES
-db.rsc = {};
+db.rsc = {
+	// FORMULARIOS PARA EVALUACION
+	forms:				require('./resources/model.forms')(sequelize, Sequelize),
+	formSections:		require('./resources/model.forms.sections')(sequelize, Sequelize),
+	formQuestions:		require('./resources/model.forms.questions')(sequelize, Sequelize),
+	// ARCHIVOS ADJUNTOS
+	gallery:			require('./resources/model.gallery')(sequelize, Sequelize)
+};
 db.resources			= require('../models/resources/model.resources')(sequelize, Sequelize);
 db.coordinates			= require('../models/resources/model.coordinates')(sequelize, Sequelize);
 db.geojson				= require('../models/resources/model.geojson')(sequelize, Sequelize);
@@ -87,9 +94,6 @@ db.towns				= require('../models/resources/model.towns')(sequelize, Sequelize);
 db.parishes				= require('../models/resources/model.parishes')(sequelize, Sequelize);
 db.persons				= require('../models/resources/model.persons')(sequelize, Sequelize);
 db.driverlicenses		= require('./resources/model.driverlicenses')(sequelize, Sequelize);
-db.rsc.forms			= require('./resources/model.forms')(sequelize, Sequelize);
-db.rsc.formSections		= require('./resources/model.forms.sections')(sequelize, Sequelize);
-db.rsc.formQuestions	= require('./resources/model.forms.questions')(sequelize, Sequelize);
 // ADMINISTRACION
 db.labels				= require('../models/admin/model.labels')(sequelize, Sequelize);
 db.parameters			= require('../models/admin/model.parameters')(sequelize, Sequelize);
@@ -140,16 +144,34 @@ db.archiveclassification		= require('./administrative/archive/model.classificati
 db.archivefolder				= require('./administrative/archive/model.folder')(sequelize, Sequelize);
 db.archivedocuments				= require('./administrative/archive/model.documents')(sequelize, Sequelize);
 // PREVENCION
-db.plans              			= require('../models/prevention/model.plans')(sequelize, Sequelize);
-db.brigades           			= require('../models/prevention/model.brigades')(sequelize, Sequelize);
-db.brigadists         			= require('../models/prevention/model.brigadists')(sequelize, Sequelize);
-db.selfProtectionAnnexes     	= require('../models/prevention/model.selfprotection.annexes')(sequelize, Sequelize);
-db.selfProtectionFactors     	= require('../models/prevention/model.selfprotection.factors')(sequelize, Sequelize);
-db.selfProtectionPrevention  	= require('../models/prevention/model.selfprotection.prevention')(sequelize, Sequelize);
-db.selfProtectionMaintenance	= require('../models/prevention/model.selfprotection.maintenances')(sequelize, Sequelize);
-db.selfProtectionMeseri      	= require('../models/prevention/model.selfprotection.meseri')(sequelize, Sequelize);
-db.covid						= require('../models/prevention/biosecurity/model.covid')(sequelize, Sequelize);
-db.covidResources				= require('../models/prevention/biosecurity/model.covid.resources')(sequelize, Sequelize);
+db.prevention = {
+	// BIOSEGURIDAD
+	covid: require('../models/prevention/biosecurity/model.covid')(sequelize, Sequelize),
+	covidResources: require('../models/prevention/biosecurity/model.covid.resources')(sequelize, Sequelize),
+	// PLANES DE AUTOPROTECCION
+	plans: require('./prevention/selfprotectionplans/model.plans')(sequelize, Sequelize),
+	planInspectors: require('./prevention/selfprotectionplans/model.plans.inspectors')(sequelize, Sequelize),
+	brigades: require('./prevention/selfprotectionplans/model.brigades')(sequelize, Sequelize),
+	brigadists: require('./prevention/selfprotectionplans/model.brigadists')(sequelize, Sequelize),
+	selfProtectionAnnexes: require('./prevention/selfprotectionplans/model.selfprotection.annexes')(sequelize, Sequelize),
+	selfProtectionFactors: require('./prevention/selfprotectionplans/model.selfprotection.factors')(sequelize, Sequelize),
+	selfProtectionPrevention: require('./prevention/selfprotectionplans/model.selfprotection.prevention')(sequelize, Sequelize),
+	selfProtectionMaintenance: require('./prevention/selfprotectionplans/model.selfprotection.maintenances')(sequelize, Sequelize),
+	selfProtectionMeseri: require('./prevention/selfprotectionplans/model.selfprotection.meseri')(sequelize, Sequelize),
+	extensions: require('./prevention/inspections/model.extensions')(sequelize, Sequelize),
+	// INSPECCIONES
+	inspections: require('./prevention/inspections/model.inspections')(sequelize, Sequelize),
+	inspectionInspector: require('./prevention/inspections/model.inspection.inspector')(sequelize, Sequelize),
+	inspectionLocal: require('./prevention/inspections/model.inspection.local')(sequelize, Sequelize),
+	reinspections: require('./prevention/inspections/model.reinspections')(sequelize, Sequelize),
+	// CAPACITACIONES CIUDADANAS
+	trainingTopics: require('./prevention/trainings/model.topics')(sequelize, Sequelize),
+	trainings: require('./prevention/trainings/model.trainings')(sequelize, Sequelize),
+	stands: require('./prevention/trainings/model.stands')(sequelize, Sequelize),
+	visits: require('./prevention/trainings/model.visits')(sequelize, Sequelize),
+	simulations: require('./prevention/trainings/model.simulations')(sequelize, Sequelize)
+};
+
 // PLANIFICACION
 db.programspoa				= require('../models/planing/model.programs')(sequelize, Sequelize);
 db.poa						= require('../models/planing/model.poa')(sequelize, Sequelize);
@@ -175,11 +197,12 @@ db.employees			= require('../models/permits/model.employees')(sequelize, Sequeli
 db.selfInspections		= require('../models/permits/model.selfinspections')(sequelize, Sequelize);
 db.permitsLocals		= require('../models/permits/model.permits')(sequelize, Sequelize);
 db.duplicates			= require('../models/permits/model.duplicates')(sequelize, Sequelize);
+
 // SUBJEFATURA
 	// UNIDAD ATENCIÓN PREHOSPITALARIA
-db.aphSupplies					= require('./subjefature/aph/model.aph.supplies')(sequelize, Sequelize);
-db.aphSupplycontrol				= require('./subjefature/aph/model.aph.supplycontrol')(sequelize, Sequelize);
-db.aphSupplyMovements			= require('./subjefature/aph/model.aph.supplycontrolmovements')(sequelize, Sequelize);
+db.aphSupplies				= require('./subjefature/aph/model.aph.supplies')(sequelize, Sequelize);
+db.aphSupplycontrol			= require('./subjefature/aph/model.aph.supplycontrol')(sequelize, Sequelize);
+db.aphSupplyMovements		= require('./subjefature/aph/model.aph.supplycontrolmovements')(sequelize, Sequelize);
 	// PARTES
 db.parts					= require('../models/subjefature/model.parts')(sequelize, Sequelize);
 db.attended					= require('../models/subjefature/model.attended')(sequelize, Sequelize);
@@ -202,16 +225,16 @@ db.persons.hasMany(db.academicTraining, {as: 'training', foreignKey: 'fk_persona
 db.academicTraining.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
 
 db.resources.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
-
+// FORMULARIOS DE EVALUACION
 db.rsc.forms.belongsTo(db.staff, {as: 'user', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
-
 db.rsc.formSections.belongsTo(db.staff, {as: 'user', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
 db.rsc.formSections.belongsTo(db.rsc.forms, {as: 'form', foreignKey: 'fk_formulario_id', targetKey: 'formulario_id'});
 db.rsc.formSections.hasMany(db.rsc.formQuestions, {as: 'questions', foreignKey: 'fk_seccion_id', targetKey: 'seccion_id'});
-
 db.rsc.formQuestions.belongsTo(db.staff, {as: 'user', foreignKey: 'fk_personal_id', targetKey: 'personal_id'});
 db.rsc.formQuestions.belongsTo(db.rsc.formSections, {as: 'section', foreignKey: 'fk_seccion_id', targetKey: 'seccion_id'});
 db.rsc.formQuestions.belongsTo(db.resources, {as: 'rating', foreignKey: 'fk_sistemacalificacion_id', targetKey: 'recurso_id'});
+// GALERIA - ADJUNTOS
+db.rsc.gallery.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
 
 // SUBJEFATURA - GENERAL
 db.wineries.belongsTo(db.stations, {as: 'station', foreignKey: 'fk_estacion_id', targetKey: 'estacion_id'});
@@ -262,7 +285,12 @@ db.locals.hasOne(db.coordinates, {as: 'coordinates', constraints: false, foreign
 db.selfInspections.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
 db.permitsLocals.belongsTo(db.selfInspections, {as: 'selfInspection', foreignKey: 'fk_autoinspeccion_id', targetKey: 'autoinspeccion_id'});
 db.permitsLocals.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
-
+db.permitsLocals.hasMany(db.duplicates, {as: 'duplicates', foreignKey: 'fk_permiso_id', targetKey: 'permiso_id'});
+// LISTADO DE EMPLEADOS DE LOCALES
+db.employees.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+db.employees.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
+db.employees.hasMany(db.prevention.brigadists, {as: 'brigade', foreignKey: 'fk_empleado_id', targetKey: 'empleado_id', onDelete: 'CASCADE', hooks:true});
+// DUPLICADOS
 db.duplicates.belongsTo(db.permitsLocals, {as: 'permit', foreignKey: 'fk_permiso_id', targetKey: 'permiso_id'});
 db.duplicates.belongsTo(db.users, {as: 'requesting', foreignKey: 'fk_usuario_solicita', targetKey: 'usuario_id'});
 db.duplicates.belongsTo(db.users, {as: 'approving', foreignKey: 'fk_usuario_aprueba', targetKey: 'usuario_id'});
@@ -270,34 +298,64 @@ db.duplicates.belongsTo(db.users, {as: 'downloading', foreignKey: 'fk_usuario_im
 db.duplicates.belongsTo(db.ppersonal, {as: 'jtprequest', foreignKey: 'jtp_solicitud', targetKey: 'ppersonal_id'});
 db.duplicates.belongsTo(db.ppersonal, {as: 'jtpapprove', foreignKey: 'jtp_aprueba', targetKey: 'ppersonal_id'});
 
-// LOCALES COMERCIALES
-db.plans.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
-db.plans.belongsTo(db.users, {as: 'inspector', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
-db.plans.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
-db.plans.belongsTo(db.entities, {as: 'billing', foreignKey: 'facturacion_id', targetKey: 'entidad_id'});
-db.plans.belongsTo(db.persons, {as: 'responsable', foreignKey: 'fk_responsable_tramite', targetKey: 'persona_id'});
-db.plans.belongsTo(db.persons, {as: 'sos', foreignKey: 'fk_sos_id', targetKey: 'persona_id'});
-db.plans.belongsTo(db.academicTraining, {as: 'training', foreignKey: 'profesional_sos_id', targetKey: 'formacion_id'});
-// LISTADO DE EMPLEADOS DE LOCALES
-db.employees.belongsTo(db.persons, {as: 'person', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
-db.employees.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
-db.employees.hasMany(db.brigadists, {as: 'brigade', foreignKey: 'fk_empleado_id', targetKey: 'empleado_id', onDelete: 'CASCADE', hooks:true});
-// BRIGADAS Y BRIGADISTAS
-db.brigades.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
-db.brigades.belongsTo(db.persons, {as: 'responsable', foreignKey: 'fk_responsable_id', targetKey: 'persona_id'});
-db.brigades.belongsTo(db.persons, {as: 'junior', foreignKey: 'fk_subalterno_id', targetKey: 'persona_id'});
-db.brigades.hasMany(db.brigadists, {as: 'brigadist', foreignKey: 'fk_brigada_id', targetKey: 'brigada_id'});
-db.brigadists.belongsTo(db.employees, {as: 'employee', foreignKey: 'fk_empleado_id', targetKey: 'empleado_id'});
-db.brigadists.belongsTo(db.brigades, {as: 'brigade', foreignKey: 'fk_brigada_id', targetKey: 'brigada_id'});
-// AUTOPROTECCION
-db.selfProtectionMaintenance.belongsTo(db.entities, {as: 'professional', foreignKey: 'mantenimiento_responsable_id', targetKey: 'entidad_id'});
-db.resources.hasMany(db.selfProtectionMaintenance, {as: 'maintenance', foreignKey: 'fk_recurso_id', targetKey: 'recurso_id'});
-db.selfProtectionMaintenance.belongsTo(db.resources, {as: 'resource', foreignKey: 'fk_recurso_id', targetKey: 'recurso_id'});
 // BIOSEGURIDAD
-db.covid.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
-db.covid.hasMany(db.covidResources, {as: 'resources', foreignKey: 'fk_bioseguridad_id', targetKey: 'bioseguridad_id'});
-db.covidResources.belongsTo(db.covid, {as: 'covid', foreignKey: 'fk_bioseguridad_id', targetKey: 'bioseguridad_id'});
-db.covidResources.belongsTo(db.resources, {as: 'src', foreignKey: 'fk_recurso_id', targetKey: 'recurso_id'});
+db.prevention.covid.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
+db.prevention.covid.hasMany(db.prevention.covidResources, {as: 'resources', foreignKey: 'fk_bioseguridad_id', targetKey: 'bioseguridad_id'});
+db.prevention.covidResources.belongsTo(db.prevention.covid, {as: 'covid', foreignKey: 'fk_bioseguridad_id', targetKey: 'bioseguridad_id'});
+db.prevention.covidResources.belongsTo(db.resources, {as: 'src', foreignKey: 'fk_recurso_id', targetKey: 'recurso_id'});
+// AUTOPROTECCION
+db.prevention.selfProtectionMaintenance.belongsTo(db.entities, {as: 'professional', foreignKey: 'mantenimiento_responsable_id', targetKey: 'entidad_id'});
+db.resources.hasMany(db.prevention.selfProtectionMaintenance, {as: 'maintenance', foreignKey: 'fk_recurso_id', targetKey: 'recurso_id'});
+db.prevention.selfProtectionMaintenance.belongsTo(db.resources, {as: 'resource', foreignKey: 'fk_recurso_id', targetKey: 'recurso_id'});
+// INSPECCIONES
+db.prevention.inspections.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
+db.prevention.inspections.belongsTo(db.persons, {as: 'applicant', foreignKey: 'fk_solicitante_id', targetKey: 'persona_id'});
+db.prevention.inspections.belongsTo(db.persons, {as: 'enterviewed', foreignKey: 'fk_entrevistado_id', targetKey: 'persona_id'});
+db.prevention.inspections.hasMany(db.prevention.inspectionLocal, {as: 'locals', foreignKey: 'fk_inspeccion_id', targetKey: 'inspeccion_id'});
+db.prevention.inspections.hasMany(db.prevention.inspectionInspector, {as: 'inspectors', foreignKey: 'fk_inspeccion_id', targetKey: 'inspeccion_id'});
+db.prevention.inspectionLocal.belongsTo(db.prevention.inspections, {as: 'inspection', foreignKey: 'fk_inspeccion_id', targetKey: 'inspeccion_id'});
+db.prevention.inspectionLocal.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
+db.prevention.inspectionInspector.belongsTo(db.prevention.inspections, {as: 'inspection', foreignKey: 'fk_inspeccion_id', targetKey: 'inspeccion_id'});
+db.prevention.inspectionInspector.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
+db.prevention.reinspections.belongsTo(db.prevention.inspections, {as: 'inspection', foreignKey: 'fk_inspeccion_id', targetKey: 'inspeccion_id'});
+// PLANES DE AUTOPROTECCION
+db.prevention.plans.hasMany(db.rsc.gallery, {as: 'gallery', foreignKey: 'fk_id', targetKey: 'plan_id'});
+
+db.prevention.plans.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id'});
+db.prevention.plans.belongsTo(db.users, {as: 'inspector', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
+db.prevention.plans.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
+db.prevention.plans.belongsTo(db.entities, {as: 'billing', foreignKey: 'facturacion_id', targetKey: 'entidad_id'});
+db.prevention.plans.belongsTo(db.persons, {as: 'responsable', foreignKey: 'fk_responsable_tramite', targetKey: 'persona_id'});
+db.prevention.plans.belongsTo(db.persons, {as: 'sos', foreignKey: 'fk_sos_id', targetKey: 'persona_id'});
+db.prevention.plans.belongsTo(db.academicTraining, {as: 'training', foreignKey: 'profesional_sos_id', targetKey: 'formacion_id'});
+db.prevention.plans.hasMany(db.prevention.planInspectors, {as: 'inspectors', foreignKey: 'fk_plan_id', targetKey: 'plan_id'});
+db.prevention.planInspectors.belongsTo(db.ppersonal, {as: 'ppersonal', foreignKey: 'fk_personal_id', targetKey: 'ppersonal_id'});
+// BRIGADAS Y BRIGADISTAS
+db.prevention.brigades.belongsTo(db.locals, {as: 'local', foreignKey: 'fk_local_id', targetKey: 'local_id'});
+db.prevention.brigades.belongsTo(db.persons, {as: 'responsable', foreignKey: 'fk_responsable_id', targetKey: 'persona_id'});
+db.prevention.brigades.belongsTo(db.persons, {as: 'junior', foreignKey: 'fk_subalterno_id', targetKey: 'persona_id'});
+db.prevention.brigades.hasMany(db.prevention.brigadists, {as: 'brigadist', foreignKey: 'fk_brigada_id', targetKey: 'brigada_id'});
+db.prevention.brigadists.belongsTo(db.employees, {as: 'employee', foreignKey: 'fk_empleado_id', targetKey: 'empleado_id'});
+db.prevention.brigadists.belongsTo(db.prevention.brigades, {as: 'brigade', foreignKey: 'fk_brigada_id', targetKey: 'brigada_id'});
+// PRORROGAS
+db.prevention.extensions.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
+db.prevention.extensions.belongsTo(db.prevention.inspections, {as: 'inspection', foreignKey: 'fk_inspeccion_id', targetKey: 'inspeccion_id'});
+db.prevention.extensions.belongsTo(db.persons, {as: 'requested', foreignKey: 'prorroga_solicitante', targetKey: 'persona_id'});
+db.prevention.extensions.belongsTo(db.ppersonal, {as: 'authorize', foreignKey: 'fk_autoriza_id', targetKey: 'ppersonal_id'});
+// CAPACITACIONES CIUDADANAS
+db.prevention.trainings.belongsTo(db.prevention.trainingTopics, {as: 'topic', foreignKey: 'fk_tema_id', targetKey: 'tema_id'});
+db.prevention.trainings.belongsTo(db.entities, {as: 'entity', foreignKey: 'fk_entidad_id', targetKey: 'entidad_id'});
+db.prevention.trainings.belongsTo(db.persons, {as: 'requested', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+db.prevention.trainings.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
+db.prevention.stands.belongsTo(db.entities, {as: 'entity', foreignKey: 'fk_entidad_id', targetKey: 'entidad_id'});
+db.prevention.stands.belongsTo(db.persons, {as: 'requested', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+db.prevention.stands.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
+db.prevention.visits.belongsTo(db.entities, {as: 'entity', foreignKey: 'fk_entidad_id', targetKey: 'entidad_id'});
+db.prevention.visits.belongsTo(db.persons, {as: 'requested', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+db.prevention.visits.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
+db.prevention.simulations.belongsTo(db.entities, {as: 'entity', foreignKey: 'fk_entidad_id', targetKey: 'entidad_id'});
+db.prevention.simulations.belongsTo(db.persons, {as: 'requested', foreignKey: 'fk_persona_id', targetKey: 'persona_id'});
+db.prevention.simulations.belongsTo(db.users, {as: 'user', foreignKey: 'fk_usuario_id', targetKey: 'usuario_id'});
 
 // PLANIFICACION
 db.poaprojects.belongsTo(db.programspoa, {as: 'program', foreignKey: 'fk_programa_id', targetKey: 'programa_id'});

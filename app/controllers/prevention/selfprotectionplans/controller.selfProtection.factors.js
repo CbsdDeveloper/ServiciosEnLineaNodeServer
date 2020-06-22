@@ -1,7 +1,7 @@
 'use strict';
-const db = require('../../models');
+const db = require('../../../models');
 const resourceModel = db.resources;
-const factorModel = db.selfProtectionFactors;
+const factorModel = db.prevention.selfProtectionFactors;
 
 // ENCONTRAR REGISTRO POR ID
 exports.findSelfProtectionFactorsByPlan = (req, res) => {

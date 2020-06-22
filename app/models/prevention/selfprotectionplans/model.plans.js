@@ -211,7 +211,19 @@ module.exports = (sequelize, DataTypes) => {
 		plan_responsable_tramite: { 
 			type: DataTypes.STRING,
 			defaultValue: 'REPRESENTANTE LEGAL'
-		} //
+		}, //
+	
+		plan_correccion: { 
+			type: DataTypes.STRING,
+			defaultValue: 'SI'
+		}, // text default 'SI'::text, -- 
+		
+		plan_responsbale_registro: { 
+			type: DataTypes.STRING
+		}, // text, -- 
+		plan_motivoregistro: { 
+			type: DataTypes.STRING
+		} // text -- 
 
 	}, {
 		schema: 'prevencion',
@@ -221,4 +233,4 @@ module.exports = (sequelize, DataTypes) => {
 	});
 	
 	return Model;
-}
+};

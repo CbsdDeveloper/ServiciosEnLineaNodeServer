@@ -1,9 +1,9 @@
 'use strict';
-const db = require('../../models');
+const db = require('../../../models');
 const resourceModel = db.resources;
 const entityModel = db.entities;
 const personModel = db.persons;
-const maintenanceModel = db.selfProtectionMaintenance;
+const maintenanceModel = db.prevention.selfProtectionMaintenance;
 
 // ENCONTRAR REGISTRO POR ID
 exports.findSelfProtectionMaintenanceByPlan = (req, res) => {

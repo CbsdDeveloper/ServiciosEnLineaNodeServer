@@ -1,6 +1,6 @@
 'use strict';
-const db = require('../../models');
-const annexeModel = db.selfProtectionAnnexes;
+const db = require('../../../models');
+const annexeModel = db.prevention.selfProtectionAnnexes;
 
 // ENCONTRAR REGISTRO POR ID
 exports.findSelfProtectionAnnexesByPlan = (req, res) => {

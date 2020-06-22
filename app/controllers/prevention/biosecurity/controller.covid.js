@@ -1,8 +1,8 @@
 'use strict';
 const db = require('../../../models');
 
-const model = db.covid;
-const covidResourcesMdl = db.covidResources;
+const model = db.prevention.covid;
+const covidResourcesMdl = db.prevention.covidResources;
 const resourceModel = db.resources;
 const localMdl = db.locals;
 

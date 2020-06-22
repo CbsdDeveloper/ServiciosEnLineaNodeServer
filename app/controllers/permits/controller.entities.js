@@ -61,7 +61,7 @@ module.exports = {
 	// Find a Customer by Id
 	findById(req, res){	
 		entityModel.findOne({
-			where: { entidad_id: req.body.id },
+			where: { entidad_id: req.body.entityId },
 			include: [
 				{ model: partner, as: 'person' }
 			]

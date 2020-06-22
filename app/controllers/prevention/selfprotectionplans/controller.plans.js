@@ -1,18 +1,102 @@
 'use strict';
-const db = require('../../models');
+const db = require('../../../models');
 const seq = db.sequelize;
-const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
+const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
+const { staff } = require('../../../models');
 
-const planModel = db.plans;
+const planModel = db.prevention.plans;
+const planInspectorMdl = db.prevention.planInspectors;
 
 const localMdl = db.locals;
 const entityMdl = db.entities;
 const trainingMdl = db.academicTraining;
+
+const ppersonalMdl = db.ppersonal;
+const staffMdl = db.staff;
 const personMdl = db.persons;
 
+const galleryMdl = db.rsc.gallery;
 const userMdl = db.users;
 
 module.exports = {
+
+	/**
+	 * @function paginationEntity
+	 * @param {Object} req - server request
+	 * @param {Object} res - server response
+	 * @returns {Object} - custom response
+	*/
+	async paginationEntity(req, res){
+		try {
+			const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
+			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
+			const where = seq.or(
+				seq.where(seq.fn('LOWER', seq.col('plan_codigo')), 'LIKE', '%' + filter + '%'),
+				seq.where(seq.fn('LOWER', seq.col('plan_estado')), 'LIKE', '%' + filter + '%')
+			);
+			const { rows, count } = await planModel.findAndCountAll(
+				{
+					offset: offset,
+					limit: limit,
+					where: where,
+					order: [ sort ],
+					include: [ 
+						{
+							model: localMdl, as: 'local',
+							attributes: [ 'local_nombrecomercial','local_parroquia','local_principal','local_secundaria','local_referencia' ],
+							include: [
+								{
+									model: entityMdl, as: 'entity',
+									attributes: [ 'entidad_id','entidad_ruc','entidad_razonsocial','entidad_contribuyente' ],
+									include: [
+										{ 
+											model: personMdl, as: 'person',
+											attributes: [ 'persona_doc_identidad','persona_apellidos','persona_nombres','persona_correo' ]
+										}
+									]
+								}
+							]
+						},
+						{
+							model: galleryMdl,	as: 'gallery',
+							required: false,
+							where: { fk_table: 'planesemergencia' }
+						},
+						{
+							model: planInspectorMdl, as: 'inspectors',
+							include: [
+								{
+									model: ppersonalMdl, as: 'ppersonal',
+									attributes: [ 'ppersonal_estado' ],
+									include: [
+										{
+											model: staffMdl, as: 'staff',
+											attributes: [ 'personal_correo_institucional' ],
+											include: [
+												{
+													model: personMdl, as: 'person',
+													attributes: [ 'persona_apellidos','persona_nombres' ]
+												}
+											]
+										}
+									]
+								}
+							]
+
+						},
+						{ 
+							model: userMdl, as: 'user',
+							attributes: [ ['usuario_login','usuario'] ]
+						} 
+					]
+				});
+			const meta = paginate(currentPage, count, rows, pageLimit);
+			db.setDataTable(res,{ rows, meta },'PLANES DE AUTOPROTECCION');
+		} catch (error) {
+			db.setEmpty(res,'ERROR EN PAGINACION DE PLANES DE AUTOPROTECCION',false,error);
+		}
+
+	},
 
 	/*
 	 * PERMISOS DE FUNCIONAMIENTO POR ID DE LOCAL
@@ -20,67 +104,83 @@ module.exports = {
 	async paginateByLocal(req, res){
 		
 		const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
-			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
-			const { rows, count } = await planModel.findAndCountAll(
+		const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
+		const { rows, count } = await planModel.findAndCountAll(
+			{
+				offset: offset,
+				limit: limit,
+				order: [ sort ],
+				where: { '$local.local_id$': req.query.localId },
+				include: [
+					{
+						model: localMdl, as: 'local',
+						attributes: [ 'local_id','local_nombrecomercial' ],
+						include: [
+							{ 
+								model: entityMdl, as: 'entity',
+								attributes: [ 'entidad_id','entidad_razonsocial','entidad_ruc','entidad_contribuyente' ]
+							}
+						]
+					},
+					{ 
+						model: userMdl, as: 'user',
+						attributes: [ ['usuario_login','usuario'] ]
+					} ,
+					{ 
+						model: userMdl, as: 'inspector',
+						required: false,
+						attributes: [ ['usuario_login','inspector'] ]
+					} 
+				]
+			});
+		const meta = paginate(currentPage, count, rows, pageLimit);
+		db.setDataTable(res,{ rows, meta },'PERMISOS ANUALES DE FUNCIONAMIENTO');
+
+	},
+
+	/*
+	 * ENCONTRAR REGISTRO POR ID DE LOCAL
+	 */
+	async findByLocalId(req, res){
+		// CONSULTA DE PLANES
+		let data = await planModel.findAll({
+			include: [
 				{
-					offset: offset,
-					limit: limit,
-					order: [ sort ],
-					where: { '$local.local_id$': req.query.localId },
+					model: planInspectorMdl, as: 'inspectors',
 					include: [
 						{
-							model: localMdl, as: 'local',
-							attributes: [ 'local_id','local_nombrecomercial' ],
+							model: ppersonalMdl, as: 'ppersonal',
+							attributes: [ 'ppersonal_estado' ],
 							include: [
-								{ 
-									model: entityMdl, as: 'entity',
-									attributes: [ 'entidad_id','entidad_razonsocial','entidad_ruc','entidad_contribuyente' ]
+								{
+									model: staffMdl, as: 'staff',
+									attributes: [ 'personal_correo_institucional' ],
+									include: [
+										{
+											model: personMdl, as: 'person',
+											attributes: [ 'persona_apellidos','persona_nombres' ]
+										}
+									]
 								}
 							]
-						},
-						{ 
-							model: userMdl, as: 'user',
-							attributes: [ ['usuario_login','usuario'] ]
-						} ,
-						{ 
-							model: userMdl, as: 'inspector',
-							required: false,
-							attributes: [ ['usuario_login','inspector'] ]
-						} 
+						}
 					]
-				});
-			const meta = paginate(currentPage, count, rows, pageLimit);
-			db.setDataTable(res,{ rows, meta },'PERMISOS ANUALES DE FUNCIONAMIENTO');
-
+				},
+				{
+					model: userMdl, as: 'user',
+					attributes: [ ['usuario_login','usuario'] ]
+				}
+			],
+			where: { fk_local_id: req.body.localId },
+			order: [ [ 'plan_codigo','DESC' ] ]
+		})
+		// RETORNAR LISTADO
+		db.setEmpty(res,'PLANES DE UN LOCAL',true,data);	
 	},
 
-	// ENCONTRAR REGISTRO POR ID DE LOCAL
-	findByLocalId(req, res){
-		// CONDICIONALES DE BUSQUEDA
-		var strWhr = { fk_local_id: req.body.localId}
-		// CONSULTAR REGISTROS
-		planModel.count({
-			where: strWhr
-		}).then(c => {
-			// VALIDAR CONSULTA
-			if( c > 0 ){
-				planModel.findAll({
-					where: strWhr
-				}).then(data => {
-					// RETORNAR LISTADO
-					res.status(200).json({
-						estado: true,
-						mensaje: 'PLANES DE UN LOCAL',
-						data: data
-					});
-				}).catch(err => { res.status(500).json({msg: "error", details: err}); });
-			}else{
-				db.setEmpty(res,'NO SE HA ENCONTRADO EL REGISTRO => planModel->findByLocalId');
-			}
-		});
-	},
-
-	// ENCONTRAR REGISTRO POR ID DE LOCAL
+	/*
+	 * ENCONTRAR REGISTRO POR ID DE LOCAL
+	 */
 	findById(req, res){
 		// CONDICIONALES DE BUSQUEDA
 		var strWhr = { plan_id: req.body.planId }
@@ -138,7 +238,9 @@ module.exports = {
 		});
 	},
 
-	// ACTUALIZAR REGISTROS
+	/*
+	 * ENCONTRAR REGISTRO POR ID DE LOCAL
+	 */ 
 	updateEntity(req, res){
 		// ACTUALIZAR DATOS DE LOCAL
 		planModel.update(
@@ -155,7 +257,9 @@ module.exports = {
 		}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 	},
 
-	// ACTUALIZAR RELACION CON REGISTROS
+	/*
+	 * ACTUALIZAR RELACION CON REGISTROS
+	 */
 	updateResourcesEntity(req, res){
 
 		// TRANSACCION

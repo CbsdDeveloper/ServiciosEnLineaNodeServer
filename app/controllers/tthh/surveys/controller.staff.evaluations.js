@@ -1,5 +1,4 @@
 'use strict';
-const { dateFormat, now, format } = require('../../../config/parseDate');
 const db = require('../../../models');
 
 const testModel = db.surveysStaffEvaluations;
@@ -22,10 +21,10 @@ module.exports ={
 			// ENCONTRAR O CREAR EVALUACIÓN
 			await testModel.update(
 				{
-					evaluado_fechaevaluacion: dateFormat(new Date(), format.dateTime),
+					evaluado_fechaevaluacion: db.getCurrentDate(),
 					test_estado: 'TEST REALIZADA',
 					fk_personal_id: req.body.fk_personal_id,
-					test_registro: dateFormat(new Date(), format.dateTime)
+					test_registro: db.getCurrentDate()
 				},
 				{ where: strWhr }
 			);

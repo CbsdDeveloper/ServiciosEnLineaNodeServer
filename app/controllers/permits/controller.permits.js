@@ -7,6 +7,8 @@ const { calculateLimitAndOffset, paginate } = require('../../config/pagination')
 const permitModel = db.permitsLocals;
 const selfInspectionMdl = db.selfInspections;
 
+const duplicatedMdl = db.duplicates;
+
 const userMdl = db.users;
 const localMdl = db.locals;
 const entityMdl = db.entities;
@@ -56,7 +58,16 @@ module.exports = {
 						{ 
 							model: userMdl, as: 'user',
 							attributes: [ ['usuario_login','usuario'] ]
-						} 
+						},
+						{
+							model: duplicatedMdl, as: 'duplicates',
+							attributes: [ 'duplicado_estado' ],
+							where: {
+								duplicado_estado: ['APROBADO','PENDIENTE']
+							},
+							limit: 1,
+							order: [ [ 'duplicado_id','DESC' ] ] 
+						}
 					]
 				});
 			const meta = paginate(currentPage, count, rows, pageLimit);
@@ -106,6 +117,30 @@ module.exports = {
 			const meta = paginate(currentPage, count, rows, pageLimit);
 			db.setDataTable(res,{ rows, meta },'PERMISOS ANUALES DE FUNCIONAMIENTO');
 
-	}
+	},
+
+	/*
+	 * ENCONTRAR REGISTRO POR ID DE LOCAL
+	 */
+	async findByLocalId(req, res){
+		// CONSULTA DE PLANES
+		let data = await permitModel.findAll({
+			include: [
+				{
+					model: selfInspectionMdl, as: 'selfInspection',
+					attributes: [ 'autoinspeccion_id','autoinspeccion_codigo','autoinspeccion_fecha' ],
+					where: { fk_local_id: req.body.localId },
+					required: true
+				},
+				{
+					model: userMdl, as: 'user',
+					attributes: [ [ 'usuario_login','usuario' ] ]
+				}
+			],
+			order: [ [ 'permiso_fecha','DESC' ] ]
+		})
+		// RETORNAR LISTADO
+		db.setEmpty(res,'PERMISOS DE FUNCIONAMIENTO DE UN LOCAL',true,data);	
+	},
 
 };
