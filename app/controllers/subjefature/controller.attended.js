@@ -2,7 +2,7 @@
 const db = require('../../models');
 const seq = db.sequelize;
 
-const model = db.attended;
+const model = db.subjefature.attended;
 
 module.exports = {
 

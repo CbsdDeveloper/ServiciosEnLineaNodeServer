@@ -3,8 +3,8 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const workdaysModel = db.workdays;
-const scheduleworkdays = db.scheduleworkdays;
+const workdaysModel = db.tthh.workdays;
+const scheduleworkdays = db.tthh.scheduleworkdays;
 
 module.exports = {
 

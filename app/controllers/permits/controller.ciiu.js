@@ -3,9 +3,9 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const ciiuModel = db.ciiu;
-const taxeMdl = db.taxes;
-const activityMdl = db.activities;
+const ciiuModel = db.permits.ciiu;
+const taxeMdl = db.permits.taxes;
+const activityMdl = db.permits.activities;
 
 module.exports = {
 

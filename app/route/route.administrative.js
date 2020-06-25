@@ -6,9 +6,9 @@ const router = express.Router();
 * CONTROLLERS DE MODELOS
 */
 const administrativeCtrl = {
-    shelvings:              require('../controllers/administrative/archive/controller.shelvings'),
-    boxes:                  require('../controllers/administrative/archive/controller.boxes'),
-    folders:                require('../controllers/administrative/archive/controller.folders'),
+    shelvings: require('../controllers/administrative/archive/controller.shelvings'),
+    boxes: require('../controllers/administrative/archive/controller.boxes'),
+    folders: require('../controllers/administrative/archive/controller.folders'),
     schema: require('../controllers/controller.administrative.js')
 };
 

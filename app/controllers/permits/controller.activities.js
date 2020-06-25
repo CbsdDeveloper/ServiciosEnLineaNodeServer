@@ -3,7 +3,7 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const activityModel = db.activities;
+const activityModel = db.permits.activities;
 
 module.exports = {
 

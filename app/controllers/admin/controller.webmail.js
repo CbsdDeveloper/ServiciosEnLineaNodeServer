@@ -3,7 +3,7 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const model = db.webmail;
+const model = db.admin.webmail;
 
 module.exports = {
 

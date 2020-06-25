@@ -1,7 +1,7 @@
 'use strict';
 const db = require('../../../models');
-const testModel = db.psychosocialTest;
-const Answer = db.psychosocialTestAnswers;
+const testModel = db.tthh.psychosocialTest;
+const Answer = db.tthh.psychosocialTestAnswers;
 
 module.exports ={
 	

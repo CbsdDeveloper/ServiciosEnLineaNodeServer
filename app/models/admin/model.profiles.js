@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-	const Model = sequelize.define('tb_perfiles', {
+	const Profile = sequelize.define('tb_perfiles', {
 		perfil_id: { 
 			type: DataTypes.INTEGER,
 			unique: true,
@@ -23,5 +23,5 @@ module.exports = (sequelize, DataTypes) => {
 		freezeTableName: true
 	});
 	
-	return Model;
+	return Profile;
 }

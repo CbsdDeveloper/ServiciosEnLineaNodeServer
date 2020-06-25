@@ -6,18 +6,18 @@ const router = express.Router();
 * CONTROLLERS DE MODELOS
 */
 const financialCtrl = {
-    contractingprocedures:      require('../controllers/financial/controller.contractingprocedures'),
-    budgetclassifier:           require('../controllers/financial/controller.budgetclassifier'),
-    retentionclassifier:        require('../controllers/financial/controller.retentionclassifier'),
-    accountcatalog:             require('../controllers/financial/controller.accountcatalog'),
-    programs:                   require('../controllers/financial/controller.programs'),
-    subprograms:                require('../controllers/financial/controller.subprograms'),
-    projects:                   require('../controllers/financial/controller.projects'),
-    activities:                 require('../controllers/financial/controller.activities'),
-    entities:                   require('../controllers/financial/controller.entities'),
-    typedocuments:              require('../controllers/financial/controller.typedocuments'),
+    contractingprocedures: require('../controllers/financial/controller.contractingprocedures'),
+    budgetclassifier: require('../controllers/financial/controller.budgetclassifier'),
+    retentionclassifier: require('../controllers/financial/controller.retentionclassifier'),
+    accountcatalog: require('../controllers/financial/controller.accountcatalog'),
+    programs: require('../controllers/financial/controller.programs'),
+    subprograms: require('../controllers/financial/controller.subprograms'),
+    projects: require('../controllers/financial/controller.projects'),
+    activities: require('../controllers/financial/controller.activities'),
+    entities: require('../controllers/financial/controller.entities'),
+    typedocuments: require('../controllers/financial/controller.typedocuments'),
 
-    schema:      require('../controllers/controller.financial')
+    schema: require('../controllers/controller.financial')
 };
 
 /*

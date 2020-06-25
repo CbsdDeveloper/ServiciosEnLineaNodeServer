@@ -1,6 +1,6 @@
 'use strict';
 const db = require('../../models');
-const programModel = db.programspoa;
+const programModel = db.planing.programspoa;
 
 // FETCH All Customers
 exports.findAll = (req, res) => {

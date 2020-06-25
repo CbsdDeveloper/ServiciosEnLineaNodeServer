@@ -4,11 +4,11 @@ const db = require('../../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
-const model = db.aphSupplies;
+const model = db.subjefature.aphSupplies;
 
-const userModel = db.users;
-const staffModel = db.staff;
-const personModel = db.persons;
+const userModel = db.admin.users;
+const staffModel = db.tthh.staff;
+const personModel = db.resources.persons;
 
 module.exports = {
 

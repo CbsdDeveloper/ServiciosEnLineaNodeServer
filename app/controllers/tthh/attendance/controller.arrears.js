@@ -3,10 +3,10 @@ const db = require('../../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
-const markingModel = db.biometricMarkings;
-const staff = db.staff;
-const persons = db.persons;
-const period = db.biometricPeriods;
+const markingModel = db.tthh.biometricMarkings;
+const staff = db.tthh.staff;
+const persons = db.resources.persons;
+const period = db.tthh.biometricPeriods;
 
 module.exports = {
 

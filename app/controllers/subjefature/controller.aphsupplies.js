@@ -2,8 +2,8 @@
 const db = require('../../models');
 const seq = db.sequelize;
 
-const model = db.partSupplies;
-const supplies = db.aphSupplies;
+const model = db.subjefature.partSupplies;
+const supplies = db.subjefature.aphSupplies;
 
 module.exports = {
 

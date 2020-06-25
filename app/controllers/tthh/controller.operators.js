@@ -3,11 +3,11 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const model = db.operators;
+const model = db.tthh.operators;
 
-const staffModel = db.staff;
-const personModel = db.persons;
-const licenseModel = db.driverlicenses;
+const staffModel = db.tthh.staff;
+const personModel = db.resources.persons;
+const licenseModel = db.resources.driverlicenses;
 
 module.exports = {
 

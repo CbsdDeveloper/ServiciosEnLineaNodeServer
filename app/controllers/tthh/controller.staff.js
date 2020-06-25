@@ -1,10 +1,10 @@
 'use strict';
 const db = require('../../models');
 
-const staffModel = db.staff;
-const workdayModel = db.workdays;
+const staffModel = db.tthh.staff;
+const workdayModel = db.tthh.workdays;
 
-const personModel = db.persons;
+const personModel = db.resources.persons;
 
 /*
 * CONSULTAR INFORMACION DE PERSONAL POR NUMERO DE CEDULA

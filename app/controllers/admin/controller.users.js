@@ -1,13 +1,13 @@
 'use strict';
 const db = require('../../models');
-const Model = db.users;
+const Model = db.admin.users;
 
 // FETCH All Customers
 exports.findAll = (req, res) => {
 	Model.findAll({
 		include: [
-			{ model: db.profiles, as: 'profile' },
-			{ model: db.persons, as: 'person' }
+			{ model: db.admin.profiles, as: 'profile' },
+			{ model: db.resources.persons, as: 'person' }
 		]
 	}).then(data => {
 		db.setJSON(res,data,'LISTADO DE USUARIOS');

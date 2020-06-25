@@ -1,7 +1,7 @@
 'use strict';
 const db = require('../../../models');
-const medicineModel = db.medicines;
-const inventoryModel = db.inventoryMedicines;
+const medicineModel = db.tthh.medicines;
+const inventoryModel = db.tthh.inventoryMedicines;
 const sql = db.sequelize;
 
 // LISTAR TODOS LOS MEDICAMENTOS

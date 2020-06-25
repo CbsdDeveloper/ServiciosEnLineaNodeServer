@@ -1,6 +1,6 @@
 'use strict';
 const db = require('../../models');
-const Model = db.profiles;
+const Model = db.admin.profiles;
 
 // FETCH All Customers
 exports.findAll = (req, res) => {

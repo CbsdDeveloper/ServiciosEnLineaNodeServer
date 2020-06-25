@@ -13,6 +13,10 @@ module.exports = function(app) {
     app.use('/api/paginate/tthh', tthhRoutes);
     app.use('/api/tthh', tthhRoutes);
 
+    const administrativeRoutes = require('./route.administrative');
+    app.use('/api/paginate/administrative', administrativeRoutes);
+    app.use('/api/administrative', administrativeRoutes);
+
     const subjefatureRoutes = require('./route.subjefature');
     app.use('/api/paginate/subjefature', subjefatureRoutes);
     app.use('/api/subjefature', subjefatureRoutes);

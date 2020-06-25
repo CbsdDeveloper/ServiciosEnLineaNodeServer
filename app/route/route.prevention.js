@@ -8,23 +8,23 @@ const preventionCtrl = {
     // PRORROGAS
     extensions:                 require('../controllers/prevention/inspections/controller.extensions'),
     // PLANES DE AUTOPROTECCION
-    plans:                      require('../controllers/prevention/selfprotectionplans/controller.plans'),
-    selfProtectionAnnexes:      require('../controllers/prevention/selfprotectionplans/controller.selfProtection.annexes'),
-    selfProtectionFactors:      require('../controllers/prevention/selfprotectionplans/controller.selfProtection.factors'),
-    selfProtectionPrevention:   require('../controllers/prevention/selfprotectionplans/controller.selfProtection.prevention'),
-    selfProtectionMaintenance:  require('../controllers/prevention/selfprotectionplans/controller.selfProtection.maintenance'),
-    selfProtectionMeseri:       require('../controllers/prevention/selfprotectionplans/controller.selfProtection.meseri'),
-    brigades:                   require('../controllers/prevention/selfprotectionplans/controller.brigades'),
-    brigadists:                 require('../controllers/prevention/selfprotectionplans/controller.brigadists'),
+    plans: require('../controllers/prevention/selfprotectionplans/controller.plans'),
+    selfProtectionAnnexes: require('../controllers/prevention/selfprotectionplans/controller.selfProtection.annexes'),
+    selfProtectionFactors: require('../controllers/prevention/selfprotectionplans/controller.selfProtection.factors'),
+    selfProtectionPrevention: require('../controllers/prevention/selfprotectionplans/controller.selfProtection.prevention'),
+    selfProtectionMaintenance: require('../controllers/prevention/selfprotectionplans/controller.selfProtection.maintenance'),
+    selfProtectionMeseri: require('../controllers/prevention/selfprotectionplans/controller.selfProtection.meseri'),
+    brigades: require('../controllers/prevention/selfprotectionplans/controller.brigades'),
+    brigadists: require('../controllers/prevention/selfprotectionplans/controller.brigadists'),
     // PLANES DE BIOSEGURIDAD
-    srcBiosecurity:             require('../controllers/prevention/biosecurity/controller.covid'),
+    srcBiosecurity: require('../controllers/prevention/biosecurity/controller.covid'),
     // CAPACITACIONES CIUDADANAS
-    trainings:          require('../controllers/prevention/trainings/controller.trainings'),
-    stands:             require('../controllers/prevention/trainings/controller.stands'),
-    visits:             require('../controllers/prevention/trainings/controller.visits'),
-    simulations:        require('../controllers/prevention/trainings/controller.simulations'),
+    trainings: require('../controllers/prevention/trainings/controller.trainings'),
+    stands: require('../controllers/prevention/trainings/controller.stands'),
+    visits: require('../controllers/prevention/trainings/controller.visits'),
+    simulations: require('../controllers/prevention/trainings/controller.simulations'),
 
-    schema:             require('../controllers/controller.prevencion.js')
+    schema: require('../controllers/controller.prevencion.js')
 };
 
 /*

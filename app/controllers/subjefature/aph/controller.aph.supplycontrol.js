@@ -3,8 +3,8 @@ const db = require('../../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
-const model = db.aphSupplycontrol;
-const cellar = db.wineries;
+const model = db.subjefature.aphSupplycontrol;
+const cellar = db.tthh.wineries;
 
 module.exports = {
 

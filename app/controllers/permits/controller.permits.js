@@ -4,14 +4,14 @@ const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
 
-const permitModel = db.permitsLocals;
-const selfInspectionMdl = db.selfInspections;
+const permitModel = db.permits.permitsLocals;
+const selfInspectionMdl = db.permits.selfInspections;
 
-const duplicatedMdl = db.duplicates;
+const duplicatedMdl = db.permits.duplicates;
 
-const userMdl = db.users;
-const localMdl = db.locals;
-const entityMdl = db.entities;
+const userMdl = db.admin.users;
+const localMdl = db.permits.locals;
+const entityMdl = db.permits.entities;
 
 module.exports = {
 

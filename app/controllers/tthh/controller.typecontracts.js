@@ -3,7 +3,7 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const typeContracts = db.typeContracts;
+const typeContracts = db.tthh.typeContracts;
 
 module.exports = {
 

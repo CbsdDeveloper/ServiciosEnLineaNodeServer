@@ -1,6 +1,13 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
 	const Model = sequelize.define('tb_inspeccion_local', {
+
+		inspeccionlocal_id: {
+			type: DataTypes.INTEGER,
+			unique: true,
+			primaryKey: true,
+			autoIncrement: true
+		}, // serial primary key,
 		
 		inspeccion_fecha:{
 			type: DataTypes.DATE
@@ -19,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
 		}, // int default 0, -- AFORO DEL PLAN
 		inspeccion_plantas:{
 			type: DataTypes.INTEGER
-		}, // int default 0 -- NUMERO DE PISOS
+		} // int default 0 -- NUMERO DE PISOS
 
 	}, {
 		schema: 'prevencion',
@@ -28,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
 		freezeTableName: true
 	});
 
-	Model.removeAttribute('id');
+	// Model.removeAttribute('id');
 	
 	return Model;
-}
+};

@@ -7,16 +7,16 @@ const { staff } = require('../../../models');
 const planModel = db.prevention.plans;
 const planInspectorMdl = db.prevention.planInspectors;
 
-const localMdl = db.locals;
-const entityMdl = db.entities;
-const trainingMdl = db.academicTraining;
+const localMdl = db.permits.locals;
+const entityMdl = db.permits.entities;
+const trainingMdl = db.tthh.academicTraining;
 
-const ppersonalMdl = db.ppersonal;
-const staffMdl = db.staff;
-const personMdl = db.persons;
+const ppersonalMdl = db.tthh.ppersonal;
+const staffMdl = db.tthh.staff;
+const personMdl = db.resources.persons;
 
-const galleryMdl = db.rsc.gallery;
-const userMdl = db.users;
+const galleryMdl = db.resources.gallery;
+const userMdl = db.admin.users;
 
 module.exports = {
 
@@ -31,8 +31,12 @@ module.exports = {
 			const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
 			const where = seq.or(
-				seq.where(seq.fn('LOWER', seq.col('plan_codigo')), 'LIKE', '%' + filter + '%'),
-				seq.where(seq.fn('LOWER', seq.col('plan_estado')), 'LIKE', '%' + filter + '%')
+				{ plan_codigo: seq.where(seq.fn('LOWER', seq.col('plan_codigo')), 'LIKE', '%' + filter + '%') },
+				{ plan_estado: seq.where(seq.fn('LOWER', seq.col('plan_estado')), 'LIKE', '%' + filter + '%') },
+
+				{ local_nombrecomercial: seq.where(seq.fn('LOWER', seq.col('local_nombrecomercial')), 'LIKE', '%' + filter + '%') },
+				{ entidad_razonsocial: seq.where(seq.fn('LOWER', seq.col('entidad_razonsocial')), 'LIKE', '%' + filter + '%') },
+				{ entidad_ruc: seq.where(seq.fn('LOWER', seq.col('entidad_ruc')), 'LIKE', '%' + filter + '%') }
 			);
 			const { rows, count } = await planModel.findAndCountAll(
 				{
@@ -43,7 +47,7 @@ module.exports = {
 					include: [ 
 						{
 							model: localMdl, as: 'local',
-							attributes: [ 'local_nombrecomercial','local_parroquia','local_principal','local_secundaria','local_referencia' ],
+							attributes: [ 'local_id','local_nombrecomercial','local_parroquia','local_principal','local_secundaria','local_referencia' ],
 							include: [
 								{
 									model: entityMdl, as: 'entity',
@@ -51,19 +55,22 @@ module.exports = {
 									include: [
 										{ 
 											model: personMdl, as: 'person',
-											attributes: [ 'persona_doc_identidad','persona_apellidos','persona_nombres','persona_correo' ]
+											attributes: [ 'persona_id','persona_doc_identidad','persona_apellidos','persona_nombres','persona_correo' ]
 										}
 									]
 								}
 							]
 						},
+						/*
 						{
 							model: galleryMdl,	as: 'gallery',
+							attributes: [ 'media_nombre','media_titulo' ],
 							required: false,
 							where: { fk_table: 'planesemergencia' }
 						},
 						{
 							model: planInspectorMdl, as: 'inspectors',
+							attributes: [ 'fk_plan_id','fk_personal_id' ],
 							include: [
 								{
 									model: ppersonalMdl, as: 'ppersonal',
@@ -82,8 +89,8 @@ module.exports = {
 									]
 								}
 							]
-
 						},
+						*/
 						{ 
 							model: userMdl, as: 'user',
 							attributes: [ ['usuario_login','usuario'] ]

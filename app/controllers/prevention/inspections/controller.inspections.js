@@ -1,17 +1,17 @@
 'use strict';
 const db = require('../../../models');
 const seq = db.sequelize;
+const Op = db.Sequelize.Op;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
 const inspectionModel = db.prevention.inspections;
 const inspectionLocalMdl = db.prevention.inspectionLocal;
 const inspectionInspectorMdl = db.prevention.inspectionInspector;
 
-const localMdl = db.locals;
-const personMdl = db.persons;
-const entityMdl = db.entities;
+const localMdl = db.permits.locals;
+const entityMdl = db.permits.entities;
 
-const userMdl = db.users;
+const userMdl = db.admin.users;
 
 module.exports = {
 
@@ -22,51 +22,46 @@ module.exports = {
 		
 		const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
 		const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
-		const where = seq.or(
-			{ inspeccion_codigo: seq.where(seq.fn('LOWER', seq.col('inspeccion_codigo')), 'LIKE', '%' + filter + '%') },
-			{ inspeccion_estado: seq.where(seq.fn('LOWER', seq.col('inspeccion_estado')), 'LIKE', '%' + filter + '%') },
-			{ inspeccion_informe_numero: seq.where(seq.fn('LOWER', seq.col('inspeccion_informe_numero')), 'LIKE', '%' + filter + '%') }
-		);
-		const { rows, count } = await inspectionModel.findAndCountAll(
+		const whr = {
+			[Op.or]: [
+				{ '$inspection.inspeccion_codigo$': { [Op.iLike]: '%' + filter + '%'} },
+				{ '$inspection.inspeccion_estado$': { [Op.iLike]: '%' + filter + '%'} },
+				{ '$inspection.inspeccion_informe_numero$': { [Op.iLike]: '%' + filter + '%'} },
+
+				seq.literal("inspection.inspeccion_fecha_inspeccion::text like '%" + filter + "%'"),
+
+				{ '$local.local_nombrecomercial$': { [Op.iLike]: '%' + filter + '%'} },
+				{ '$local.entity.entidad_ruc$': { [Op.iLike]: '%' + filter + '%'} },
+				{ '$local.entity.entidad_razonsocial$': { [Op.iLike]: '%' + filter + '%'} },
+				{ '$inspection.user.usuario_login$': { [Op.iLike]: '%' + filter + '%'} }
+			]
+		};
+		const { rows, count } = await inspectionLocalMdl.findAndCountAll(
 			{
 				offset: offset,
 				limit: limit,
-				order: [ sort ],
-				where: where,
+				order: [ [ { model: inspectionModel, as: 'inspection' }, 'inspeccion_codigo', 'DESC' ] ],
+				where: whr,
+				distinct: true,
 				include: [
 					{
-						model: inspectionLocalMdl, as: 'locals',
+						model: localMdl, as: 'local',
+						attributes: [ 'local_id','local_nombrecomercial','local_principal','local_secundaria','local_referencia','local_telefono','local_clavecatastral' ],	
 						include: [
-							{
-								model: localMdl, as: 'local',
-								attributes: [ 'local_id','local_nombrecomercial','local_principal','local_secundaria','local_referencia','local_telefono','local_clavecatastral' ],	
-								include: [
-									{ 
-										model: entityMdl, as: 'entity',
-										attributes: [ 'entidad_id','entidad_razonsocial','entidad_ruc','entidad_contribuyente' ],
-										include: [
-											{ 
-												model: personMdl, as: 'person',
-												attributes: [ 'persona_id','persona_nombres','persona_apellidos','persona_doc_identidad' ]
-											}
-										]
-									}
-								]
+							{ 
+								model: entityMdl, as: 'entity',
+								attributes: [ 'entidad_id','entidad_razonsocial','entidad_ruc','entidad_contribuyente' ]
 							}
 						]
 					},
 					{
-						model: inspectionInspectorMdl, as: 'inspectors',
+						model: inspectionModel, as: 'inspection',
 						include: [
 							{
 								model: userMdl, as: 'user',
 								attributes: [ ['usuario_login','usuario'] ]
 							}
 						]
-					},
-					{
-						model: userMdl, as: 'user',
-						attributes: [ ['usuario_login','usuario'] ]
 					}
 				]
 			});

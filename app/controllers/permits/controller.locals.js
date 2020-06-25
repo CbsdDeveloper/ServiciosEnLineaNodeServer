@@ -3,16 +3,16 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const localModel = db.locals;
+const localModel = db.permits.locals;
 
-const coordinatesMdl = db.coordinates;
-const ciiuMdl = db.ciiu;
-const taxesMdl = db.taxes;
-const activityMdl = db.activities;
-const entityMdl = db.entities;
-const personMdl = db.persons;
+const coordinatesMdl = db.resources.coordinates;
+const ciiuMdl = db.permits.ciiu;
+const taxesMdl = db.permits.taxes;
+const activityMdl = db.permits.activities;
+const entityMdl = db.permits.entities;
+const personMdl = db.resources.persons;
 
-const userMdl = db.users;
+const userMdl = db.admin.users;
 
 module.exports = {
 
@@ -35,7 +35,7 @@ module.exports = {
 				{
 					offset: offset,
 					limit: limit,
-					where: (filter != '')?where:{},
+					where: where,
 					order: [ sort ],
 					include: [
 						{ 

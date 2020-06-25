@@ -1,8 +1,8 @@
 'use strict';
 const db = require('../../models');
-const employeeModel = db.employees;
+const employeeModel = db.permits.employees;
 const brigadistModel = db.prevention.brigadists;
-const person = db.persons;
+const person = db.resources.persons;
 
 module.exports = {
 	

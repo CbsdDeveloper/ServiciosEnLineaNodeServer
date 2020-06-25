@@ -1,6 +1,6 @@
 'use strict';
 const db = require('../../models');
-const coordinateModel = db.coordinates;
+const coordinateModel = db.resources.coordinates;
 
 // ENCONTRAR REGISTRO POR ID
 exports.findByEntity = (req, res) => {	

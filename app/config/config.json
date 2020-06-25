@@ -28,7 +28,6 @@
     "config":{
       "host": "localhost",
       "dialect": "postgres",
-      "operatorsAliases": 0,
 
       "dialectOptions": {
         "useUTC": false

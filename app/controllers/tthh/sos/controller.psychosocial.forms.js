@@ -1,6 +1,6 @@
 'use strict';
 const db = require('../../../models');
-const psychosocialformsModel = db.psychosocialforms;
+const psychosocialformsModel = db.tthh.psychosocialforms;
 
 // LISTADO DE FORMULARIOS
 exports.findAll = (req, res) => {

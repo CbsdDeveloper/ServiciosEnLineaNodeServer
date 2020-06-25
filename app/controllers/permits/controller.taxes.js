@@ -3,8 +3,8 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const taxeModel = db.taxes;
-const activityMdl = db.activities;
+const taxeModel = db.permits.taxes;
+const activityMdl = db.permits.activities;
 
 module.exports = {
 

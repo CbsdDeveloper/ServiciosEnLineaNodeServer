@@ -4,8 +4,8 @@ const seq = db.sequelize;
 
 const visitMdl = db.prevention.visits;
 
-const personMdl = db.persons;
-const userMdl = db.users;
+const personMdl = db.resources.persons;
+const userMdl = db.admin.users;
 
 module.exports = {
 

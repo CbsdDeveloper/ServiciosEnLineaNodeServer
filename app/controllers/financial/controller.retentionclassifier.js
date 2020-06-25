@@ -3,7 +3,7 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const retentionclassifier = db.retentionclassifier;
+const retentionclassifier = db.financial.retentionclassifier;
 
 module.exports = {
 

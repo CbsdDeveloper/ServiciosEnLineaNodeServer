@@ -6,14 +6,14 @@ const router = express.Router();
 * CONTROLLERS DE MODELOS
 */
 const adminCtrl = {
-    labels:         require('../controllers/admin/controller.labels'),
-    reports:        require('../controllers/admin/controller.reports'),
-    parameters:     require('../controllers/admin/controller.parameters'),
-    webmail:        require('../controllers/admin/controller.webmail'),
-    profiles:       require('../controllers/admin/controller.profiles'),
-    users:          require('../controllers/admin/controller.users'),
+    labels: require('../controllers/admin/controller.labels'),
+    reports: require('../controllers/admin/controller.reports'),
+    parameters: require('../controllers/admin/controller.parameters'),
+    webmail: require('../controllers/admin/controller.webmail'),
+    profiles: require('../controllers/admin/controller.profiles'),
+    users: require('../controllers/admin/controller.users'),
 
-    schema:          require('../controllers/controller.admin.js')
+    schema: require('../controllers/controller.admin.js')
 };
 
 /*

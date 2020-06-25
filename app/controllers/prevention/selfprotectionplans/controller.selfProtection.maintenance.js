@@ -1,8 +1,8 @@
 'use strict';
 const db = require('../../../models');
-const resourceModel = db.resources;
-const entityModel = db.entities;
-const personModel = db.persons;
+const resourceModel = db.resources.resources;
+const entityModel = db.permits.entities;
+const personModel = db.resources.persons;
 const maintenanceModel = db.prevention.selfProtectionMaintenance;
 
 // ENCONTRAR REGISTRO POR ID

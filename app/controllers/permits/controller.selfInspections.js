@@ -3,10 +3,10 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const selfInspectionModel = db.selfInspections;
+const selfInspectionModel = db.permits.selfInspections;
 
-const localMdl = db.locals;
-const entityMdl = db.entities;
+const localMdl = db.permits.locals;
+const entityMdl = db.permits.entities;
 // VARIABLES GLOBALES
 var strWhr;
 

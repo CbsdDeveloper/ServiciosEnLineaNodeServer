@@ -1,6 +1,7 @@
 'use strict';
 const db = require('../../../models');
 const seq = db.sequelize;
+const Op = db.Sequelize.Op;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
 const extensionMdl = db.prevention.extensions;
@@ -9,13 +10,13 @@ const inspectionMdl = db.prevention.inspections;
 const inspectionLocalMdl = db.prevention.inspectionLocal;
 const inspectionInspectorMdl = db.prevention.inspectionInspector;
 
-const localMdl = db.locals;
-const personMdl = db.persons;
-const entityMdl = db.entities;
+const localMdl = db.permits.locals;
+const personMdl = db.resources.persons;
+const entityMdl = db.permits.entities;
 
-const userMdl = db.users;
-const ppersonalMdl = db.ppersonal;
-const staffMdl = db.staff;
+const userMdl = db.admin.users;
+const ppersonalMdl = db.tthh.ppersonal;
+const staffMdl = db.tthh.staff;
 
 module.exports = {
 
@@ -26,10 +27,24 @@ module.exports = {
 		
 		const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
 		const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
-		const where = seq.or(
-			{ prorroga_codigo: seq.where(seq.fn('LOWER', seq.col('prorroga_codigo')), 'LIKE', '%' + filter + '%') },
-			{ prorroga_estado: seq.where(seq.fn('LOWER', seq.col('prorroga_estado')), 'LIKE', '%' + filter + '%') }
-		);
+		const where = {
+			[Op.or]: [
+				{ prorroga_codigo: { [Op.iLike]: '%' + filter + '%'} },
+				{ prorroga_estado: { [Op.iLike]: '%' + filter + '%'} },
+				seq.literal("prorroga_desde::text like '%" + filter + "%'"),
+				seq.literal("prorroga_hasta::text like '%" + filter + "%'"),
+
+				{ '$requested.persona_apellidos$': { [Op.iLike]: '%' + filter + '%'} },
+				{ '$requested.persona_nombres$': { [Op.iLike]: '%' + filter + '%'} },,
+				{ '$requested.persona_doc_identidad$': { [Op.iLike]: '%' + filter + '%'} },
+
+				{ '$inspection.inspeccion_codigo$': { [Op.iLike]: '%' + filter + '%'} },
+				{ '$inspection.inspeccion_informe_numero$': { [Op.iLike]: '%' + filter + '%'} },
+				seq.literal("inspection.inspeccion_fecha_inspeccion::text like '%" + filter + "%'"),
+				
+				{ '$user.usuario_login$': { [Op.iLike]: '%' + filter + '%'} }
+			]
+		};
 		const { rows, count } = await extensionMdl.findAndCountAll({
 			offset: offset,
 			limit: limit,
@@ -38,7 +53,7 @@ module.exports = {
 			include: [
 				{
 					model: inspectionMdl, as: 'inspection',
-					include: [
+					/*include: [
 						{
 							model: inspectionLocalMdl, as: 'locals',
 							include: [
@@ -48,28 +63,13 @@ module.exports = {
 									include: [
 										{ 
 											model: entityMdl, as: 'entity',
-											attributes: [ 'entidad_id','entidad_razonsocial','entidad_ruc','entidad_contribuyente' ],
-											include: [
-												{ 
-													model: personMdl, as: 'person',
-													attributes: [ 'persona_id','persona_nombres','persona_apellidos','persona_doc_identidad' ]
-												}
-											]
+											attributes: [ 'entidad_id','entidad_razonsocial','entidad_ruc','entidad_contribuyente' ]
 										}
 									]
 								}
 							]
-						},
-						{
-							model: inspectionInspectorMdl, as: 'inspectors',
-							include: [
-								{
-									model: userMdl, as: 'user',
-									attributes: [ ['usuario_login','usuario'] ]
-								}
-							]
 						}
-					]
+					]*/
 				},
 				{
 					model: ppersonalMdl, as: 'authorize',
@@ -89,7 +89,7 @@ module.exports = {
 				},
 				{
 					model: personMdl, as: 'requested',
-					attributes: [ 'persona_apellidos','persona_nombres' ]
+					attributes: [ 'persona_apellidos','persona_nombres','persona_doc_identidad' ]
 				},
 				{
 					model: userMdl, as: 'user',

@@ -3,9 +3,9 @@ const db = require('../../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
-const model = db.aphSupplyMovements;
-const inventory = db.aphSupplycontrol;
-const supplies = db.aphSupplies;
+const model = db.subjefature.aphSupplyMovements;
+const inventory = db.subjefature.aphSupplycontrol;
+const supplies = db.subjefature.aphSupplies;
 
 module.exports = {
 

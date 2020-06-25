@@ -3,9 +3,9 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const entityModel = db.entities;
-const partner = db.persons;
-const userMdl = db.users;
+const entityModel = db.permits.entities;
+const partner = db.resources.persons;
+const userMdl = db.admin.users;
 
 module.exports = {
 

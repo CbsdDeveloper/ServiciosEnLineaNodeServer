@@ -5,8 +5,8 @@ const seq = db.sequelize;
 const trainingMdl = db.prevention.trainings;
 const trainingTopicMdl = db.prevention.trainingTopics;
 
-const personMdl = db.persons;
-const userMdl = db.users;
+const personMdl = db.resources.persons;
+const userMdl = db.admin.users;
 
 module.exports = {
 

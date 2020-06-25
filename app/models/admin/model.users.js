@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-	const Model = sequelize.define('tb_usuarios', {
+	const User = sequelize.define('tb_usuarios', {
 		usuario_id: { 
 			type: DataTypes.INTEGER,
 			unique: true,
@@ -46,6 +46,12 @@ module.exports = (sequelize, DataTypes) => {
 		timestamps: false,
 		freezeTableName: true
 	});
+
+	/*
+	User.associate = function(models) {
+		User.belongsTo(models.Profile, { foreignKey: 'perfil_id' });
+	};
+	*/
 	
-	return Model;
+	return User;
 }

@@ -3,11 +3,11 @@ const db = require('../../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
-const model = db.absences;
-const absencesControl = db.absencesControl;
+const model = db.tthh.absences;
+const absencesControl = db.tthh.absencesControl;
 
-const staffModel = db.staff;
-const personModel = db.persons;
+const staffModel = db.tthh.staff;
+const personModel = db.resources.persons;
 
 module.exports = {
 

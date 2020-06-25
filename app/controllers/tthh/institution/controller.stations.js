@@ -3,9 +3,9 @@ const db = require('../../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
-const model = db.stations;
+const model = db.tthh.stations;
 
-const userMdl = db.users;
+const userMdl = db.admin.users;
 
 module.exports = {
 

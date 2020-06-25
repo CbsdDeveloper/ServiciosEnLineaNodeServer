@@ -1,7 +1,7 @@
 'use strict';
 const db = require('../../../models');
-const jobModel = db.jobs;
-const leadershipModel = db.leaderships;
+const jobModel = db.tthh.jobs;
+const leadershipModel = db.tthh.leaderships;
 
 // LISTADO DE PUESTOS DE TRABAJO
 exports.findAll = (req, res) => {

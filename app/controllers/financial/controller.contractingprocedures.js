@@ -1,6 +1,6 @@
 'use strict';
 const db = require('../../models');
-const contractingproceduresModel = db.contractingprocedures;
+const contractingproceduresModel = db.financial.contractingprocedures;
 
 // FETCH All Customers
 exports.findAll = (req, res) => {

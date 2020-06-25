@@ -1,6 +1,6 @@
 'use strict';
 const db = require('../../models');
-const geojsonModel = db.geojson;
+const geojsonModel = db.resources.geojson;
 
 // ENCONTRAR REGISTRO POR ID
 exports.findByEntity = (req, res) => {	

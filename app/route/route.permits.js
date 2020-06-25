@@ -6,17 +6,17 @@ const router = express.Router();
 * CONTROLLERS DE MODELOS
 */
 const permitsCtrl = {
-    activities:     require('../controllers/permits/controller.activities'),
-    taxes:          require('../controllers/permits/controller.taxes'),
-    ciiu:           require('../controllers/permits/controller.ciiu'),
-    entities:       require('../controllers/permits/controller.entities'),
-    locals:         require('../controllers/permits/controller.locals'),
-    employees:      require('../controllers/permits/controller.employees'),
-    selfInspections:require('../controllers/permits/controller.selfInspections'),
-    permits:        require('../controllers/permits/controller.permits'),
-    duplicates:     require('../controllers/permits/controller.duplicates'),
+    activities: require('../controllers/permits/controller.activities'),
+    taxes: require('../controllers/permits/controller.taxes'),
+    ciiu: require('../controllers/permits/controller.ciiu'),
+    entities: require('../controllers/permits/controller.entities'),
+    locals: require('../controllers/permits/controller.locals'),
+    employees: require('../controllers/permits/controller.employees'),
+    selfInspections: require('../controllers/permits/controller.selfInspections'),
+    permits: require('../controllers/permits/controller.permits'),
+    duplicates: require('../controllers/permits/controller.duplicates'),
 
-    schema:        require('../controllers/controller.permits.js')
+    schema: require('../controllers/controller.permits.js')
 };
 
 /*

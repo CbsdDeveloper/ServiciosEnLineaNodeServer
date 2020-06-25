@@ -1,7 +1,7 @@
 'use strict';
 const db = require('../../models');
-const academicTrainingModel = db.academicTraining;
-const personModel = db.persons;
+const academicTrainingModel = db.tthh.academicTraining;
+const personModel = db.resources.persons;
 
 // FETCH All Customers
 exports.findAll = (req, res) => {

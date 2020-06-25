@@ -4,18 +4,18 @@ const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
 
-const duplicateModel = db.duplicates;
-const permitMdl = db.permitsLocals;
-const selfInspectionMdl = db.selfInspections;
+const duplicateModel = db.permits.duplicates;
+const permitMdl = db.permits.permitsLocals;
+const selfInspectionMdl = db.permits.selfInspections;
 
-const userMdl = db.users;
-const localMdl = db.locals;
-const entityMdl = db.entities;
+const userMdl = db.admin.users;
+const localMdl = db.permits.locals;
+const entityMdl = db.permits.entities;
 
-const ppersonalMdl = db.ppersonal;
-const staffMdl = db.staff;
-const personMdl = db.persons;
-const jobMdl = db.jobs;
+const ppersonalMdl = db.tthh.ppersonal;
+const staffMdl = db.tthh.staff;
+const personMdl = db.resources.persons;
+const jobMdl = db.tthh.jobs;
 // VARIABLES GLOBALES
 var strWhr;
 

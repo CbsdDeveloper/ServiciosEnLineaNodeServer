@@ -3,8 +3,8 @@ const db = require('../../../models');
 
 const model = db.prevention.covid;
 const covidResourcesMdl = db.prevention.covidResources;
-const resourceModel = db.resources;
-const localMdl = db.locals;
+const resourceModel = db.resources.resources;
+const localMdl = db.permits.locals;
 
 // ENCONTRAR REGISTRO POR ID
 exports.findResourcesByBiosecurity = async (req, res) => {

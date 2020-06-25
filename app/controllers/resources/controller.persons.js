@@ -1,6 +1,6 @@
 'use strict';
 const db = require('../../models');
-const Model = db.persons;
+const Model = db.resources.persons;
 
 // LISTAR TODOS LOS REGISTROS
 exports.findAll = (req, res) => {

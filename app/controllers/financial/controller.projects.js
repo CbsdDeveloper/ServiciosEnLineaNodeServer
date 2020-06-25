@@ -3,8 +3,8 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const model = db.financialProjects;
-const subprogramModel = db.financialSubprograms;
+const model = db.financial.financialProjects;
+const subprogramModel = db.financial.financialSubprograms;
 
 module.exports = {
 
