@@ -8,23 +8,25 @@ const preventionCtrl = {
     // PRORROGAS
     extensions:                 require('../controllers/prevention/inspections/controller.extensions'),
     // PLANES DE AUTOPROTECCION
-    plans: require('../controllers/prevention/selfprotectionplans/controller.plans'),
-    selfProtectionAnnexes: require('../controllers/prevention/selfprotectionplans/controller.selfProtection.annexes'),
-    selfProtectionFactors: require('../controllers/prevention/selfprotectionplans/controller.selfProtection.factors'),
-    selfProtectionPrevention: require('../controllers/prevention/selfprotectionplans/controller.selfProtection.prevention'),
-    selfProtectionMaintenance: require('../controllers/prevention/selfprotectionplans/controller.selfProtection.maintenance'),
-    selfProtectionMeseri: require('../controllers/prevention/selfprotectionplans/controller.selfProtection.meseri'),
-    brigades: require('../controllers/prevention/selfprotectionplans/controller.brigades'),
-    brigadists: require('../controllers/prevention/selfprotectionplans/controller.brigadists'),
+    plans:                      require('../controllers/prevention/selfprotectionplans/controller.plans'),
+    selfProtectionAnnexes:      require('../controllers/prevention/selfprotectionplans/controller.selfProtection.annexes'),
+    selfProtectionFactors:      require('../controllers/prevention/selfprotectionplans/controller.selfProtection.factors'),
+    selfProtectionPrevention:   require('../controllers/prevention/selfprotectionplans/controller.selfProtection.prevention'),
+    selfProtectionMaintenance:  require('../controllers/prevention/selfprotectionplans/controller.selfProtection.maintenance'),
+    selfProtectionMeseri:       require('../controllers/prevention/selfprotectionplans/controller.selfProtection.meseri'),
+    brigades:                   require('../controllers/prevention/selfprotectionplans/controller.brigades'),
+    brigadists:                 require('../controllers/prevention/selfprotectionplans/controller.brigadists'),
     // PLANES DE BIOSEGURIDAD
-    srcBiosecurity: require('../controllers/prevention/biosecurity/controller.covid'),
+    srcBiosecurity:             require('../controllers/prevention/biosecurity/controller.covid'),
     // CAPACITACIONES CIUDADANAS
-    trainings: require('../controllers/prevention/trainings/controller.trainings'),
-    stands: require('../controllers/prevention/trainings/controller.stands'),
-    visits: require('../controllers/prevention/trainings/controller.visits'),
-    simulations: require('../controllers/prevention/trainings/controller.simulations'),
-
-    schema: require('../controllers/controller.prevencion.js')
+    trainings:                  require('../controllers/prevention/trainings/controller.trainings'),
+    stands:                     require('../controllers/prevention/trainings/controller.stands'),
+    visits:                     require('../controllers/prevention/trainings/controller.visits'),
+    simulations:                require('../controllers/prevention/trainings/controller.simulations'),
+    // PERMISOS DE USO DE GLP
+    tglp:                       require('../controllers/prevention/glp/controller.transport'),
+    // SCHEMA
+    schema:                     require('../controllers/controller.prevencion.js')
 };
 
 /*
@@ -34,6 +36,7 @@ const preventionCtrl = {
 router.get('/inspections/inspections', preventionCtrl.inspections.paginationEntity);
 router.get('/inspections/extensions', preventionCtrl.extensions.paginationEntity);
 router.get('/inspections/selfprotections', preventionCtrl.plans.paginationEntity);
+router.get('/glp/transport', preventionCtrl.tglp.paginationEntity);
 router.get('/plans/selfprotections/localId', preventionCtrl.plans.paginateByLocal);
 
 /*
@@ -44,6 +47,7 @@ router.post('/inspections/list/localId', preventionCtrl.inspections.findByLocalI
 // PRORROGAS
 router.post('/extensions/list/localId', preventionCtrl.extensions.findByLocalId);
 // PLAN DE AUTOPROTECCION
+router.post('/selfprotections/detail/byId', preventionCtrl.plans.detailById);
 router.post('/plans/list/localId', preventionCtrl.plans.findByLocalId);
 router.post('/plans/planById', preventionCtrl.plans.findById);
 router.put('/plans/selfproteccion', preventionCtrl.plans.updateEntity);
@@ -68,6 +72,9 @@ router.post('/trainings/list/entityId', preventionCtrl.trainings.findByEntityId)
 router.post('/stands/list/entityId', preventionCtrl.stands.findByEntityId);
 router.post('/visits/list/entityId', preventionCtrl.visits.findByEntityId);
 router.post('/simulations/list/entityId', preventionCtrl.simulations.findByEntityId);
+// TRANSPORTE DE GLP
+router.post('/glp/transport/detail/byId', preventionCtrl.tglp.findById);
+router.post('/glp/transport/review/byId', preventionCtrl.tglp.reviewById);
 
 /*
  * CONTROLLERS DE SCHEMAS

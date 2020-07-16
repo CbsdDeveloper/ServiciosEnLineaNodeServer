@@ -1,8 +1,8 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-	const Model = sequelize.define('tb_planesemergencia_inspector', {
+	const Model = sequelize.define('tb_tglp_inspector', {
 
-		planinspector_id: {
+		tglpinspector_id: {
 			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
@@ -15,6 +15,8 @@ module.exports = (sequelize, DataTypes) => {
 		timestamps: false,
 		freezeTableName: true
 	});
+
+	Model.removeAttribute('id');
 	
 	return Model;
-}
+};

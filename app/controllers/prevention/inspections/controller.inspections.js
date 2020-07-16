@@ -98,5 +98,4 @@ module.exports = {
 		db.setEmpty(res,'INSPECCIONES DE UN LOCAL',true,data);
 	}
 
-
 }

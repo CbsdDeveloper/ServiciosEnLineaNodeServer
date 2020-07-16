@@ -59,11 +59,19 @@ module.exports = {
 	},
 
 	// Find a Customer by Id
-	findById(req, res){	
+	findById(req, res){
 		entityModel.findOne({
 			where: { entidad_id: req.body.entityId },
 			include: [
-				{ model: partner, as: 'person' }
+				{ 
+					model: partner, as: 'person',
+					attributes: [ 'persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo','persona_telefono','persona_celular' ]
+				 },
+				{ 
+					model: partner, as: 'adopted', 
+					attributes: [ 'persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo','persona_telefono','persona_celular' ],
+					required: false 
+				}
 			]
 		}).then(data => {
 			db.setEmpty(res,'ENTIDAD POR ID',true,data);

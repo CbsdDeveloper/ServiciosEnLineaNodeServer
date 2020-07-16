@@ -16,8 +16,6 @@ const ppersonalMdl = db.tthh.ppersonal;
 const staffMdl = db.tthh.staff;
 const personMdl = db.resources.persons;
 const jobMdl = db.tthh.jobs;
-// VARIABLES GLOBALES
-var strWhr;
 
 module.exports = {
 

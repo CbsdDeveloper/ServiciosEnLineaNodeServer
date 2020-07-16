@@ -13,8 +13,10 @@ const trainingMdl = db.tthh.academicTraining;
 
 const ppersonalMdl = db.tthh.ppersonal;
 const staffMdl = db.tthh.staff;
-const personMdl = db.resources.persons;
+const jobMdl = db.tthh.jobs;
+const leadershipMdl = db.tthh.leaderships;
 
+const personMdl = db.resources.persons;
 const galleryMdl = db.resources.gallery;
 const userMdl = db.admin.users;
 
@@ -31,6 +33,7 @@ module.exports = {
 			const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
 			const where = seq.or(
+				{ plan_tipo: seq.where(seq.fn('LOWER', seq.col('plan_tipo')), 'LIKE', '%' + filter + '%') },
 				{ plan_codigo: seq.where(seq.fn('LOWER', seq.col('plan_codigo')), 'LIKE', '%' + filter + '%') },
 				{ plan_estado: seq.where(seq.fn('LOWER', seq.col('plan_estado')), 'LIKE', '%' + filter + '%') },
 
@@ -38,65 +41,64 @@ module.exports = {
 				{ entidad_razonsocial: seq.where(seq.fn('LOWER', seq.col('entidad_razonsocial')), 'LIKE', '%' + filter + '%') },
 				{ entidad_ruc: seq.where(seq.fn('LOWER', seq.col('entidad_ruc')), 'LIKE', '%' + filter + '%') }
 			);
-			const { rows, count } = await planModel.findAndCountAll(
-				{
-					offset: offset,
-					limit: limit,
-					where: where,
-					order: [ sort ],
-					include: [ 
-						{
-							model: localMdl, as: 'local',
-							attributes: [ 'local_id','local_nombrecomercial','local_parroquia','local_principal','local_secundaria','local_referencia' ],
-							include: [
-								{
-									model: entityMdl, as: 'entity',
-									attributes: [ 'entidad_id','entidad_ruc','entidad_razonsocial','entidad_contribuyente' ],
-									include: [
-										{ 
-											model: personMdl, as: 'person',
-											attributes: [ 'persona_id','persona_doc_identidad','persona_apellidos','persona_nombres','persona_correo' ]
-										}
-									]
-								}
-							]
-						},
-						/*
-						{
-							model: galleryMdl,	as: 'gallery',
-							attributes: [ 'media_nombre','media_titulo' ],
-							required: false,
-							where: { fk_table: 'planesemergencia' }
-						},
-						{
-							model: planInspectorMdl, as: 'inspectors',
-							attributes: [ 'fk_plan_id','fk_personal_id' ],
-							include: [
-								{
-									model: ppersonalMdl, as: 'ppersonal',
-									attributes: [ 'ppersonal_estado' ],
-									include: [
-										{
-											model: staffMdl, as: 'staff',
-											attributes: [ 'personal_correo_institucional' ],
-											include: [
-												{
-													model: personMdl, as: 'person',
-													attributes: [ 'persona_apellidos','persona_nombres' ]
-												}
-											]
-										}
-									]
-								}
-							]
-						},
-						*/
-						{ 
-							model: userMdl, as: 'user',
-							attributes: [ ['usuario_login','usuario'] ]
-						} 
-					]
-				});
+			const { rows, count } = await planModel.findAndCountAll({
+				offset: offset,
+				limit: limit,
+				where: where,
+				order: [ sort ],
+				include: [ 
+					{
+						model: localMdl, as: 'local',
+						attributes: [ 'local_id','local_nombrecomercial','local_parroquia','local_principal','local_secundaria','local_referencia' ],
+						include: [
+							{
+								model: entityMdl, as: 'entity',
+								attributes: [ 'entidad_id','entidad_ruc','entidad_razonsocial','entidad_contribuyente' ],
+								include: [
+									{ 
+										model: personMdl, as: 'person',
+										attributes: [ 'persona_id','persona_doc_identidad','persona_apellidos','persona_nombres','persona_correo' ]
+									}
+								]
+							}
+						]
+					},
+					/*
+					{
+						model: galleryMdl,	as: 'gallery',
+						attributes: [ 'media_nombre','media_titulo' ],
+						required: false,
+						where: { fk_table: 'planesemergencia' }
+					},
+					{
+						model: planInspectorMdl, as: 'inspectors',
+						attributes: [ 'fk_plan_id','fk_personal_id' ],
+						include: [
+							{
+								model: ppersonalMdl, as: 'ppersonal',
+								attributes: [ 'ppersonal_estado' ],
+								include: [
+									{
+										model: staffMdl, as: 'staff',
+										attributes: [ 'personal_correo_institucional' ],
+										include: [
+											{
+												model: personMdl, as: 'person',
+												attributes: [ 'persona_apellidos','persona_nombres' ]
+											}
+										]
+									}
+								]
+							}
+						]
+					},
+					*/
+					{ 
+						model: userMdl, as: 'user',
+						attributes: [ ['usuario_login','usuario'] ]
+					} 
+				]
+			});
 			const meta = paginate(currentPage, count, rows, pageLimit);
 			db.setDataTable(res,{ rows, meta },'PLANES DE AUTOPROTECCION');
 		} catch (error) {
@@ -186,7 +188,7 @@ module.exports = {
 	},
 
 	/*
-	 * ENCONTRAR REGISTRO POR ID DE LOCAL
+	 * ENCONTRAR REGISTRO POR ID
 	 */
 	findById(req, res){
 		// CONDICIONALES DE BUSQUEDA
@@ -243,6 +245,78 @@ module.exports = {
 				db.setEmpty(res,'NO SE HA ENCONTRADO EL REGISTRO => planModel->findById');
 			}
 		});
+	},
+
+	/*
+	 * ENCONTRAR REGISTRO POR ID
+	 */
+	async detailById(req, res){
+		const data = await planModel.findOne({
+			where: { plan_id: req.body.id },
+			include: [ 
+				{
+					model: localMdl, as: 'local',
+					include: [
+						{
+							model: entityMdl, as: 'entity',
+							include: [
+								{ model: personMdl, as: 'person' }
+							]
+						}
+					]
+				},
+				{
+					model: galleryMdl,	as: 'gallery',
+					required: false,
+					where: { fk_table: 'planesemergencia' },
+					include: [
+						{ 
+							model: userMdl, as: 'user',
+							attributes: [ ['usuario_login','usuario'] ]
+						} 
+					],
+					order: [ ['media_nombre'] ]
+				},
+				{
+					model: planInspectorMdl, as: 'inspectors',
+					attributes: [ 'fk_plan_id','fk_personal_id' ],
+					include: [
+						{
+							model: ppersonalMdl, as: 'ppersonal',
+							attributes: [ 'ppersonal_estado','personal_fecha_ingreso' ],
+							include: [
+								{
+									model: staffMdl, as: 'staff',
+									attributes: [ 'personal_correo_institucional' ],
+									include: [
+										{
+											model: personMdl, as: 'person',
+											attributes: [ 'persona_apellidos','persona_nombres','persona_imagen','persona_doc_identidad' ]
+										}
+									]
+								},
+								{
+									model: jobMdl, as: 'job',
+									attributes: [ 'puesto_nombre' ],
+									include: [
+										{
+											model: leadershipMdl, as: 'leadership',
+											attributes: [ 'direccion_nombre' ]
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{ 
+					model: userMdl, as: 'user',
+					attributes: [ ['usuario_login','usuario'] ]
+				} 
+			]
+		});
+		// RETORNAR CONSULTA
+		db.setEmpty(res,'DETALLE DE PLAN DE AUTOPROTECCION',true,data);
 	},
 
 	/*

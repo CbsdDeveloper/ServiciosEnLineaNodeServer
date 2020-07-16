@@ -106,6 +106,7 @@ db.resources = {
 	towns:				require('./resources/model.towns')(sequelize, Sequelize),
 	parishes:			require('./resources/model.parishes')(sequelize, Sequelize),
 	persons:			require('./resources/model.persons')(sequelize, Sequelize),
+	vehicles:			require('./resources/model.vehicles')(sequelize, Sequelize),
 	driverlicenses:		require('./resources/model.driverlicenses')(sequelize, Sequelize)
 };
 // ADMINISTRACION
@@ -150,6 +151,10 @@ db.prevention = {
 	inspectionInspector:		require('./prevention/inspections/model.inspection.inspector')(sequelize, Sequelize),
 	inspectionLocal:			require('./prevention/inspections/model.inspection.local')(sequelize, Sequelize),
 	reinspections:				require('./prevention/inspections/model.reinspections')(sequelize, Sequelize),
+	// GLP
+	tglp:						require('./prevention/glp/model.transport')(sequelize, Sequelize),
+	tglpInspector:				require('./prevention/glp/model.transport.inspector')(sequelize, Sequelize),
+	tglpResources:				require('./prevention/glp/model.transport.resources')(sequelize, Sequelize),
 	// CAPACITACIONES CIUDADANAS
 	trainingTopics:				require('./prevention/trainings/model.topics')(sequelize, Sequelize),
 	trainings:					require('./prevention/trainings/model.trainings')(sequelize, Sequelize),
@@ -260,6 +265,9 @@ db.resources.towns.belongsTo(db.resources.states, {foreignKey: 'fk_state_id'});
 db.resources.parishes.belongsTo(db.resources.towns, {foreignKey: 'fk_town_id'});
 db.resources.persons.hasMany(db.tthh.academicTraining, {as: 'training', foreignKey: 'fk_persona_id'});
 db.resources.resources.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
+// VEHICULOS
+db.resources.vehicles.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
+db.resources.vehicles.belongsTo(db.resources.persons, {as: 'owner', foreignKey: 'propietario_id'});
 // FORMULARIOS DE EVALUACION
 db.resources.forms.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
 db.resources.formSections.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
@@ -320,31 +328,26 @@ db.tthh.absences.belongsTo(db.tthh.staff, {as: 'justifie', foreignKey: 'fk_justi
 db.tthh.absences.hasMany(db.tthh.absencesControl, {as: 'control', foreignKey: 'fk_inasistencia_id'});
 db.tthh.absencesControl.belongsTo(db.tthh.absences, {as: 'absence', foreignKey: 'fk_inasistencia_id'});
 db.tthh.absencesControl.belongsTo(db.tthh.staff, {as: 'responsible', foreignKey: 'fk_personal_id'});
-
 // EVALUACIONES DE TALENTO HUMANO
 db.tthh.surveysEvaluations.belongsTo(db.resources.forms, {as: 'form', foreignKey: 'fk_formulario_id'});
 db.tthh.surveysEvaluations.belongsTo(db.tthh.staff, {as: 'staff', foreignKey: 'fk_personal_id'});
 db.tthh.surveysEvaluations.hasMany(db.tthh.surveysStaffEvaluations, {as: 'evaluations', foreignKey: 'fk_evaluacion_id'});
-
 db.tthh.surveysStaffEvaluations.belongsTo(db.tthh.surveysEvaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id'});
 db.tthh.surveysStaffEvaluations.belongsTo(db.tthh.staff, {as: 'staff', foreignKey: 'fk_evaluado_id'});
 db.tthh.surveysStaffEvaluations.belongsTo(db.tthh.staff, {as: 'personal', foreignKey: 'fk_personal_id'});
 db.tthh.surveysStaffEvaluationsAnswers.belongsTo(db.tthh.surveysStaffEvaluations, {as: 'test', foreignKey: 'fk_test_id'});
 db.tthh.surveysStaffEvaluationsAnswers.belongsTo(db.resources.formQuestions, {as: 'question', foreignKey: 'fk_pregunta_id'});
-
 // EVALUACION DE RIESGO PSICOSOCIAL
 db.tthh.psychosocialformsSections.belongsTo(db.tthh.psychosocialforms, {as: 'form', foreignKey: 'fk_formulario_id'});
 db.tthh.psychosocialformsSections.hasMany(db.tthh.psychosocialformsQuestions, {as: 'questions', foreignKey: 'fk_seccion_id'});
 db.tthh.psychosocialformsQuestions.belongsTo(db.tthh.psychosocialformsSections, {as: 'section', foreignKey: 'fk_seccion_id'});
 db.tthh.psychosocialformsQuestions.belongsTo(db.resources.resources, {as: 'question', foreignKey: 'fk_pregunta_id'});
 db.tthh.psychosocialformsQuestions.belongsTo(db.resources.resources, {as: 'ranking', foreignKey: 'fk_sistemacalificacion_id'});
-
 db.tthh.psychosocialEvaluations.belongsTo(db.tthh.psychosocialforms, {as: 'form', foreignKey: 'fk_formulario_id'});
 db.tthh.psychosocialformsQuestions.belongsToMany(db.tthh.psychosocialEvaluations, {through: 'tb_evaluacionesriesgopsicosocial_preguntas', foreignKey: 'fk_pregunta_id'});
 db.tthh.psychosocialEvaluations.belongsToMany(db.tthh.psychosocialformsQuestions, {through: 'tb_evaluacionesriesgopsicosocial_preguntas', foreignKey: 'fk_evaluacion_id'});
 db.tthh.psychosocialEvaluationsQuestions.belongsTo(db.tthh.psychosocialformsQuestions, {as: 'question', foreignKey: 'fk_pregunta_id'});
 db.tthh.psychosocialEvaluationsQuestions.belongsTo(db.tthh.psychosocialEvaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id'});
-
 db.tthh.psychosocialTest.belongsTo(db.tthh.psychosocialEvaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id'});
 db.tthh.psychosocialTest.belongsTo(db.tthh.staff, {as: 'staff', foreignKey: 'fk_evaluado_id'});
 db.tthh.psychosocialTestAnswers.belongsTo(db.tthh.psychosocialTest, {as: 'test', foreignKey: 'fk_test_id'});
@@ -356,6 +359,7 @@ db.tthh.psychosocialTestAnswers.belongsTo(db.tthh.psychosocialformsQuestions, {a
  */
 // ENTIDADES
 db.permits.entities.belongsTo(db.resources.persons, {as: 'person', foreignKey: 'fk_representante_id'});
+db.permits.entities.belongsTo(db.resources.persons, {as: 'adopted', foreignKey: 'fk_apoderado_id'});
 db.permits.entities.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
 // PERMISOS
 db.permits.taxes.belongsTo(db.permits.activities, {as: 'activity', foreignKey: 'fk_actividad_id'});
@@ -393,8 +397,6 @@ db.prevention.covidResources.belongsTo(db.resources.resources, {as: 'src', forei
 db.prevention.inspections.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
 db.prevention.inspections.belongsTo(db.resources.persons, {as: 'applicant', foreignKey: 'fk_solicitante_id'});
 db.prevention.inspections.belongsTo(db.resources.persons, {as: 'enterviewed', foreignKey: 'fk_entrevistado_id'});
-
-
 // INSPECCIONES - LOCALES
 db.prevention.inspections.hasMany(db.prevention.inspectionLocal, {as: 'locals', foreignKey: 'fk_inspeccion_id'});
 db.prevention.inspectionLocal.belongsTo(db.prevention.inspections, {as: 'inspection', foreignKey: 'fk_inspeccion_id'});
@@ -403,11 +405,20 @@ db.prevention.inspectionLocal.belongsTo(db.permits.locals, {as: 'local', foreign
 db.prevention.inspections.hasMany(db.prevention.inspectionInspector, {as: 'inspectors', foreignKey: 'fk_inspeccion_id'});
 db.prevention.inspectionInspector.belongsTo(db.prevention.inspections, {as: 'inspection', foreignKey: 'fk_inspeccion_id',});
 db.prevention.inspectionInspector.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_inspector_id'});
-
-
-
 // REINSPECCIONES
 db.prevention.reinspections.belongsTo(db.prevention.inspections, {as: 'inspection', foreignKey: 'fk_inspeccion_id'});
+// TRANSPORTE DE GLP
+db.prevention.tglp.belongsTo(db.permits.permitsLocals, {as: 'permit', foreignKey: 'fk_permiso_id'});
+db.prevention.tglp.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
+db.prevention.tglp.belongsTo(db.admin.users, {as: 'inspector', foreignKey: 'fk_inspector_id'});
+db.prevention.tglp.belongsTo(db.resources.vehicles, {as: 'vehicle', foreignKey: 'fk_vehiculo_id'});
+// TRANSPORTE GLP RELACIONES
+db.prevention.tglp.hasMany(db.prevention.tglpInspector, {as: 'inspectors', foreignKey: 'fk_tglp_id'});
+db.prevention.tglpInspector.belongsTo(db.prevention.tglp, {as: 'transport', foreignKey: 'fk_tglp_id'});
+db.prevention.tglpInspector.belongsTo(db.tthh.ppersonal, {as: 'ppersonal', foreignKey: 'fk_personal_id'});
+db.prevention.tglp.hasMany(db.prevention.tglpResources, {as: 'resources', foreignKey: 'fk_transporte_id'});
+db.prevention.tglpResources.belongsTo(db.prevention.tglp, {as: 'transport', foreignKey: 'fk_transporte_id'});
+db.prevention.tglpResources.belongsTo(db.resources.resources, {as: 'src', foreignKey: 'fk_recurso_id'});
 // AUTOPROTECCION
 db.prevention.selfProtectionMaintenance.belongsTo(db.permits.entities, {as: 'professional', foreignKey: 'mantenimiento_responsable_id'});
 db.resources.resources.hasMany(db.prevention.selfProtectionMaintenance, {as: 'maintenance', foreignKey: 'fk_recurso_id'});

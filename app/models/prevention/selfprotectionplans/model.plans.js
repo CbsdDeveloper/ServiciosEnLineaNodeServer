@@ -223,7 +223,11 @@ module.exports = (sequelize, DataTypes) => {
 		}, // text, -- 
 		plan_motivoregistro: { 
 			type: DataTypes.STRING
-		} // text -- 
+		}, // text -- 
+		plan_tipo: { 
+			type: DataTypes.STRING,
+			defaultValue: 'FORMATO EXTERNO'
+		}, //
 
 	}, {
 		schema: 'prevencion',
