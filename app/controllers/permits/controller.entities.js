@@ -35,7 +35,7 @@ module.exports = {
 					include: [ 
 						{ 
 							model: partner, as: 'person',
-							attributes: [ 'persona_id','persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo' ]
+							attributes: [ 'persona_id','persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo','persona_telefono','persona_celular' ]
 						},
 						{ 
 							model: userMdl, as: 'user',
@@ -65,11 +65,11 @@ module.exports = {
 			include: [
 				{ 
 					model: partner, as: 'person',
-					attributes: [ 'persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo','persona_telefono','persona_celular' ]
+					attributes: [ 'persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo','persona_telefono','persona_celular','persona_imagen' ]
 				 },
 				{ 
 					model: partner, as: 'adopted', 
-					attributes: [ 'persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo','persona_telefono','persona_celular' ],
+					attributes: [ 'persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo','persona_telefono','persona_celular','persona_imagen' ],
 					required: false 
 				}
 			]

@@ -265,6 +265,30 @@ module.exports = {
 						}
 					]
 				},
+				{ 
+					model: entityMdl, as: 'billing', 
+					include: [
+						{ model: personMdl, as: 'person' }
+					],
+					required: false
+				},
+				{ 
+					model: personMdl, 
+					attributes: [ 'persona_doc_identidad','persona_apellidos','persona_nombres','persona_telefono','persona_celular','persona_correo','persona_anexo_cedula' ],
+					as: 'responsable',
+					required: false
+				},
+				{ 
+					model: trainingMdl, 
+					as: 'training',
+					required: false
+				},
+				{ 
+					model: personMdl, 
+					attributes: [ 'persona_doc_identidad','persona_apellidos','persona_nombres','persona_telefono','persona_celular','persona_correo','persona_anexo_cedula' ],
+					as: 'sos',
+					required: false
+				},
 				{
 					model: galleryMdl,	as: 'gallery',
 					required: false,

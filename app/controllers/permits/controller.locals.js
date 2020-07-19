@@ -82,9 +82,7 @@ module.exports = {
 						{ 
 							model: ciiuMdl, as: 'ciiu', 
 							include:[
-								{
-									model: taxesMdl, as: 'taxe'
-								}
+								{ model: taxesMdl, as: 'taxe' }
 							]
 						}
 					],

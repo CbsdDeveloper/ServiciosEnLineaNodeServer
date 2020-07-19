@@ -67,7 +67,10 @@ module.exports = (sequelize, DataTypes) => {
 		}, // 
 		entidad_usuario_creacion:{
 			type: DataTypes.DATE
-		} // 
+		}, // 
+		entidad_direccionfacturacion:{
+			type: DataTypes.STRING
+		}, // 
 	}, {
 		schema: 'permisos',
 		underscored: true,
