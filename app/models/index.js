@@ -433,6 +433,12 @@ db.prevention.plans.belongsTo(db.resources.persons, {as: 'sos', foreignKey: 'fk_
 db.prevention.plans.belongsTo(db.tthh.academicTraining, {as: 'training', foreignKey: 'profesional_sos_id'});
 db.prevention.plans.hasMany(db.resources.gallery, {as: 'gallery', foreignKey: 'fk_id', targetKey: 'plan_id'});
 
+db.prevention.plans.hasMany(db.prevention.selfProtectionAnnexes, {as: 'annexes', foreignKey: 'fk_plan_id'});
+db.prevention.selfProtectionAnnexes.belongsTo(db.prevention.plans, {as: 'plan', foreignKey: 'fk_plan_id'});
+
+db.prevention.plans.hasMany(db.prevention.selfProtectionMaintenance, {as: 'maintenances', foreignKey: 'fk_plan_id'});
+db.prevention.selfProtectionMaintenance.belongsTo(db.prevention.plans, {as: 'plan', foreignKey: 'fk_plan_id'});
+
 db.prevention.plans.hasMany(db.prevention.planInspectors, {as: 'inspectors', foreignKey: 'fk_plan_id'});
 db.prevention.planInspectors.belongsTo(db.prevention.plans, {as: 'plan', foreignKey: 'fk_plan_id'});
 

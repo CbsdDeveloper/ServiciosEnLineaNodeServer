@@ -7,6 +7,9 @@ const { staff } = require('../../../models');
 const planModel = db.prevention.plans;
 const planInspectorMdl = db.prevention.planInspectors;
 
+const annexeMdl = db.prevention.selfProtectionAnnexes;
+const maintenanceMdl = db.prevention.selfProtectionMaintenance;
+
 const localMdl = db.permits.locals;
 const entityMdl = db.permits.entities;
 const trainingMdl = db.tthh.academicTraining;
@@ -18,6 +21,7 @@ const leadershipMdl = db.tthh.leaderships;
 
 const personMdl = db.resources.persons;
 const galleryMdl = db.resources.gallery;
+const resourceMdl = db.resources.resources;
 const userMdl = db.admin.users;
 
 module.exports = {
@@ -332,6 +336,16 @@ module.exports = {
 							]
 						}
 					]
+				},
+				{ 
+					model: annexeMdl, as: 'annexes',
+					required: false
+				},
+				{
+					model: maintenanceMdl, as: 'maintenances',
+					where: { mantenimiento_aplicacion: 'SI APLICA' },
+					include: [ { model: resourceMdl, as: 'resource' } ],
+					required: false
 				},
 				{ 
 					model: userMdl, as: 'user',
