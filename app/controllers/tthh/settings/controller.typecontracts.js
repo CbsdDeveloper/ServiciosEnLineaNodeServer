@@ -1,9 +1,9 @@
 'use strict';
-const db = require('../../models');
+const db = require('../../../models');
 const seq = db.sequelize;
-const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
+const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
-const typeAdvances = db.tthh.typeAdvances;
+const typeContracts = db.tthh.typeContracts;
 
 module.exports = {
 
@@ -15,12 +15,12 @@ module.exports = {
 	*/
 	async paginationEntity(req, res){
 		try {
-			const { query: { currentPage, pageLimit, textFilter, sortData = 'tanticipo_nombre' } } = req;
+			const { query: { currentPage, pageLimit, textFilter, sortData = 'tcontrato_nombre' } } = req;
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
 			const where = {
-				cuenta_codigo: seq.where(seq.fn('LOWER', seq.col('tanticipo_nombre')), 'LIKE', '%' + filter + '%')
+				tcontrato_nombre: seq.where(seq.fn('LOWER', seq.col('tcontrato_nombre')), 'LIKE', '%' + filter + '%')
 			};
-			const { rows, count } = await typeAdvances.findAndCountAll(
+			const { rows, count } = await typeContracts.findAndCountAll(
 				{
 					offset: offset,
 					limit: limit,
@@ -28,22 +28,11 @@ module.exports = {
 					order: [ sort ]
 				});
 			const meta = paginate(currentPage, count, rows, pageLimit);
-			db.setDataTable(res,{ rows, meta },'TIPOS DE ANTICIPOS');
+			db.setDataTable(res,{ rows, meta },'TIPOS DE CONTRATOS');
 		} catch (error) {
-			db.setEmpty(res,'TIPOS DE ANTICIPOS',false,error);
+			db.setEmpty(res,'TIPOS DE CONTRATOS',false,error);
 		}
 
-	},
-
-	/*
-	 * LISTAR MODELOS
-	 */
-	async listEntity(req, res){
-		// LISTAR MODELOS
-		typeAdvances.findAll().then(data => {
-			// RETORNAR CONSULTA
-			db.setJSON(res,data,'LISTADO DE MODELOS',data);
-		});
 	},
 
 	/*
@@ -51,21 +40,18 @@ module.exports = {
 	 */
 	async updateEntity(req, res){
 		try {
-
 			// ACTUALIZAR DATOS DE MODELO
-			req.body.tanticipo_registro = db.getCurrentDate();
+			req.body.tcontrato_registro = db.getCurrentDate();
 			// ACTUALIZAR MODELO
-			typeAdvances.update(req.body,{
-				where: { tanticipo_id: req.body.tanticipo_id }
+			typeContracts.update(req.body,{
+				where: { tcontrato_id: req.body.tcontrato_id }
 			}).then(model => {
 				// RETORNAR CONSULTA
 				db.setEmpty(res,'DATOS ACTUALIZADOS CORRECTAMENTE',true,model);
 			});
-
 		} catch (error) {
 			db.setEmpty(res,'ERROR EN MODELO',false,error);
 		}
-
 	}
 
 };

@@ -18,7 +18,7 @@ module.exports = {
 
 	// ESTACIONES POR ID
 	findById(req, res){	
-		model.findById(req.params.id).then(data => {
+		model.findByPk(req.params.id).then(data => {
 			db.setJSON(res,data,'ESTACION POR ID');
 		}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 	},

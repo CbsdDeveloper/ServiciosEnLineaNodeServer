@@ -75,7 +75,7 @@ module.exports = {
 					offset: offset,
 					limit: limit,
 					where: {
-						recurso_clasificacion: 'SISTEMA DE CALIFICACION PARA EVALUACIONES'
+						recurso_clasificacion: ['SISTEMA DE CALIFICACION PARA EVALUACIONES','SISTEMA DE CALIFICACION PARA DAÑOS EN EQUIPOS DE RESCATE VERTICAL']
 					},
 					order: [ sort ],
 					include: [
@@ -99,7 +99,7 @@ module.exports = {
 	async getRatingsystem(req, res){
 		let data = await resourceModel.findAll(
 			{
-				where: { recurso_clasificacion: 'SISTEMA DE CALIFICACION PARA EVALUACIONES' },
+				where: { recurso_clasificacion: ['SISTEMA DE CALIFICACION PARA EVALUACIONES','SISTEMA DE CALIFICACION PARA DAÑOS EN EQUIPOS DE RESCATE VERTICAL'] },
 				order: [ ['recurso_nombre'] ]
 			});
 		db.setEmpty(res,'SISTEMA DE CALIFICACION PARA EVALUACIONES',true,data);

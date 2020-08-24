@@ -166,18 +166,20 @@ db.prevention = {
 db.tthh = {
 	// INSTITUTCION & PARAMETRICACION
 	stations:					require('./tthh/institution/model.stations')(sequelize, Sequelize),
-	academicTraining:			require('./tthh/model.academicTraining')(sequelize, Sequelize),
-	workdays:					require('./tthh/model.workdays')(sequelize, Sequelize),
-	scheduleworkdays:			require('./tthh/model.scheduleworkdays')(sequelize, Sequelize),
+	platoons:					require('./tthh/institution/model.platoons')(sequelize, Sequelize),
 	leaderships:				require('./tthh/institution/model.leaderships')(sequelize, Sequelize),
 	jobs:						require('./tthh/institution/model.jobs')(sequelize, Sequelize),
+	workdays:					require('./tthh/settings/model.workdays')(sequelize, Sequelize),
+	typeAdvances:				require('./tthh/settings/model.typeadvances')(sequelize, Sequelize),
+	typeContracts:				require('./tthh/settings/model.typecontracts')(sequelize, Sequelize),
+	scheduleworkdays:			require('./tthh/settings/model.scheduleworkdays')(sequelize, Sequelize),
+	occupationalgroups:			require('./tthh/settings/model.occupationalgroups')(sequelize, Sequelize),
+	academicTraining:			require('./tthh/model.academicTraining')(sequelize, Sequelize),
 	staff:						require('./tthh/model.staff')(sequelize, Sequelize),
 	ppersonal:					require('./tthh/model.ppersonal')(sequelize, Sequelize),
 	operators:					require('./tthh/model.operators')(sequelize, Sequelize),
 	biometricPeriods:			require('./tthh/attendance/model.biometricPeriods')(sequelize, Sequelize),
 	biometricMarkings:			require('./tthh/attendance/model.biometricMarkings')(sequelize, Sequelize),
-	typeAdvances:				require('./tthh/model.typeadvances')(sequelize, Sequelize),
-	typeContracts:				require('./tthh/model.typecontracts')(sequelize, Sequelize),
 	wineries:					require('./tthh/institution/model.wineries')(sequelize, Sequelize),
 	// CONTROL DE ASISTENCIA
 	absences:					require('./tthh/attendance/model.absences')(sequelize, Sequelize),
@@ -197,7 +199,11 @@ db.tthh = {
 	psychosocialEvaluations:			require('./tthh/sos/model.psychosocial.evaluation')(sequelize, Sequelize),
 	psychosocialEvaluationsQuestions:	require('./tthh/sos/model.psychosocial.evaluation.questions')(sequelize, Sequelize),
 	psychosocialTest:					require('./tthh/sos/model.psychosocial.test')(sequelize, Sequelize),
-	psychosocialTestAnswers:			require('./tthh/sos/model.psychosocial.test.answers')(sequelize, Sequelize)
+	psychosocialTestAnswers:			require('./tthh/sos/model.psychosocial.test.answers')(sequelize, Sequelize),
+	vrescueCategoriesequipments:		require('./tthh/sos/model.vrescue.categoriesequipment')(sequelize, Sequelize),
+	vrescueEquipments:					require('./tthh/sos/model.vrescue.equipments')(sequelize, Sequelize),
+	vrescueHistory:						require('./tthh/sos/model.vrescue.history')(sequelize, Sequelize),
+	vrescueHistoryAnswers:				require('./tthh/sos/model.vrescue.historyanswers')(sequelize, Sequelize)
 };
 // DIRECCION ADMINISTRATIVA
 db.administrative = {
@@ -292,6 +298,9 @@ db.admin.users.belongsTo(db.resources.persons, {as: 'person', foreignKey: 'fk_pe
  */
 // INSTITUCION
 db.tthh.stations.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
+db.tthh.stations.hasMany(db.tthh.platoons, {as: 'platoons', foreignKey: 'fk_estacion_id'});
+db.tthh.platoons.belongsTo(db.tthh.stations, {as: 'station', foreignKey: 'fk_estacion_id'});
+db.tthh.platoons.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
 db.tthh.leaderships.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
 db.tthh.leaderships.belongsTo(db.tthh.leaderships, {as: 'leadership', foreignKey: 'fk_direccion_id'});
 db.tthh.jobs.belongsTo(db.tthh.leaderships, {as: 'leadership', foreignKey: 'fk_direccion_id'});
@@ -352,7 +361,19 @@ db.tthh.psychosocialTest.belongsTo(db.tthh.psychosocialEvaluations, {as: 'evalua
 db.tthh.psychosocialTest.belongsTo(db.tthh.staff, {as: 'staff', foreignKey: 'fk_evaluado_id'});
 db.tthh.psychosocialTestAnswers.belongsTo(db.tthh.psychosocialTest, {as: 'test', foreignKey: 'fk_test_id'});
 db.tthh.psychosocialTestAnswers.belongsTo(db.tthh.psychosocialformsQuestions, {as: 'question', foreignKey: 'fk_pregunta_id'});
-
+// RESCATE VERTICAL
+db.tthh.vrescueCategoriesequipments.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.tthh.vrescueEquipments.belongsTo(db.tthh.platoons, {as: 'platoon', foreignKey: 'fk_peloton_id'});
+db.tthh.vrescueEquipments.belongsTo(db.resources.forms, {as: 'form', foreignKey: 'fk_formulario_id'});
+db.tthh.vrescueEquipments.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.tthh.vrescueEquipments.belongsTo(db.tthh.vrescueCategoriesequipments, {as: 'category', foreignKey: 'fk_categoria_id'});
+db.tthh.vrescueHistory.belongsTo(db.tthh.vrescueEquipments, {as: 'equipment', foreignKey: 'fk_equipo_id'});
+db.tthh.vrescueHistory.belongsTo(db.resources.forms, {as: 'form', foreignKey: 'fk_formulario_id'});
+db.tthh.vrescueHistory.belongsTo(db.tthh.platoons, {as: 'platoon', foreignKey: 'fk_peloton_id'});
+db.tthh.vrescueHistory.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.tthh.vrescueHistory.hasMany(db.tthh.vrescueHistoryAnswers, {as: 'answers', foreignKey: 'fk_registro_id'});
+db.tthh.vrescueHistoryAnswers.belongsTo(db.tthh.vrescueHistory, {as: 'history', foreignKey: 'fk_registro_id'});
+db.tthh.vrescueHistoryAnswers.belongsTo(db.resources.formQuestions, {as: 'questions', foreignKey: 'fk_pregunta_id'});
 
 /*
  * PERMISOS DE FUNCIONAMIENTO

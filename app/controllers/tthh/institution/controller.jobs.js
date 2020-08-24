@@ -44,6 +44,7 @@ exports.findAllStaffByLeadership = (req, res) => {
 			// REGISTRAR MODELO
 			model.jobs[v.leadership.direccion_id].push(v);
 		});
+		
 		// RETORNAR CONSULTA
 		db.setJSON(res,model,'LISTADO DE PUESTOS DE TRABAJO POR DIRECCIONES');
 

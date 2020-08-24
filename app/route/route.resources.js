@@ -25,9 +25,12 @@ const resourcesCtrl = {
 * SERVICIOS PARA PAGINAR RESULTADOS
 */
 router.get('/resources/tthh/surveys/ratingsystem', resourcesCtrl.resources.paginationRatingSystems);
-router.get('/resources/tthh/surveys/forms', resourcesCtrl.forms.paginationEntity);
+
+router.get('/resources/tthh/surveys/forms', resourcesCtrl.forms.paginationSurveysForms);
 router.get('/resources/tthh/surveys/forms/sections', resourcesCtrl.formSections.paginationEntity);
 router.get('/resources/tthh/surveys/evaluations', resourcesCtrl.surveysEvaluations.paginationEntity);
+
+router.get('/resources/tthh/vrescue/forms', resourcesCtrl.forms.paginationVRescueForms);
 
 /*
 * CONTROLLERS DE MODELOS
@@ -42,6 +45,8 @@ router.get('/resources/plans/factors', resourcesCtrl.resources.findResourcesFact
 router.get('/resources/plans/prevention', resourcesCtrl.resources.findResourcesPreventionForPlans);
 router.post('/surveys/forms/entityById', resourcesCtrl.forms.findById);
 router.get('/surveys/ratingsystem/list', resourcesCtrl.resources.getRatingsystem);
+// RESCATE VERTICAL
+router.get('/tthh/sos/vrescue/forms/list', resourcesCtrl.forms.findAllvRescueforms);
 
 /*
 * CONTROLLERS DE SCHEMAS
