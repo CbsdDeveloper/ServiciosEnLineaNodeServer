@@ -73,7 +73,6 @@ module.exports = {
                
 	},
 	
-	
 	/*
 	 * ACTUALIZACIÓN DE MARCACIONES
 	 */

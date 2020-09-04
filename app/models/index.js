@@ -208,6 +208,10 @@ db.tthh = {
 // DIRECCION ADMINISTRATIVA
 db.administrative = {
 	// ARCHIVO
+	archiveseries:				require('./administrative/archive/model.series')(sequelize, Sequelize),
+	archiveperiods:				require('./administrative/archive/model.periods')(sequelize, Sequelize),
+	archiveperiodseries:		require('./administrative/archive/model.periods.series')(sequelize, Sequelize),
+	
 	archiveshelving:			require('./administrative/archive/model.shelving')(sequelize, Sequelize),
 	archiveboxes:				require('./administrative/archive/model.boxes')(sequelize, Sequelize),
 	archivecategories:			require('./administrative/archive/model.categories')(sequelize, Sequelize),
@@ -533,6 +537,17 @@ db.subjefature.partSupplies.belongsTo(db.tthh.wineries, {as: 'cellar', foreignKe
  * DIRECCIÓN ADMINISTRATIVA
  */
 // ARCHIVO
+db.administrative.archiveseries.belongsTo(db.tthh.leaderships, {as: 'section', foreignKey: 'fk_seccion_id'});
+db.administrative.archiveseries.belongsTo(db.tthh.leaderships, {as: 'subsection', foreignKey: 'fk_subseccion_id'});
+db.administrative.archiveseries.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+
+db.administrative.archiveperiods.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.administrative.archiveperiods.hasMany(db.administrative.archiveperiodseries, {as: 'series', foreignKey: 'fk_periodo_id'});
+
+db.administrative.archiveperiodseries.belongsTo(db.administrative.archiveseries, {as: 'serie', foreignKey: 'fk_serie_id'});
+db.administrative.archiveperiodseries.belongsTo(db.administrative.archiveperiods, {as: 'period', foreignKey: 'fk_periodo_id'});
+db.administrative.archiveperiodseries.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+
 db.administrative.archiveboxes.belongsTo(db.administrative.archiveshelving, {as: 'shelving', foreignKey: 'fk_estanteria_id'});
 db.administrative.archivefolder.belongsTo(db.administrative.archiveboxes, {as: 'box', foreignKey: 'fk_caja_id'});
 db.administrative.archivedocuments.belongsTo(db.administrative.archivecategories, {as: 'category', foreignKey: 'fk_categoria_id'});

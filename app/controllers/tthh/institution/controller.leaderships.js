@@ -1,6 +1,7 @@
 'use strict';
 const db = require('../../../models');
 const seq = db.sequelize;
+const Op = db.Sequelize.Op;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
 const model = db.tthh.leaderships;
@@ -37,15 +38,17 @@ module.exports = {
 		try {
 			const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
-			const where = seq.or(
-				{ direccion_tipo: seq.where(seq.fn('LOWER', seq.col('direccion_tipo')), 'LIKE', '%' + filter + '%') },
-				{ direccion_codigo: seq.where(seq.fn('LOWER', seq.col('direccion_codigo')), 'LIKE', '%' + filter + '%') },
-				{ direccion_nombre: seq.where(seq.fn('LOWER', seq.col('direccion_nombre')), 'LIKE', '%' + filter + '%') }
-			);
+			const whr = {
+				[Op.or]: [
+					{ direccion_tipo: { [Op.iLike]: '%' + filter + '%'} },
+					{ direccion_codigo: { [Op.iLike]: '%' + filter + '%'} },
+					{ direccion_nombre: { [Op.iLike]: '%' + filter + '%'} }
+				]
+			};
 			const { rows, count } = await model.findAndCountAll({
 				offset: offset,
 				limit: limit,
-				where: (filter != '')?where:{},
+				where: whr,
 				order: [ sort ],
 				include: [
 					{

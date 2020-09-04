@@ -20,7 +20,10 @@ exports.findResourcesByBiosecurity = async (req, res) => {
 
 	// CONSULTAR REGISTROS
 	resourceModel.findAll({
-		where: { recurso_clasificacion_prevencion: ['COVID19'] },
+		where: { 
+			recurso_clasificacion_prevencion: ['COVID19'],
+			recurso_estado: 'ACTIVO'
+		},
 		order: [ ['recurso_id'] ]
 	}).then(async resourcesList => {
 
