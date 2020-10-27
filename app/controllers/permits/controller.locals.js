@@ -28,6 +28,9 @@ module.exports = {
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
 			const where = seq.or(
 				{ local_nombrecomercial: seq.where(seq.fn('LOWER', seq.col('local_nombrecomercial')), 'LIKE', '%' + filter + '%') },
+				{ local_principal: seq.where(seq.fn('LOWER', seq.col('local_principal')), 'LIKE', '%' + filter + '%') },
+				{ local_secundaria: seq.where(seq.fn('LOWER', seq.col('local_secundaria')), 'LIKE', '%' + filter + '%') },
+				{ local_referencia: seq.where(seq.fn('LOWER', seq.col('local_referencia')), 'LIKE', '%' + filter + '%') },
 				{ entidad_razonsocial: seq.where(seq.fn('LOWER', seq.col('entidad_razonsocial')), 'LIKE', '%' + filter + '%') },
 				{ entidad_ruc: seq.where(seq.fn('LOWER', seq.col('entidad_ruc')), 'LIKE', '%' + filter + '%') }
 			);

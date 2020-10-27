@@ -20,6 +20,15 @@ module.exports = (sequelize, DataTypes) => {
 		periodo_nombre: {
 			type: DataTypes.STRING
 		}, // text , -- 
+		
+		
+		periodo_inicio: {
+			type: DataTypes.DATE
+		}, // date, -- 
+		periodo_cierre: {
+			type: DataTypes.DATE
+		}, // date, -- 
+		
 		periodo_descripcion: {
 			type: DataTypes.STRING
 		}, // text, -- 

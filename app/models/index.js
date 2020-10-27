@@ -217,12 +217,17 @@ db.administrative = {
 	archivecategories:			require('./administrative/archive/model.categories')(sequelize, Sequelize),
 	archiveclassification:		require('./administrative/archive/model.classification')(sequelize, Sequelize),
 	archivefolder:				require('./administrative/archive/model.folder')(sequelize, Sequelize),
-	archivedocuments:			require('./administrative/archive/model.documents')(sequelize, Sequelize)
+	archivedocuments:			require('./administrative/archive/model.documents')(sequelize, Sequelize),
+
+	edocMsg:					require('./administrative/edocumentation/model.documentation')(sequelize, Sequelize),
+	edocSigned:					require('./administrative/edocumentation/model.signeds')(sequelize, Sequelize),
+	edocRecipients:				require('./administrative/edocumentation/model.recipients')(sequelize, Sequelize)
 };
 // PLANIFICACION
 db.planing = {
 	programspoa:				require('./planing/model.programs')(sequelize, Sequelize),
 	poa:						require('./planing/model.poa')(sequelize, Sequelize),
+	reforms:					require('./planing/model.poareforms')(sequelize, Sequelize),
 	poaprojects:				require('./planing/model.poaprojects')(sequelize, Sequelize)
 };
 // FINANCIERO
@@ -500,8 +505,18 @@ db.prevention.simulations.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk
  * PLANIFICACIÓN
  */
 // POA
+db.planing.programspoa.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+
+db.planing.poa.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.planing.poa.hasMany(db.planing.reforms, {as: 'reforms', foreignKey: 'fk_poa_id'});
+
+db.planing.reforms.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.planing.reforms.belongsTo(db.planing.poa, {as: 'poa', foreignKey: 'fk_poa_id'});
+db.planing.reforms.hasMany(db.planing.poaprojects, {as: 'projects', foreignKey: 'fk_reforma_id'});
+
+db.planing.poaprojects.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.planing.poaprojects.belongsTo(db.planing.reforms, {as: 'reform', foreignKey: 'fk_reforma_id'});
 db.planing.poaprojects.belongsTo(db.planing.programspoa, {as: 'program', foreignKey: 'fk_programa_id'});
-db.planing.poaprojects.belongsTo(db.planing.poa, {as: 'poa', foreignKey: 'fk_poa_id'});
 
 
 /*
@@ -555,6 +570,19 @@ db.administrative.archivedocuments.belongsTo(db.administrative.archiveclassifica
 db.administrative.archivedocuments.belongsTo(db.administrative.archivefolder, {as: 'folder', foreignKey: 'fk_folder_id'});
 db.administrative.archivedocuments.belongsTo(db.tthh.staff, {as: 'send', foreignKey: 'fk_envia_id'});
 db.administrative.archivedocuments.belongsTo(db.tthh.staff, {as: 'receive', foreignKey: 'fk_recibido_id'});
+
+// DOCUMENTACIÓN ELECTRÓNICA
+db.administrative.edocMsg.belongsTo(db.tthh.ppersonal, {as: 'subscribe', foreignKey: 'fk_remitente_id'});
+db.administrative.edocMsg.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.administrative.edocMsg.hasMany(db.administrative.edocRecipients, {as: 'recipients', foreignKey: 'fk_delectronica_id'});
+
+db.administrative.edocSigned.belongsTo(db.administrative.edocMsg, {as: 'edoc', foreignKey: 'fk_delectronica_id'});
+db.administrative.edocSigned.belongsTo(db.tthh.ppersonal, {as: 'responsible', foreignKey: 'fk_remitente_id'});
+db.administrative.edocSigned.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+
+db.administrative.edocRecipients.belongsTo(db.administrative.edocMsg, {as: 'edoc', foreignKey: 'fk_delectronica_id'});
+db.administrative.edocRecipients.belongsTo(db.tthh.staff, {as: 'staff', foreignKey: 'fk_destinatario_id'});
+db.administrative.edocRecipients.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
 
 
 // INICIALIZAR SEQUELIZE

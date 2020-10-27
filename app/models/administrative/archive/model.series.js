@@ -41,6 +41,22 @@ module.exports = (sequelize, DataTypes) => {
 		serie_origendocumentacion: {
 			type: DataTypes.STRING
 		}, // text
+	
+		serie_plazo_gestion: {
+			type: DataTypes.INTEGER
+		}, // int default 2, -- PLAZO DE CONSERVACION DEL ARCHIVO
+		serie_plazo_central: {
+			type: DataTypes.INTEGER
+		}, // int default 5, -- PLAZO DE CONSERVACION DEL ARCHIVO
+	
+		serie_disposicionfinal: {
+			type: DataTypes.STRING,
+			defaultValue: 'CONSERVACION' 
+		}, // text default 'CONSERVACION'::text, -- CONSERVACION, ELIMINACION
+		
+		serie_observacion: {
+			type: DataTypes.STRING
+		}, // text -- 
 
 	}, {
 		schema: 'logistica',

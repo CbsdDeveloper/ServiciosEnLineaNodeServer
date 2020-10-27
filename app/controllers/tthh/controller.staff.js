@@ -2,9 +2,9 @@
 const db = require('../../models');
 
 const staffModel = db.tthh.staff;
-const workdayModel = db.tthh.workdays;
+const workdayMdl = db.tthh.workdays;
 
-const personModel = db.resources.persons;
+const personMdl = db.resources.persons;
 
 /*
 * CONSULTAR INFORMACION DE PERSONAL POR NUMERO DE CEDULA
@@ -17,20 +17,20 @@ const getStaffInfo = async (type, data) => {
     if( type == 'staffId' ){
         // CONSULTAR MODELO POR ID
         strWhr = {
-            include: [{ model: personModel, as: 'person' }],
+            include: [{ model: personMdl, as: 'person' }],
             where: { personal_id: data }
         };
     }else if( type == 'personId' ){
         // CONSULTAR MODELO POR ID
         strWhr = {
-            include: [{ model: personModel, as: 'person' }],
+            include: [{ model: personMdl, as: 'person' }],
             where: { fk_persona_id: data }
         };
     }else if( type == 'personCC' ){
         // CONSULTAR MODELO POR ID
         strWhr = {
             include: [{ 
-                model: personModel, as: 'person',
+                model: personMdl, as: 'person',
                 where: { persona_doc_identidad: data }
             }]
         };
@@ -51,7 +51,7 @@ module.exports = {
     async updateBiometricCode(req, res){
 
         // BUSCAR MODELO DE WORKDAY
-        const workday = await workdayModel.findByPk(req.body.fk_jornada_id);
+        const workday = await workdayMdl.findByPk(req.body.fk_jornada_id);
 
         // BUSCAR MODELO
         let staff = await staffModel.findByPk(req.body.personal_id);
@@ -85,6 +85,33 @@ module.exports = {
 
         // MENSAJE POR DEFECTO
         db.sendJSON( res, json );
-    }
+    },
+
+    /*
+     * LISTADO DE PERSONAL ACTIVO
+     */
+    async staffActiveList(req, res){
+
+        // VALIDAR LA CONSULTA
+        let list = await staffModel.findAll({
+            where: {
+                personal_estado: 'EN FUNCIONES'
+            },
+            attributes: ['personal_correo_institucional','personal_id'],
+            include: [
+                {
+                    model: personMdl, as: 'person',
+                    attributes: ['persona_apellidos','persona_nombres','persona_doc_identidad','persona_imagen','persona_correo','persona_celular']
+                }
+            ],
+            order: [ 
+                [ { model: personMdl, as: 'person' }, 'persona_apellidos', 'ASC' ]
+            ]
+        });
+
+        // RETORNAR CONSULTA
+        db.setEmpty(res,'LISTADO DE PERSONAL - ACTIVOS',true,list);
+    },
+
 
 };

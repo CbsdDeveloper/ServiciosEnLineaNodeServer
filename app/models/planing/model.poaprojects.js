@@ -16,6 +16,9 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 'ACTIVO' 
 		}, // text default 'ACTIVO'::text, -- 
 		
+		proyecto_codigo:{
+			type: DataTypes.STRING
+		}, //  text, -- 
 		proyecto_nombre:{
 			type: DataTypes.STRING
 		}, //  text, -- 
@@ -25,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
 		proyecto_justificacion:{
 			type: DataTypes.STRING
 		}, //  text, -- 
+		proyecto_observacion:{
+			type: DataTypes.STRING
+		}, //  text, -- 
+
 		proyecto_meta:{
 			type: DataTypes.STRING
 		}, //  text, -- 

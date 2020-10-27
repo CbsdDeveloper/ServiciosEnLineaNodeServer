@@ -91,6 +91,7 @@ router.get('/stations', tthhCtrl.stations.findAll);
 router.get('/stations/byId/:id', tthhCtrl.stations.findById);
 router.get('/stations/platoons', tthhCtrl.platoons.findAllBySations);
 router.post('/staff/requestEntity', tthhCtrl.staff.requestEntity);
+router.get('/staff/active/list', tthhCtrl.staff.staffActiveList);
 // CONTROL DE ASISTENCIA
 router.put('/attendance/biometric/staff', tthhCtrl.staff.updateBiometricCode);
 router.post('/attendance/biometricperiods', tthhCtrl.biometricPeriods.insertEntity);

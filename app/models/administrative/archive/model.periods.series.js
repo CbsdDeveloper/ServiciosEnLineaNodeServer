@@ -26,6 +26,18 @@ module.exports = (sequelize, DataTypes) => {
 		pserie_cierre: {
 			type: DataTypes.DATE
 		}, // date, -- 
+	
+		pserie_plazo_gestion: {
+			type: DataTypes.INTEGER
+		}, // int, -- PLAZO DE CONSERVACION DEL ARCHIVO
+		pserie_plazo_central: {
+			type: DataTypes.INTEGER
+		}, // int, -- PLAZO DE CONSERVACION DEL ARCHIVO
+	
+		pserie_disposicionfinal: {
+			type: DataTypes.STRING,
+			defaultValue: 'CONSERVACION' 
+		}, // text default 'CONSERVACIÓN'::text, -- 
 
 		pserie_detalle: {
 			type: DataTypes.STRING

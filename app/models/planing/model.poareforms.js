@@ -1,38 +1,34 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-	const Model = sequelize.define('tb_poa', {
-		poa_id: { 
+	const Model = sequelize.define('tb_poa_reformas', {
+		reforma_id: { 
 			type: DataTypes.INTEGER,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true
 		},
 	
-		poa_registro:{
+		reforma_registro:{
 			type: DataTypes.STRING
 		}, //  timestamp without time zone default current_timestamp(0), -- 
-		poa_estado: {
+		reforma_estado: {
 			type: DataTypes.STRING,
 			defaultValue: 'ACTIVO' 
 		}, // text default 'ACTIVO'::text, -- 
 		
-		poa_periodo:{
+		reforma_numero: {
+			type: DataTypes.INTEGER
+		}, // int default 1, -- NUMERO DE REFORMA
+		reforma_nombre: {
 			type: DataTypes.STRING
-		}, //  text, -- 
-		poa_presupuesto:{
-			type: DataTypes.DECIMAL(12,2),
-			defaultValue: 0
-		}, //  text, -- 
-		poa_descripcion:{
+		}, // text, -- NOMBRE EN ORDINAL
+		
+		reforma_fecha: {
+			type: DataTypes.DATE
+		}, // date not null, -- FECHA DE REFORMA
+		reforma_descripcion: {
 			type: DataTypes.STRING
-		}, //  text, -- 
-
-		poa_periodo_inicio: { 
-			type: DataTypes.DATE
-		}, // date, -- 
-		poa_periodo_cierre: { 
-			type: DataTypes.DATE
-		}, // date, -- 
+		}, // text -- DESCRIPCION DE REFORMA
 
 	}, {
 		schema: 'planificacion',

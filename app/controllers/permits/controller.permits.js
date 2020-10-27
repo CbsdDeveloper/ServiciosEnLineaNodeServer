@@ -62,6 +62,7 @@ module.exports = {
 						{
 							model: duplicatedMdl, as: 'duplicates',
 							attributes: [ 'duplicado_estado' ],
+							required: false,
 							where: {
 								duplicado_estado: ['APROBADO','PENDIENTE']
 							},
