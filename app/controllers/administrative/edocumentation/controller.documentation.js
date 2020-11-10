@@ -3,7 +3,6 @@ const db = require('../../../models');
 const Op = db.Sequelize.Op;
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
-const { RecordingInstance } = require('twilio/lib/rest/api/v2010/account/call/recording');
 
 const edocModel = db.administrative.edocMsg;
 
@@ -246,7 +245,28 @@ module.exports = {
 			db.setEmpty(res,'Destinatario ingresado con éxito!',true,recipient);
 
 		} catch (error) {
-			db.setEmpty(res,'EDOC - SET SENDER',false,error);
+			db.setEmpty(res,'EDOC - SET RECIPIENT',false,error);
+		}
+
+	},
+
+	/*
+	 * ELIMINAR DESTINATARIOS
+	 */
+	async deleteRecipient(req, res){
+
+		try {
+
+			// OBTENER DATOS DE FORMULARIO
+			let { query } = req;
+
+			await recipientMdl.destroy({ where: { destinatario_id	: query.entityId } });
+
+			// ENVIAR DADTOS A CLIENTE
+			db.setEmpty(res,'Destinatario eliminado con éxito!',true,query);
+
+		} catch (error) {
+			db.setEmpty(res,'EDOC - REMOVE RECIPIENT',false,error);
 		}
 
 	},

@@ -43,6 +43,7 @@ router.post('/edocumentation/compose/draft', administrativeCtrl.edoc.composeDraf
 router.post('/edocumentation/detail/byMessageId', administrativeCtrl.edoc.detailByEntityId);
 router.put('/edocumentation/setSender/byMessageId', administrativeCtrl.edoc.setSender);
 router.put('/edocumentation/setRecipients/byMessageId', administrativeCtrl.edoc.setRecipients);
+router.delete('/edocumentation/deleteRecipient/byId', administrativeCtrl.edoc.deleteRecipient);
 
 
 /*
