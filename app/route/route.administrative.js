@@ -6,17 +6,21 @@ const router = express.Router();
 * CONTROLLERS DE MODELOS
 */
 const administrativeCtrl = {
-    seres:          require('../controllers/administrative/archive/controller.series'),
-    periods:        require('../controllers/administrative/archive/controller.periods'),
-    pseries:        require('../controllers/administrative/archive/controller.periods.series'),
+    seres:              require('../controllers/administrative/archive/controller.series'),
+    periods:            require('../controllers/administrative/archive/controller.periods'),
+    pseries:            require('../controllers/administrative/archive/controller.periods.series'),
 
-    shelvings:      require('../controllers/administrative/archive/controller.shelvings'),
-    boxes:          require('../controllers/administrative/archive/controller.boxes'),
-    folders:        require('../controllers/administrative/archive/controller.folders'),
+    shelvings:          require('../controllers/administrative/archive/controller.shelvings'),
+    boxes:              require('../controllers/administrative/archive/controller.boxes'),
+    folders:            require('../controllers/administrative/archive/controller.folders'),
     
-    edoc:           require('../controllers/administrative/edocumentation/controller.documentation'),
+    edoc:               require('../controllers/administrative/edocumentation/controller.documentation'),
+    
+    typeMinorTools:     require('../controllers/administrative/gservices/controller.minortools.categories'),
+    minorTools:         require('../controllers/administrative/gservices/controller.minortools'),
+    minorMaintenances:  require('../controllers/administrative/gservices/controller.minortools.maintenances'),
 
-    schema:         require('../controllers/controller.administrative.js')
+    schema:             require('../controllers/controller.administrative.js')
 };
 
 /*
@@ -32,6 +36,11 @@ router.get('/archive/boxes', administrativeCtrl.boxes.paginationEntity);
 router.get('/archive/folders', administrativeCtrl.folders.paginationEntity);
 
 router.get('/edocumentation/inbox', administrativeCtrl.edoc.paginationEntity);
+// SERVICIOS GENERALES
+    // MANTENIMIENTO DE HERRAMIENTAS
+router.get('/gservices/minortools/types', administrativeCtrl.typeMinorTools.paginationEntity);
+router.get('/gservices/minortools', administrativeCtrl.minorTools.paginationEntity);
+router.get('/gservices/minortools/maintenances', administrativeCtrl.minorMaintenances.paginationEntity);
 
 /*
 * CONTROLLERS DE MODELOS
@@ -44,6 +53,19 @@ router.post('/edocumentation/detail/byMessageId', administrativeCtrl.edoc.detail
 router.put('/edocumentation/setSender/byMessageId', administrativeCtrl.edoc.setSender);
 router.put('/edocumentation/setRecipients/byMessageId', administrativeCtrl.edoc.setRecipients);
 router.delete('/edocumentation/deleteRecipient/byId', administrativeCtrl.edoc.deleteRecipient);
+// SERVICIOS GENERALES
+    // MANTENIMIENTO DE HERRAMIENTAS MENORES
+router.get('/gservices/minortools/types/list', administrativeCtrl.typeMinorTools.listEntity);
+router.post('/gservices/minortools/types', administrativeCtrl.typeMinorTools.newEntity);
+router.put('/gservices/minortools/types', administrativeCtrl.typeMinorTools.updateEntity);
+
+router.get('/gservices/minortools/list', administrativeCtrl.minorTools.listEntity);
+router.post('/gservices/minortools', administrativeCtrl.minorTools.newEntity);
+router.put('/gservices/minortools', administrativeCtrl.minorTools.updateEntity);
+
+router.post('/gservices/minortools/maintenances/detailById', administrativeCtrl.minorMaintenances.detailEntityById);
+router.post('/gservices/minortools/maintenances/insert/tools', administrativeCtrl.minorMaintenances.insertToolsToMaintenance);
+router.delete('/gservices/minortools/maintenances/delete/tools', administrativeCtrl.minorMaintenances.deleteToolsToMaintenance);
 
 
 /*

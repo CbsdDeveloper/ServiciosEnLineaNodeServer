@@ -221,7 +221,12 @@ db.administrative = {
 
 	edocMsg:					require('./administrative/edocumentation/model.documentation')(sequelize, Sequelize),
 	edocSigned:					require('./administrative/edocumentation/model.signeds')(sequelize, Sequelize),
-	edocRecipients:				require('./administrative/edocumentation/model.recipients')(sequelize, Sequelize)
+	edocRecipients:				require('./administrative/edocumentation/model.recipients')(sequelize, Sequelize),
+
+	typeMinorTools:				require('./administrative/gservices/model.tools.categories')(sequelize, Sequelize),
+	minorTools:					require('./administrative/gservices/model.tools')(sequelize, Sequelize),
+	minorMaintenances:			require('./administrative/gservices/model.tools.maintenances')(sequelize, Sequelize),
+	minorMaintenancesTools:		require('./administrative/gservices/model.tools.maintenances.tools')(sequelize, Sequelize)
 };
 // PLANIFICACION
 db.planing = {
@@ -583,6 +588,23 @@ db.administrative.edocSigned.belongsTo(db.tthh.staff, {as: 'user', foreignKey: '
 db.administrative.edocRecipients.belongsTo(db.administrative.edocMsg, {as: 'edoc', foreignKey: 'fk_delectronica_id'});
 db.administrative.edocRecipients.belongsTo(db.tthh.staff, {as: 'staff', foreignKey: 'fk_destinatario_id'});
 db.administrative.edocRecipients.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+
+// MANTENIMIENTO DE HERRAMIENTAS MENORES
+db.administrative.typeMinorTools.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+
+db.administrative.minorTools.belongsTo(db.administrative.typeMinorTools, {as: 'category', foreignKey: 'fk_categoria_id'});
+db.administrative.minorTools.belongsTo(db.tthh.staff, {as: 'custodian', foreignKey: 'fk_custodio_id'});
+db.administrative.minorTools.belongsTo(db.tthh.stations, {as: 'station', foreignKey: 'fk_estacion_id'});
+db.administrative.minorTools.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+
+db.administrative.minorMaintenances.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.administrative.minorMaintenances.belongsTo(db.tthh.ppersonal, {as: 'tservices', foreignKey: 'tecnico_servicios'});
+db.administrative.minorMaintenances.hasMany(db.administrative.minorMaintenancesTools, {as: 'tools', foreignKey: 'fk_mantenimiento_id'});
+
+db.administrative.minorMaintenancesTools.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.administrative.minorMaintenancesTools.belongsTo(db.administrative.minorMaintenances, {as: 'maintenance', foreignKey: 'fk_mantenimiento_id'});
+db.administrative.minorMaintenancesTools.belongsTo(db.administrative.minorTools, {as: 'tool', foreignKey: 'fk_herramienta_id'});
+
 
 
 // INICIALIZAR SEQUELIZE

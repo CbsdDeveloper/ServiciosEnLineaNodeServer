@@ -26,6 +26,12 @@ const getStaffInfo = async (type, data) => {
             include: [{ model: personMdl, as: 'person' }],
             where: { fk_persona_id: data }
         };
+    }else if( type == 'userId' ){
+        // CONSULTAR MODELO POR ID
+        strWhr = {
+            include: [{ model: personMdl, as: 'person' }],
+            where: { fk_persona_id: data }
+        };
     }else if( type == 'personCC' ){
         // CONSULTAR MODELO POR ID
         strWhr = {
