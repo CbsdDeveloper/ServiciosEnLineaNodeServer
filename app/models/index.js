@@ -37,7 +37,9 @@ Object.keys(db).forEach(modelName => {
 require('pg').types.setTypeParser(1114, str => moment(str).format('YYYY-MM-DD HH:mm:ss'));
 
 
-db.getCurrentDate=function(){ return new Date(); };
+db.getCurrentDate=function(){ 
+	return new Date(); 
+};
 db.setDataTable=function(res,data,serviceName = 'dataTable',status = true){
 	res.status(200).json({
 		estado: status,
@@ -599,6 +601,8 @@ db.administrative.minorTools.belongsTo(db.tthh.staff, {as: 'user', foreignKey: '
 
 db.administrative.minorMaintenances.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
 db.administrative.minorMaintenances.belongsTo(db.tthh.ppersonal, {as: 'tservices', foreignKey: 'tecnico_servicios'});
+db.administrative.minorMaintenances.belongsTo(db.tthh.ppersonal, {as: 'administrative', foreignKey: 'director_administrativo'});
+db.administrative.minorMaintenances.belongsTo(db.tthh.ppersonal, {as: 'savestore', foreignKey: 'mantenimiento_guardalmacen'});
 db.administrative.minorMaintenances.hasMany(db.administrative.minorMaintenancesTools, {as: 'tools', foreignKey: 'fk_mantenimiento_id'});
 
 db.administrative.minorMaintenancesTools.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});

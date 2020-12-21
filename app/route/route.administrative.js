@@ -35,7 +35,9 @@ router.get('/archive/shelvings', administrativeCtrl.shelvings.paginationEntity);
 router.get('/archive/boxes', administrativeCtrl.boxes.paginationEntity);
 router.get('/archive/folders', administrativeCtrl.folders.paginationEntity);
 
-router.get('/edocumentation/inbox', administrativeCtrl.edoc.paginationEntity);
+router.get('/edocumentation/inbox/all', administrativeCtrl.edoc.paginationEntity);
+router.get('/edocumentation/inbox', administrativeCtrl.edoc.paginationEntityBySession);
+router.get('/edocumentation/deleted/all', administrativeCtrl.edoc.paginationEntityDeleted);
 // SERVICIOS GENERALES
     // MANTENIMIENTO DE HERRAMIENTAS
 router.get('/gservices/minortools/types', administrativeCtrl.typeMinorTools.paginationEntity);
@@ -53,6 +55,9 @@ router.post('/edocumentation/detail/byMessageId', administrativeCtrl.edoc.detail
 router.put('/edocumentation/setSender/byMessageId', administrativeCtrl.edoc.setSender);
 router.put('/edocumentation/setRecipients/byMessageId', administrativeCtrl.edoc.setRecipients);
 router.delete('/edocumentation/deleteRecipient/byId', administrativeCtrl.edoc.deleteRecipient);
+router.delete('/edocumentation/delete/byeDocId', administrativeCtrl.edoc.deleteEntity);
+router.delete('/edocumentation/restore/byeDocId', administrativeCtrl.edoc.restoreEntity);
+
 // SERVICIOS GENERALES
     // MANTENIMIENTO DE HERRAMIENTAS MENORES
 router.get('/gservices/minortools/types/list', administrativeCtrl.typeMinorTools.listEntity);

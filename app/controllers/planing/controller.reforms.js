@@ -6,9 +6,31 @@ const { calculateLimitAndOffset, paginate } = require('../../config/pagination')
 const reformModel = db.planing.reforms;
 
 const poaMdl = db.planing.poa;
+const projectMdl = db.planing.poaprojects;
 
+const userMdl = db.admin.users;
 const staffMdl = db.tthh.staff;
 const personMdl = db.resources.persons;
+
+/*
+* CONSULTAR INFORMACION DE PERSONAL POR NUMERO DE CEDULA
+*/
+const getStaffInfo = async (entityId) => {
+
+	let user = await userMdl.findByPk(entityId);
+
+    // VARIABLES AUXILIARES
+    let strWhr = {
+		include: [{ model: personMdl, as: 'person' }],
+		where: { fk_persona_id: user.fk_persona_id }
+	};
+
+    // VALIDAR EXISTENCIA DE REGISTROS
+    if( await staffMdl.count( strWhr ) >0 ) return db.parseJSON('ok', true, await staffMdl.findOne( strWhr ));
+
+    // ENVIAR MENSAJE POR DEFECTO
+    return db.parseJSON('No se ha encontrado ningún registro con los datos que usted a ingresado.');
+};
 
 module.exports = {
 
@@ -63,6 +85,54 @@ module.exports = {
 			db.setEmpty(res,'PLANIFICACION - LISTAR REFORMAS VIGENTES DEL POA POA',false,error);
 		}
 
+	},
+
+	/*
+	 * ACTUALIZAR REFORMA
+	 */
+	async updateEntity(req, res){
+		
+		try {
+
+			// OBTENER FORMULARIO
+			let { body } = req;
+
+			// DATOS DE SESSION
+			let staff = await getStaffInfo(body.sessionId);
+
+			// ACTUALIZAR REFORMA
+			let temp = {
+				fk_personal_id: staff.data.personal_id,
+				reforma_estado: 'VIGENTE',
+				reforma_registro: db.getCurrentDate(),
+				reforma_descripcion: 'REFORMA FINALIZADA EL ' + db.getCurrentDate()
+			};
+
+			// CREAR REGISTRO
+			await reformModel.update(
+				temp,
+				{
+					where: { reforma_id: body.reformId }
+				}
+			);
+
+			// ACTUALIZAR PROYECTOS DE REFORMA
+			await projectMdl.update(
+				{
+					proyecto_estado: 'CONFIRMADO'
+				},
+				{
+					where: { fk_reforma_id: body.reformId }
+				}
+			);
+
+			
+			db.setEmpty(res,'REFORMA FINALIZADA CON ÉXITO',true,body);
+			
+		} catch (error) {
+			db.setEmpty(res,'PLANIFICACION - SETTEAR COMO VIGENTE LA REFORMA ACTUAL',false,error);
+		}
+		
 	}
 
 };

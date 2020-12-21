@@ -9,12 +9,12 @@ const maintenaceToolsMdl = db.administrative.minorMaintenancesTools;
 const toolMdl = db.administrative.minorTools;
 const categoryMdl = db.administrative.typeMinorTools;
 
-const userMdl = db.admin.users;
-
 const ppersonalMdl = db.tthh.ppersonal;
 const staffMdl = db.tthh.staff;
 const personMdl = db.resources.persons;
 const stationMdl = db.tthh.stations;
+
+const userMdl = db.admin.users;
 
 /*
 * CONSULTAR INFORMACION DE PERSONAL POR NUMERO DE CEDULA
@@ -91,6 +91,28 @@ module.exports = {
 				include: [
 					{
 						model: ppersonalMdl, as: 'tservices',
+						include: {
+							model: staffMdl, as: 'staff',
+							attributes: [ 'personal_correo_institucional' ],
+							include: [{
+								model: personMdl, as: 'person',
+								attributes: ['persona_nombres','persona_apellidos']
+							}]
+						}
+					},
+					{
+						model: ppersonalMdl, as: 'administrative',
+						include: {
+							model: staffMdl, as: 'staff',
+							attributes: [ 'personal_correo_institucional' ],
+							include: [{
+								model: personMdl, as: 'person',
+								attributes: ['persona_nombres','persona_apellidos']
+							}]
+						}
+					},
+					{
+						model: ppersonalMdl, as: 'savestore',
 						include: {
 							model: staffMdl, as: 'staff',
 							attributes: [ 'personal_correo_institucional' ],

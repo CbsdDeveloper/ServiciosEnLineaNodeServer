@@ -139,6 +139,7 @@ router.post('/sos/vrescue/equipments/usage/byEquipmentId/list', tthhCtrl.vrescue
 router.get('/responsiblesByLeaderships', tthhCtrl.schema.findAResponsiblesByLeaderships);
 router.get('/staffList', tthhCtrl.schema.findAllStaff);
 router.get('/staff/functions/list', tthhCtrl.schema.findAllStaffFunctions);
+router.get('/staff/ppersonal/functions/list', tthhCtrl.schema.findAllPpersonalFunctions);
 router.post('/staff/leadership', tthhCtrl.schema.findAllStaffByLeadership);
 router.get('/drivers', tthhCtrl.schema.findAllDrivers);
 router.get('/platoons', tthhCtrl.schema.findAllPlatoons);

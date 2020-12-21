@@ -35,6 +35,17 @@ module.exports = (sequelize, DataTypes) => {
 		mantenimiento_taller: {
 			type: DataTypes.STRING
 		}, // text, -- 
+		mantenimiento_taller_responsable: {
+			type: DataTypes.STRING
+		}, // text, -- 
+
+		mantenimiento_proceso: {
+			type: DataTypes.STRING
+		}, // text, -- 
+		
+		mantenimiento_fregistro: {
+			type: DataTypes.DATE
+		}, // date, -- 
 		
 		mantenimiento_fecha_recepcion: {
 			type: DataTypes.DATE

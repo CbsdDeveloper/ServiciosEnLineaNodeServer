@@ -24,6 +24,7 @@ router.get('/poa/reforms/pagination', planingCtrl.reform.paginationEntity);
 * CONTROLLERS DE MODELOS
 */
 router.post('/poa/detail/byId', planingCtrl.poa.findById);
+router.put('/poa/reform/byId', planingCtrl.reform.updateEntity);
 router.get('/poa/programs/list', planingCtrl.programspoa.findAll);
 router.post('/poa/projects/list/reformId', planingCtrl.poaprojects.findByReform);
 

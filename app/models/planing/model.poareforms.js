@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 	
 		reforma_registro:{
-			type: DataTypes.STRING
+			type: DataTypes.DATE
 		}, //  timestamp without time zone default current_timestamp(0), -- 
 		reforma_estado: {
 			type: DataTypes.STRING,
