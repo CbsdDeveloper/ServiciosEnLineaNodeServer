@@ -42,6 +42,7 @@ router.get('/entities/:entityRuc', permitsCtrl.entities.findByEntity);
 router.post('/entities/detail/entityId', permitsCtrl.entities.findById);
 router.post('/entities/login', permitsCtrl.entities.findByRUC);
 router.post('/entities/enitiyByRUC', permitsCtrl.entities.findByRUC);
+router.put('/entities/terms/accept', permitsCtrl.entities.acceptTermsByEntity);
 // ACTIVIDADES COMERCIALES (15)
 router.get('/commercialActivities', permitsCtrl.activities.findCommercialActivities);
 // ACTIVIDADES ECONOMICAS (LOCALES)
@@ -53,8 +54,11 @@ router.post('/employees/localId', permitsCtrl.employees.findByLocal);
 router.put('/employees', permitsCtrl.employees.updateEntity);
 router.delete('/employees/:employeeId', permitsCtrl.employees.deleteEntity);
 router.delete('/employees/localId/all/:localId', permitsCtrl.employees.deleteByLocal);
+// AUTOINSPECCIONES
+router.post('/entity/detail/selfInspectionId', permitsCtrl.selfInspections.findBySelfInspectionId);
 // PERMISOS DE FUNCIONAMIENTO
 router.post('/permits/list/localId', permitsCtrl.permits.findByLocalId);
+router.post('/permits/list/selfInspectionId', permitsCtrl.permits.findBySelfInspectionId);
 
 /*
 * CONTROLLERS DE SCHEMAS

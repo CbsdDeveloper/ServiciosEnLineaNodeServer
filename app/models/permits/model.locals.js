@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 'ACTIVO'
 		}, // text default 'ACTIVO'::text,
 		local_registro:{
-			type: DataTypes.STRING
+			type: DataTypes.DATE
 		}, // timestamp without time zone default current_timestamp(0),
 	
 		local_imagen:{
@@ -201,7 +201,17 @@ module.exports = (sequelize, DataTypes) => {
 		local_establecimiento:{
 			type: DataTypes.STRING,
 			defaultValue: 'NO'
-		} //  text, -- ALTURA DE LA EDIFICACION
+		}, //  text, -- ALTURA DE LA EDIFICACION
+
+		local_aperturasri:{
+			type: DataTypes.DATE
+		}, // FEHCA DE INICIO DE ACTIVIDADES SRI
+		local_numeroestablecimiento:{
+			type: DataTypes.INTEGER
+		}, // NUMERO DE ESTABLECIMIENTO SRI
+		local_certificadostablecimiento:{
+			type: DataTypes.STRING
+		}, // CERTIFICADO DE ESTABLECIMIENTO REGISTRADO SRI
 
 	}, {
 		schema: 'permisos',

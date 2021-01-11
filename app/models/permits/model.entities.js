@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 'ACTIVO'
 		}, // text default 'ACTIVO'::text,
 		entidad_registro:{
-			type: DataTypes.STRING
+			type: DataTypes.DATE
 		}, // timestamp without time zone default current_timestamp(0),
 		
 		entidad_contribuyente:{
@@ -70,6 +70,18 @@ module.exports = (sequelize, DataTypes) => {
 		}, // 
 		entidad_direccionfacturacion:{
 			type: DataTypes.STRING
+		}, // 
+
+		entidad_terminos:{
+			type: DataTypes.STRING,
+			defaultValue: 'NO'
+		}, // 
+		entidad_terminos_fecha:{
+			type: DataTypes.DATE
+		}, // 
+		entidad_actualizacion:{
+			type: DataTypes.STRING,
+			defaultValue: 'NO'
 		}, // 
 	}, {
 		schema: 'permisos',

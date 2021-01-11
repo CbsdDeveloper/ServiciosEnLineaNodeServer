@@ -144,4 +144,36 @@ module.exports = {
 		db.setEmpty(res,'PERMISOS DE FUNCIONAMIENTO DE UN LOCAL',true,data);	
 	},
 
+	/*
+	 * ENCONTRAR REGISTRO POR ID DE LOCAL
+	 */
+	async findBySelfInspectionId(req, res){
+		
+		try {
+			// CONSULTAR AUTOINSPECCION
+			let selfInspection = await selfInspectionMdl.findOne({ where: { autoinspeccion_codigo: req.body.code } });
+			// CONSULTA DE PLANES
+			let data = await permitModel.findAll({
+				include: [
+					{
+						model: selfInspectionMdl, as: 'selfInspection',
+						attributes: [ 'autoinspeccion_id','autoinspeccion_codigo','autoinspeccion_fecha' ],
+						where: { fk_local_id: selfInspection.fk_local_id },
+						required: true
+					},
+					{
+						model: userMdl, as: 'user',
+						attributes: [ [ 'usuario_login','usuario' ] ]
+					}
+				],
+				order: [ [ 'permiso_fecha','DESC' ] ]
+			});
+			// RETORNAR LISTADO
+			db.setEmpty(res,'PERMISOS DE FUNCIONAMIENTO DE UN LOCAL',true,data);
+
+		} catch (error) {
+			db.setEmpty(res,'DETALLE DE ENTIDAD - PERMISOS POR CODIGO_PER',false,error);
+		}	
+	},
+
 };

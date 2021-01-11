@@ -58,18 +58,20 @@ module.exports = {
 		}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 	},
 
-	// Find a Customer by Id
+	/*
+	 * INFORMACION COMPLETA DE UNA ENTIDAD
+	 */
 	findById(req, res){
 		entityModel.findOne({
 			where: { entidad_id: req.body.entityId },
 			include: [
 				{ 
 					model: partner, as: 'person',
-					attributes: [ 'persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo','persona_telefono','persona_celular','persona_imagen' ]
+					attributes: [ 'persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo','persona_telefono','persona_celular','persona_imagen','persona_anexo_cedula' ]
 				 },
 				{ 
 					model: partner, as: 'adopted', 
-					attributes: [ 'persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo','persona_telefono','persona_celular','persona_imagen' ],
+					attributes: [ 'persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo','persona_telefono','persona_celular','persona_imagen','persona_anexo_cedula' ],
 					required: false 
 				}
 			]
@@ -143,6 +145,34 @@ module.exports = {
 				db.setJSON(res,[],'NO SE HA ENCONTRADO EL REGISTRO => entityModel->findByEntity');
 			}
 		});
+	},
+
+	/*
+	 * ACTUALIZAR TERMINOS Y CONDICIONES
+	 */
+	async acceptTermsByEntity(req, res){
+		
+		try {
+
+			// ACTUALIZAR DATOS DE LOCAL
+			await entityModel.update(
+				{
+					entidad_terminos_fecha: db.getCurrentDate(),
+					entidad_terminos: 'SI',
+
+					entidad_registro: db.getCurrentDate(),
+					fk_usuario_id: 2
+				},
+				{ where: { entidad_id: req.body.entityId } }
+			);
+
+			// ENVIAR DADTOS A CLIENTE
+			db.setEmpty(res,'¡LOS TÉRMINOS Y CONDICIONES HAN SIDO ACEPTADOS EXITOSAMENTE!',true,await entityModel.findByPk(req.body.entityId));
+
+		} catch (error) {
+			db.setEmpty(res,'DETALLE DE REGISTRO - TERMINOS Y CONDICIONES',false,error);
+		}
+
 	},
 
 	/*
