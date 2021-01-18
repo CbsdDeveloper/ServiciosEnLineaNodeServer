@@ -3,7 +3,7 @@ const db = require('../../models');
 const seq = db.sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
-const model = db.admin.parameters;
+const parameterModel = db.admin.parameters;
 
 module.exports = {
 
@@ -21,7 +21,7 @@ module.exports = {
 				{ param_key: seq.where(seq.fn('LOWER', seq.col('param_key')), 'LIKE', '%' + filter + '%') },
 				{ param_value: seq.where(seq.fn('LOWER', seq.col('param_value')), 'LIKE', '%' + filter + '%') }
 			);
-			const { rows, count } = await model.findAndCountAll(
+			const { rows, count } = await parameterModel.findAndCountAll(
 				{
 					offset: offset,
 					limit: limit,
@@ -33,6 +33,29 @@ module.exports = {
 		} catch (error) {
 			db.setEmpty(res,'ADMINISTRACION :: PARAMETROS',false,error);
 		}
+
+	},
+
+	/*
+	 * ACTUALIZAR REGISTROS
+	 */
+	updateEntity(req, res){
+
+		// ACTUALIZAR DATOS DE LOCAL
+		parameterModel.update(
+			{
+				param_value: JSON.stringify(req.body.data)
+			},
+			{ where: { param_id: req.body.entityId } }
+		).then(data => {
+
+			res.status(200).json({
+				estado: true,
+				data: data,
+				mensaje: '¡ACTUALIZACIÓN DE DATOS COMPLETADA CON ÉXITO!'
+			});
+
+		}).catch(err => { res.status(500).json({msg: "error", details: err}); });
 
 	}
 

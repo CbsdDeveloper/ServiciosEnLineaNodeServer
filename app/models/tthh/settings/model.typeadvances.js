@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING 
 		}, // text, -- DETALLE
 
+		tanticipo_habilitado: { 
+			type: DataTypes.STRING 
+		}, // text, -- 
+
 		tanticipo_periodofiscal: { 
 			type: DataTypes.STRING ,
 			defaultValue: 'SI' 

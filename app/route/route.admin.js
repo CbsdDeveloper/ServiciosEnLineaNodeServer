@@ -27,6 +27,7 @@ router.get('/reports', adminCtrl.reports.paginationEntity);
 /*
 * CONTROLLERS DE MODELOS
 */
+router.put('/parameters/singleUpdate', adminCtrl.parameters.updateEntity);
 router.get('/profiles', adminCtrl.profiles.findAll);
 router.get('/profiles/:id', adminCtrl.profiles.findById);
 router.get('/users', adminCtrl.users.findAll);
