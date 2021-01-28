@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
 		proyecto_observacion:{
 			type: DataTypes.STRING
 		}, //  text, -- 
+	
+		proyecto_otrosdetalles:{
+			type: DataTypes.STRING
+		}, // text, -- DETALLE DEL PROYECTO
 
 		proyecto_meta:{
 			type: DataTypes.STRING

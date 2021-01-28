@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
 		}, //  timestamp without time zone default current_timestamp(0), -- 
 		reforma_estado: {
 			type: DataTypes.STRING,
-			defaultValue: 'ACTIVO' 
-		}, // text default 'ACTIVO'::text, -- 
+			defaultValue: 'PLANIFICACION' 
+		}, // text default 'PLANIFICACION'::text, -- 
 		
 		reforma_numero: {
 			type: DataTypes.INTEGER

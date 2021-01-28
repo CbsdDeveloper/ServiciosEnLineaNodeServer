@@ -42,9 +42,18 @@ module.exports = {
 					},
 					{
 						model: reformMdl, as: 'reforms',
+						include: [{
+							model: staffMdl, as: 'user',
+							attributes: ['personal_correo_institucional'],
+							include: [{
+								model: personMdl, as: 'person',
+								attributes: ['persona_nombres','persona_apellidos']
+							}]
+						}],
 						where: {
-							reforma_estado: 'VIGENTE'
-						}
+							reforma_estado: ['PLANIFICACION','VIGENTE']
+						},
+						required: false
 					}
 				],
 				offset: offset,
@@ -69,7 +78,7 @@ module.exports = {
 
 			// VALIDAR CONSULTA
 			let poa = await poaModel.findOne({
-				where:{ poa_id:req.body.poaId },
+				where:{ poa_id: req.body.poaId },
 				include: [
 					{
 						model: staffMdl, as: 'user',
@@ -96,7 +105,10 @@ module.exports = {
 			});
 
 			let reform = await reformMdl.findOne({
-				where:{ reforma_id:req.body.reformId },
+				where:{ 
+					reforma_estado: ['PLANIFICACION','VIGENTE'],
+					fk_poa_id: req.body.poaId
+				 },
 				include: [
 					{
 						model: staffMdl, as: 'user',

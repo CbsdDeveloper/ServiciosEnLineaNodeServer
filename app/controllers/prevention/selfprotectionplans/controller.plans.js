@@ -53,7 +53,7 @@ module.exports = {
 				include: [ 
 					{
 						model: localMdl, as: 'local',
-						attributes: [ 'local_id','local_nombrecomercial','local_parroquia','local_principal','local_secundaria','local_referencia' ],
+						attributes: [ 'local_id','local_nombrecomercial','local_parroquia','local_principal','local_secundaria','local_referencia','local_estado' ],
 						include: [
 							{
 								model: entityMdl, as: 'entity',

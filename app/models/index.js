@@ -235,6 +235,7 @@ db.planing = {
 	programspoa:				require('./planing/model.programs')(sequelize, Sequelize),
 	poa:						require('./planing/model.poa')(sequelize, Sequelize),
 	reforms:					require('./planing/model.poareforms')(sequelize, Sequelize),
+	reformsResponsiables:		require('./planing/model.poareforms.responsibles')(sequelize, Sequelize),
 	poaprojects:				require('./planing/model.poaprojects')(sequelize, Sequelize)
 };
 // FINANCIERO
@@ -517,9 +518,16 @@ db.planing.programspoa.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_per
 db.planing.poa.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
 db.planing.poa.hasMany(db.planing.reforms, {as: 'reforms', foreignKey: 'fk_poa_id'});
 
+
 db.planing.reforms.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
 db.planing.reforms.belongsTo(db.planing.poa, {as: 'poa', foreignKey: 'fk_poa_id'});
 db.planing.reforms.hasMany(db.planing.poaprojects, {as: 'projects', foreignKey: 'fk_reforma_id'});
+
+
+db.planing.reformsResponsiables.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.planing.reformsResponsiables.hasMany(db.planing.reforms, {as: 'reform', foreignKey: 'fk_reforma_id'});
+db.planing.reformsResponsiables.hasMany(db.tthh.ppersonal, {as: 'responsible', foreignKey: 'fk_responsable_id'});
+
 
 db.planing.poaprojects.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
 db.planing.poaprojects.belongsTo(db.planing.reforms, {as: 'reform', foreignKey: 'fk_reforma_id'});

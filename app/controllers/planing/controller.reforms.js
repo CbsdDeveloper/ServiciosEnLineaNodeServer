@@ -33,7 +33,7 @@ const getStaffInfo = async (entityId) => {
 };
 
 module.exports = {
-
+	
 	/**
 	 * @function paginationEntity
 	 * @param {Object} req - server request
@@ -75,9 +75,9 @@ module.exports = {
 					}
 				],
 				offset: offset,
-				limit: limit/*,
-				where: whr,
-				order: [ sort ]*/
+				limit: limit,/*
+				where: whr,*/
+				order: [ sort ]
 			});	
 			const meta = paginate(currentPage, count, rows, pageLimit);
 			db.setDataTable(res,{ rows, meta },'PLANIFICACION - LISTAR REFORMAS VIGENTES DEL POA');
@@ -88,7 +88,7 @@ module.exports = {
 	},
 
 	/*
-	 * ACTUALIZAR REFORMA
+	 * ACTUALIZAR REFORMA - CONFIRMAR CAMBIOS
 	 */
 	async updateEntity(req, res){
 		
@@ -126,7 +126,7 @@ module.exports = {
 				}
 			);
 
-			
+			// MENSAJE DE RETORNO
 			db.setEmpty(res,'REFORMA FINALIZADA CON ÉXITO',true,body);
 			
 		} catch (error) {
