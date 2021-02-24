@@ -516,7 +516,7 @@ db.prevention.simulations.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk
 db.planing.programspoa.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
 
 db.planing.poa.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
-db.planing.poa.hasMany(db.planing.reforms, {as: 'reforms', foreignKey: 'fk_poa_id'});
+db.planing.poa.hasMany(db.planing.reforms, {as: 'reforms', foreignKey: 'fk_reforma_id'});
 
 
 db.planing.reforms.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});

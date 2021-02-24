@@ -62,9 +62,9 @@ module.exports = {
 				order: [ sort ]
 			});	
 			const meta = paginate(currentPage, count, rows, pageLimit);
-			db.setDataTable(res,{ rows, meta },'PLANIFICACION - LISTAR PROGRAMAS POA');
+			db.setDataTable(res,{ rows, meta },'PLANIFICACION - LISTAR POA');
 		} catch (error) {
-			db.setEmpty(res,'PLANIFICACION - PROGRAMAS POA',false,error);
+			db.setEmpty(res,'PLANIFICACION - POA',false,error);
 		}
 
 	},

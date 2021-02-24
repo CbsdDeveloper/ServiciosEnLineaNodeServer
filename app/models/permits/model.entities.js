@@ -59,6 +59,9 @@ module.exports = (sequelize, DataTypes) => {
 		entidad_correo:{
 			type: DataTypes.STRING
 		}, // 
+		entidad_correo_alterno:{
+			type: DataTypes.STRING
+		}, // 
 		entidad_telefono:{
 			type: DataTypes.STRING
 		}, // 

@@ -40,6 +40,7 @@ module.exports = {
 				{ plan_tipo: seq.where(seq.fn('LOWER', seq.col('plan_tipo')), 'LIKE', '%' + filter + '%') },
 				{ plan_codigo: seq.where(seq.fn('LOWER', seq.col('plan_codigo')), 'LIKE', '%' + filter + '%') },
 				{ plan_estado: seq.where(seq.fn('LOWER', seq.col('plan_estado')), 'LIKE', '%' + filter + '%') },
+				{ plan_observacion: seq.where(seq.fn('LOWER', seq.col('plan_observacion')), 'LIKE', '%' + filter + '%') },
 
 				{ local_nombrecomercial: seq.where(seq.fn('LOWER', seq.col('local_nombrecomercial')), 'LIKE', '%' + filter + '%') },
 				{ entidad_razonsocial: seq.where(seq.fn('LOWER', seq.col('entidad_razonsocial')), 'LIKE', '%' + filter + '%') },
@@ -218,7 +219,8 @@ module.exports = {
 								{ 
 									model: entityMdl, as: 'entity', 
 									include: [
-										{ model: personMdl, as: 'person' }
+										{ model: personMdl, as: 'person' },
+										{ model: personMdl, as: 'adopted' }
 									]
 								}
 							]
@@ -264,7 +266,8 @@ module.exports = {
 						{
 							model: entityMdl, as: 'entity',
 							include: [
-								{ model: personMdl, as: 'person' }
+								{ model: personMdl, as: 'person' },
+								{ model: personMdl, as: 'adopted' }
 							]
 						}
 					]

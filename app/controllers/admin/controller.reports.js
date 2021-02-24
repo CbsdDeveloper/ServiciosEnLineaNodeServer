@@ -20,7 +20,8 @@ module.exports = {
 			const where = seq.or(
 				{ reporte_nombre: seq.where(seq.fn('LOWER', seq.col('reporte_nombre')), 'LIKE', '%' + filter + '%') },
 				{ reporte_jefatura: seq.where(seq.fn('LOWER', seq.col('reporte_jefatura')), 'LIKE', '%' + filter + '%') },
-				{ reporte_departamento: seq.where(seq.fn('LOWER', seq.col('reporte_departamento')), 'LIKE', '%' + filter + '%') }
+				{ reporte_departamento: seq.where(seq.fn('LOWER', seq.col('reporte_departamento')), 'LIKE', '%' + filter + '%') },
+				{ reporte_template: seq.where(seq.fn('LOWER', seq.col('reporte_template')), 'LIKE', '%' + filter + '%') }
 			);
 			const { rows, count } = await model.findAndCountAll(
 				{

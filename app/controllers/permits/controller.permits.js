@@ -1,6 +1,7 @@
 'use strict';
 const db = require('../../models');
 const seq = db.sequelize;
+const Op = db.Sequelize.Op;
 const { calculateLimitAndOffset, paginate } = require('../../config/pagination');
 
 
@@ -25,18 +26,23 @@ module.exports = {
 		try {
 			const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
-			const where = seq.or(
-				{ codigo_per: seq.where(seq.fn('LOWER', seq.col('codigo_per')), 'LIKE', '%' + filter + '%') },
+			const where = {
+				[Op.or]: [
+					{ 'codigo_per': { [Op.iLike]: '%' + filter + '%'} },
 
-				{ local_nombrecomercial: seq.where(seq.fn('LOWER', seq.col('local_nombrecomercial')), 'LIKE', '%' + filter + '%') },
-				{ entidad_razonsocial: seq.where(seq.fn('LOWER', seq.col('entidad_razonsocial')), 'LIKE', '%' + filter + '%') },
-				{ entidad_ruc: seq.where(seq.fn('LOWER', seq.col('entidad_ruc')), 'LIKE', '%' + filter + '%') }
-			);
+					{ '$selfInspection.local.local_nombrecomercial$': { [Op.iLike]: '%' + filter + '%'} },
+					
+					seq.literal("permiso_fecha::text like '%" + filter + "%'"),
+
+					{ '$selfInspection.local.entity.entidad_razonsocial$': { [Op.iLike]: '%' + filter + '%'} },
+					{ '$selfInspection.local.entity.entidad_ruc$': { [Op.iLike]: '%' + filter + '%'} }
+				]
+			};
 			const { rows, count } = await permitModel.findAndCountAll(
 				{
 					offset: offset,
 					limit: limit,
-					where: (filter != '')?where:{},
+					where: where,
 					order: [ sort ],
 					include: [
 						{

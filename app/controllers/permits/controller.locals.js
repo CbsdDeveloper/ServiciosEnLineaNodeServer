@@ -114,11 +114,15 @@ module.exports = {
 			include: [
 				{
 					model: entityMdl, as: 'entity',
-					attributes: [ 'entidad_ruc','entidad_razonsocial','entidad_contribuyente','entidad_correo','entidad_usuario_creacion' ],
+					attributes: [ 'entidad_ruc','entidad_razonsocial','entidad_contribuyente','entidad_correo','entidad_usuario_creacion','entidad_apoderado','entidad_registro' ],
 					include: [
 						{
 							model: personMdl, as: 'person',
-							attributes: [ 'persona_apellidos','persona_nombres','persona_correo','persona_doc_identidad' ]
+							attributes: [ 'persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo','persona_telefono','persona_celular','persona_imagen' ]
+						},
+						{
+							model: personMdl, as: 'adopted',
+							attributes: [ 'persona_doc_identidad','persona_tipo_doc','persona_apellidos','persona_nombres','persona_correo','persona_telefono','persona_celular','persona_imagen' ]
 						}
 					]
 				},
