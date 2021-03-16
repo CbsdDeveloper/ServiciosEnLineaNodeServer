@@ -125,6 +125,7 @@ module.exports = {
 				include: [
 					{
 						model: ppersonalMdl, as: 'subscribe',
+						attributes: ['ppersonal_id'],
 						include: [
 							{
 								model: staffMdl, as: 'staff',
@@ -145,6 +146,7 @@ module.exports = {
 				include: [
 					{
 						model: ppersonalMdl, as: 'subscribe',
+						attributes: ['ppersonal_id'],
 						include: [
 							{
 								model: staffMdl, as: 'staff',
@@ -241,6 +243,7 @@ module.exports = {
 				include: [
 					{
 						model: ppersonalMdl, as: 'subscribe',
+						attributes: ['ppersonal_id'],
 						include: [
 							{
 								model: staffMdl, as: 'staff',
@@ -307,6 +310,7 @@ module.exports = {
 						include: [
 							{
 								model: ppersonalMdl, as: 'subscribe',
+								attributes: ['ppersonal_id'],
 								include: [
 									{
 										model: staffMdl, as: 'staff',
@@ -448,6 +452,7 @@ module.exports = {
 				include: [
 					{
 						model: ppersonalMdl, as: 'subscribe',
+						attributes: ['ppersonal_id'],
 						include: [
 							{
 								model: staffMdl, as: 'staff',

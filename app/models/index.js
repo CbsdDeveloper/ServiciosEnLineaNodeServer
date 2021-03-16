@@ -222,8 +222,8 @@ db.administrative = {
 	archivedocuments:			require('./administrative/archive/model.documents')(sequelize, Sequelize),
 
 	edocMsg:					require('./administrative/edocumentation/model.documentation')(sequelize, Sequelize),
-	edocSigned:					require('./administrative/edocumentation/model.signeds')(sequelize, Sequelize),
 	edocRecipients:				require('./administrative/edocumentation/model.recipients')(sequelize, Sequelize),
+	edocSigned:					require('./administrative/edocumentation/model.signeds')(sequelize, Sequelize),
 
 	typeMinorTools:				require('./administrative/gservices/model.tools.categories')(sequelize, Sequelize),
 	minorTools:					require('./administrative/gservices/model.tools')(sequelize, Sequelize),
@@ -591,13 +591,13 @@ db.administrative.edocMsg.belongsTo(db.tthh.ppersonal, {as: 'subscribe', foreign
 db.administrative.edocMsg.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
 db.administrative.edocMsg.hasMany(db.administrative.edocRecipients, {as: 'recipients', foreignKey: 'fk_delectronica_id'});
 
-db.administrative.edocSigned.belongsTo(db.administrative.edocMsg, {as: 'edoc', foreignKey: 'fk_delectronica_id'});
-db.administrative.edocSigned.belongsTo(db.tthh.ppersonal, {as: 'responsible', foreignKey: 'fk_remitente_id'});
-db.administrative.edocSigned.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
-
 db.administrative.edocRecipients.belongsTo(db.administrative.edocMsg, {as: 'edoc', foreignKey: 'fk_delectronica_id'});
 db.administrative.edocRecipients.belongsTo(db.tthh.staff, {as: 'staff', foreignKey: 'fk_destinatario_id'});
 db.administrative.edocRecipients.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+
+db.administrative.edocSigned.belongsTo(db.administrative.edocMsg, {as: 'edoc', foreignKey: 'fk_delectronica_id'});
+db.administrative.edocSigned.belongsTo(db.tthh.ppersonal, {as: 'responsible', foreignKey: 'fk_remitente_id'});
+db.administrative.edocSigned.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
 
 // MANTENIMIENTO DE HERRAMIENTAS MENORES
 db.administrative.typeMinorTools.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});

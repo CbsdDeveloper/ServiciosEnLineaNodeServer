@@ -140,6 +140,7 @@ router.get('/responsiblesByLeaderships', tthhCtrl.schema.findAResponsiblesByLead
 router.get('/staffList', tthhCtrl.schema.findAllStaff);
 router.get('/staff/functions/list', tthhCtrl.schema.findAllStaffFunctions);
 router.get('/staff/ppersonal/functions/list', tthhCtrl.schema.findAllPpersonalFunctions);
+router.get('/staff/ppersonal/functions/gservices/list', tthhCtrl.schema.staffToGServices);
 router.post('/staff/leadership', tthhCtrl.schema.findAllStaffByLeadership);
 router.get('/drivers', tthhCtrl.schema.findAllDrivers);
 router.get('/platoons', tthhCtrl.schema.findAllPlatoons);
