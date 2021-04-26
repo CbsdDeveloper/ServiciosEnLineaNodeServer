@@ -39,7 +39,10 @@ module.exports = {
 					where: (filter != '')?where:{},
 					order: [ sort ],
 					include: [
-						{ model: station, as: 'station', attributes: ['estacion_nombre','estacion_nombre_alterno'] } 
+						{ 
+							model: station, as: 'station', 
+							attributes: ['estacion_nombre','estacion_nombre_alterno'] 
+						} 
 					]
 				});
 			const meta = paginate(currentPage, count, rows, pageLimit);

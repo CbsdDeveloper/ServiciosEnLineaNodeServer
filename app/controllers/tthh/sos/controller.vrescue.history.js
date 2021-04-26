@@ -4,11 +4,11 @@ const seq = db.sequelize;
 const Op = db.Sequelize.Op;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
-const historyModel = db.tthh.vrescueHistory;
-const historyAnswersMdl = db.tthh.vrescueHistoryAnswers;
+const historyModel = db.tthh.vrescue.history;
+const historyAnswersMdl = db.tthh.vrescue.historyAnswers;
 
-const equipmentMdl = db.tthh.vrescueEquipments;
-const categoryMdl = db.tthh.vrescueCategoriesequipments;
+const equipmentMdl = db.tthh.vrescue.equipments;
+const categoryMdl = db.tthh.vrescue.categoriesequipments;
 
 const platoonMdl = db.tthh.platoons;
 const stationMdl = db.tthh.stations;

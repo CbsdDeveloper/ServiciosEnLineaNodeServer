@@ -508,6 +508,7 @@ module.exports = {
 
 			// BUSCAR PERSONAL
 			let subscribe = await ppersonalMdl.findOne({
+				attributes: ['ppersonal_id'],
 				where: {
 					fk_personal_id: body.sender.personal_id,
 					ppersonal_estado: 'EN FUNCIONES'
@@ -515,6 +516,7 @@ module.exports = {
 			});
 
 			// SETTEAR REMITENTE
+			// await draft.update({ fk_remitente_id: subscribe.ppersonal_id });
 			draft.setSubscribe(subscribe);
 
 			// LISTAR COMO DESTINATARIO
@@ -524,7 +526,7 @@ module.exports = {
 					fk_delectronica_id	: body.entityId
 				},
 				defaults: {
-					fk_personal_id: 159,
+					fk_personal_id: body.sender.personal_id,
 
 					fk_destinatario_id: body.sender.personal_id,
 					fk_delectronica_id	: body.entityId,

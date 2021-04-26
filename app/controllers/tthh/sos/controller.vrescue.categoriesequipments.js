@@ -3,7 +3,7 @@ const db = require('../../../models');
 const Op = db.Sequelize.Op;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
-const categoryModel = db.tthh.vrescueCategoriesequipments;
+const categoryModel = db.tthh.vrescue.categoriesequipments;
 
 const staffMdl = db.tthh.staff;
 

@@ -1,12 +1,12 @@
 'use strict';
 const db = require('../../../models');
-const evaluationModel = db.tthh.psychosocialEvaluations;
-const formsModel = db.tthh.psychosocialforms;
-const sectionsModel = db.tthh.psychosocialformsSections;
-const questionsModel = db.tthh.psychosocialformsQuestions;
+const evaluationModel = db.tthh.psychosocial.evaluations;
+const formsModel = db.tthh.psychosocial.forms;
+const sectionsModel = db.tthh.psychosocial.formsSections;
+const questionsModel = db.tthh.psychosocial.formsQuestions;
 const resourceModel = db.resources.resources;
-const evaluationQuestionsModel = db.tthh.psychosocialEvaluationsQuestions;
-const testModel = db.tthh.psychosocialTest;
+const evaluationQuestionsModel = db.tthh.psychosocial.evaluationsQuestions;
+const testModel = db.tthh.psychosocial.test;
 
 module.exports ={
 	

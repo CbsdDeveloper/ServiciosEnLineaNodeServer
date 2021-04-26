@@ -20,6 +20,14 @@ const administrativeCtrl = {
     minorTools:         require('../controllers/administrative/gservices/controller.minortools'),
     minorMaintenances:  require('../controllers/administrative/gservices/controller.minortools.maintenances'),
 
+    units: {
+        unit:           require('../controllers/administrative/units/controller.units')
+    },
+
+    maintenance: {
+        order:           require('../controllers/administrative/gservices/controller.maintenanceorder')
+    },
+
     schema:             require('../controllers/controller.administrative.js')
 };
 
@@ -43,6 +51,8 @@ router.get('/edocumentation/deleted/all', administrativeCtrl.edoc.paginationEnti
 router.get('/gservices/minortools/types', administrativeCtrl.typeMinorTools.paginationEntity);
 router.get('/gservices/minortools', administrativeCtrl.minorTools.paginationEntity);
 router.get('/gservices/minortools/maintenances', administrativeCtrl.minorMaintenances.paginationEntity);
+// UNIDADES
+router.get('/units/units', administrativeCtrl.units.unit.paginationEntity);
 
 /*
 * CONTROLLERS DE MODELOS
@@ -71,6 +81,13 @@ router.put('/gservices/minortools', administrativeCtrl.minorTools.updateEntity);
 router.post('/gservices/minortools/maintenances/detailById', administrativeCtrl.minorMaintenances.detailEntityById);
 router.post('/gservices/minortools/maintenances/insert/tools', administrativeCtrl.minorMaintenances.insertToolsToMaintenance);
 router.delete('/gservices/minortools/maintenances/delete/tools', administrativeCtrl.minorMaintenances.deleteToolsToMaintenance);
+
+    // ORDENES DE MANTENIMIENTO
+router.post('/gservices/maintenances/order/detailById', administrativeCtrl.maintenance.order.detailEntityById);
+
+
+// UNIDADES
+
 
 
 /*

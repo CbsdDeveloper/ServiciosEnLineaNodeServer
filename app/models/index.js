@@ -195,17 +195,26 @@ db.tthh = {
 	surveysStaffEvaluations:			require('./tthh/surveys/model.staff.evaluation')(sequelize, Sequelize),
 	surveysStaffEvaluationsAnswers:		require('./tthh/surveys/model.staff.evaluation.answers')(sequelize, Sequelize),
 	// SOS
-	psychosocialforms:					require('./tthh/sos/model.psychosocial.forms')(sequelize, Sequelize),
-	psychosocialformsSections:			require('./tthh/sos/model.psychosocial.sections')(sequelize, Sequelize),
-	psychosocialformsQuestions:			require('./tthh/sos/model.psychosocial.forms.questions')(sequelize, Sequelize),
-	psychosocialEvaluations:			require('./tthh/sos/model.psychosocial.evaluation')(sequelize, Sequelize),
-	psychosocialEvaluationsQuestions:	require('./tthh/sos/model.psychosocial.evaluation.questions')(sequelize, Sequelize),
-	psychosocialTest:					require('./tthh/sos/model.psychosocial.test')(sequelize, Sequelize),
-	psychosocialTestAnswers:			require('./tthh/sos/model.psychosocial.test.answers')(sequelize, Sequelize),
-	vrescueCategoriesequipments:		require('./tthh/sos/model.vrescue.categoriesequipment')(sequelize, Sequelize),
-	vrescueEquipments:					require('./tthh/sos/model.vrescue.equipments')(sequelize, Sequelize),
-	vrescueHistory:						require('./tthh/sos/model.vrescue.history')(sequelize, Sequelize),
-	vrescueHistoryAnswers:				require('./tthh/sos/model.vrescue.historyanswers')(sequelize, Sequelize)
+	psychosocial: {
+		forms:						require('./tthh/sos/model.psychosocial.forms')(sequelize, Sequelize),
+		formsSections:				require('./tthh/sos/model.psychosocial.sections')(sequelize, Sequelize),
+		formsQuestions:				require('./tthh/sos/model.psychosocial.forms.questions')(sequelize, Sequelize),
+		evaluations:				require('./tthh/sos/model.psychosocial.evaluation')(sequelize, Sequelize),
+		evaluationsQuestions:		require('./tthh/sos/model.psychosocial.evaluation.questions')(sequelize, Sequelize),
+		test:						require('./tthh/sos/model.psychosocial.test')(sequelize, Sequelize),
+		testAnswers:				require('./tthh/sos/model.psychosocial.test.answers')(sequelize, Sequelize),
+	},
+	vrescue: {
+		categoriesequipments:		require('./tthh/sos/model.vrescue.categoriesequipment')(sequelize, Sequelize),
+		equipments:					require('./tthh/sos/model.vrescue.equipments')(sequelize, Sequelize),
+		history:					require('./tthh/sos/model.vrescue.history')(sequelize, Sequelize),
+		historyAnswers:				require('./tthh/sos/model.vrescue.historyanswers')(sequelize, Sequelize),
+	},
+	fextinguisher: {
+		list:						require('./tthh/sos/model.fextinguisher.list')(sequelize, Sequelize),
+		inspections:				require('./tthh/sos/model.fextinguisher.inspections')(sequelize, Sequelize),
+		reviews:					require('./tthh/sos/model.fextinguisher.reviews')(sequelize, Sequelize)
+	}
 };
 // DIRECCION ADMINISTRATIVA
 db.administrative = {
@@ -228,7 +237,19 @@ db.administrative = {
 	typeMinorTools:				require('./administrative/gservices/model.tools.categories')(sequelize, Sequelize),
 	minorTools:					require('./administrative/gservices/model.tools')(sequelize, Sequelize),
 	minorMaintenances:			require('./administrative/gservices/model.tools.maintenances')(sequelize, Sequelize),
-	minorMaintenancesTools:		require('./administrative/gservices/model.tools.maintenances.tools')(sequelize, Sequelize)
+	minorMaintenancesTools:		require('./administrative/gservices/model.tools.maintenances.tools')(sequelize, Sequelize),
+
+	maintenances: {
+		order:			require('./administrative/gservices/model.maintenanceorder')(sequelize, Sequelize),
+		performed:		require('./administrative/gservices/model.maintenanceorder.performed')(sequelize, Sequelize),
+		suggested:		require('./administrative/gservices/model.maintenanceorder.suggested')(sequelize, Sequelize),
+		payment:		require('./administrative/gservices/model.maintenanceorder.payments')(sequelize, Sequelize),
+		annexxe:		require('./administrative/gservices/model.maintenanceorder.annexxes')(sequelize, Sequelize),
+	},
+
+	units: {
+		unit:		require('./administrative/units/model.units')(sequelize, Sequelize)
+	}
 };
 // PLANIFICACION
 db.planing = {
@@ -316,6 +337,7 @@ db.admin.users.belongsTo(db.resources.persons, {as: 'person', foreignKey: 'fk_pe
 // INSTITUCION
 db.tthh.stations.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
 db.tthh.stations.hasMany(db.tthh.platoons, {as: 'platoons', foreignKey: 'fk_estacion_id'});
+db.tthh.stations.hasMany(db.administrative.units.unit, {as: 'units', foreignKey: 'fk_estacion_id'});
 db.tthh.platoons.belongsTo(db.tthh.stations, {as: 'station', foreignKey: 'fk_estacion_id'});
 db.tthh.platoons.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
 db.tthh.leaderships.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
@@ -364,33 +386,44 @@ db.tthh.surveysStaffEvaluations.belongsTo(db.tthh.staff, {as: 'personal', foreig
 db.tthh.surveysStaffEvaluationsAnswers.belongsTo(db.tthh.surveysStaffEvaluations, {as: 'test', foreignKey: 'fk_test_id'});
 db.tthh.surveysStaffEvaluationsAnswers.belongsTo(db.resources.formQuestions, {as: 'question', foreignKey: 'fk_pregunta_id'});
 // EVALUACION DE RIESGO PSICOSOCIAL
-db.tthh.psychosocialformsSections.belongsTo(db.tthh.psychosocialforms, {as: 'form', foreignKey: 'fk_formulario_id'});
-db.tthh.psychosocialformsSections.hasMany(db.tthh.psychosocialformsQuestions, {as: 'questions', foreignKey: 'fk_seccion_id'});
-db.tthh.psychosocialformsQuestions.belongsTo(db.tthh.psychosocialformsSections, {as: 'section', foreignKey: 'fk_seccion_id'});
-db.tthh.psychosocialformsQuestions.belongsTo(db.resources.resources, {as: 'question', foreignKey: 'fk_pregunta_id'});
-db.tthh.psychosocialformsQuestions.belongsTo(db.resources.resources, {as: 'ranking', foreignKey: 'fk_sistemacalificacion_id'});
-db.tthh.psychosocialEvaluations.belongsTo(db.tthh.psychosocialforms, {as: 'form', foreignKey: 'fk_formulario_id'});
-db.tthh.psychosocialformsQuestions.belongsToMany(db.tthh.psychosocialEvaluations, {through: 'tb_evaluacionesriesgopsicosocial_preguntas', foreignKey: 'fk_pregunta_id'});
-db.tthh.psychosocialEvaluations.belongsToMany(db.tthh.psychosocialformsQuestions, {through: 'tb_evaluacionesriesgopsicosocial_preguntas', foreignKey: 'fk_evaluacion_id'});
-db.tthh.psychosocialEvaluationsQuestions.belongsTo(db.tthh.psychosocialformsQuestions, {as: 'question', foreignKey: 'fk_pregunta_id'});
-db.tthh.psychosocialEvaluationsQuestions.belongsTo(db.tthh.psychosocialEvaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id'});
-db.tthh.psychosocialTest.belongsTo(db.tthh.psychosocialEvaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id'});
-db.tthh.psychosocialTest.belongsTo(db.tthh.staff, {as: 'staff', foreignKey: 'fk_evaluado_id'});
-db.tthh.psychosocialTestAnswers.belongsTo(db.tthh.psychosocialTest, {as: 'test', foreignKey: 'fk_test_id'});
-db.tthh.psychosocialTestAnswers.belongsTo(db.tthh.psychosocialformsQuestions, {as: 'question', foreignKey: 'fk_pregunta_id'});
+db.tthh.psychosocial.formsSections.belongsTo(db.tthh.psychosocial.forms, {as: 'form', foreignKey: 'fk_formulario_id'});
+db.tthh.psychosocial.formsSections.hasMany(db.tthh.psychosocial.formsQuestions, {as: 'questions', foreignKey: 'fk_seccion_id'});
+db.tthh.psychosocial.formsQuestions.belongsTo(db.tthh.psychosocial.formsSections, {as: 'section', foreignKey: 'fk_seccion_id'});
+db.tthh.psychosocial.formsQuestions.belongsTo(db.resources.resources, {as: 'question', foreignKey: 'fk_pregunta_id'});
+db.tthh.psychosocial.formsQuestions.belongsTo(db.resources.resources, {as: 'ranking', foreignKey: 'fk_sistemacalificacion_id'});
+db.tthh.psychosocial.evaluations.belongsTo(db.tthh.psychosocial.forms, {as: 'form', foreignKey: 'fk_formulario_id'});
+db.tthh.psychosocial.formsQuestions.belongsToMany(db.tthh.psychosocial.evaluations, {through: 'tb_evaluacionesriesgopsicosocial_preguntas', foreignKey: 'fk_pregunta_id'});
+db.tthh.psychosocial.evaluations.belongsToMany(db.tthh.psychosocial.formsQuestions, {through: 'tb_evaluacionesriesgopsicosocial_preguntas', foreignKey: 'fk_evaluacion_id'});
+db.tthh.psychosocial.evaluationsQuestions.belongsTo(db.tthh.psychosocial.formsQuestions, {as: 'question', foreignKey: 'fk_pregunta_id'});
+db.tthh.psychosocial.evaluationsQuestions.belongsTo(db.tthh.psychosocial.evaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id'});
+db.tthh.psychosocial.test.belongsTo(db.tthh.psychosocial.evaluations, {as: 'evaluation', foreignKey: 'fk_evaluacion_id'});
+db.tthh.psychosocial.test.belongsTo(db.tthh.staff, {as: 'staff', foreignKey: 'fk_evaluado_id'});
+db.tthh.psychosocial.testAnswers.belongsTo(db.tthh.psychosocial.test, {as: 'test', foreignKey: 'fk_test_id'});
+db.tthh.psychosocial.testAnswers.belongsTo(db.tthh.psychosocial.formsQuestions, {as: 'question', foreignKey: 'fk_pregunta_id'});
 // RESCATE VERTICAL
-db.tthh.vrescueCategoriesequipments.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
-db.tthh.vrescueEquipments.belongsTo(db.tthh.platoons, {as: 'platoon', foreignKey: 'fk_peloton_id'});
-db.tthh.vrescueEquipments.belongsTo(db.resources.forms, {as: 'form', foreignKey: 'fk_formulario_id'});
-db.tthh.vrescueEquipments.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
-db.tthh.vrescueEquipments.belongsTo(db.tthh.vrescueCategoriesequipments, {as: 'category', foreignKey: 'fk_categoria_id'});
-db.tthh.vrescueHistory.belongsTo(db.tthh.vrescueEquipments, {as: 'equipment', foreignKey: 'fk_equipo_id'});
-db.tthh.vrescueHistory.belongsTo(db.resources.forms, {as: 'form', foreignKey: 'fk_formulario_id'});
-db.tthh.vrescueHistory.belongsTo(db.tthh.platoons, {as: 'platoon', foreignKey: 'fk_peloton_id'});
-db.tthh.vrescueHistory.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
-db.tthh.vrescueHistory.hasMany(db.tthh.vrescueHistoryAnswers, {as: 'answers', foreignKey: 'fk_registro_id'});
-db.tthh.vrescueHistoryAnswers.belongsTo(db.tthh.vrescueHistory, {as: 'history', foreignKey: 'fk_registro_id'});
-db.tthh.vrescueHistoryAnswers.belongsTo(db.resources.formQuestions, {as: 'questions', foreignKey: 'fk_pregunta_id'});
+db.tthh.vrescue.categoriesequipments.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.tthh.vrescue.equipments.belongsTo(db.tthh.platoons, {as: 'platoon', foreignKey: 'fk_peloton_id'});
+db.tthh.vrescue.equipments.belongsTo(db.resources.forms, {as: 'form', foreignKey: 'fk_formulario_id'});
+db.tthh.vrescue.equipments.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.tthh.vrescue.equipments.belongsTo(db.tthh.vrescue.categoriesequipments, {as: 'category', foreignKey: 'fk_categoria_id'});
+db.tthh.vrescue.history.belongsTo(db.tthh.vrescue.equipments, {as: 'equipment', foreignKey: 'fk_equipo_id'});
+db.tthh.vrescue.history.belongsTo(db.resources.forms, {as: 'form', foreignKey: 'fk_formulario_id'});
+db.tthh.vrescue.history.belongsTo(db.tthh.platoons, {as: 'platoon', foreignKey: 'fk_peloton_id'});
+db.tthh.vrescue.history.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.tthh.vrescue.history.hasMany(db.tthh.vrescue.historyAnswers, {as: 'answers', foreignKey: 'fk_registro_id'});
+db.tthh.vrescue.historyAnswers.belongsTo(db.tthh.vrescue.history, {as: 'history', foreignKey: 'fk_registro_id'});
+db.tthh.vrescue.historyAnswers.belongsTo(db.resources.formQuestions, {as: 'questions', foreignKey: 'fk_pregunta_id'});
+// INSPECCION DE EXTINTORES
+db.tthh.fextinguisher.list.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.tthh.fextinguisher.list.belongsTo(db.tthh.stations, {as: 'station', foreignKey: 'fk_estacion_id'});
+db.tthh.fextinguisher.inspections.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.tthh.fextinguisher.inspections.belongsTo(db.tthh.stations, {as: 'station', foreignKey: 'fk_estacion_id'});
+db.tthh.fextinguisher.inspections.belongsTo(db.tthh.ppersonal, {as: 'stationresponsible', foreignKey: 'fk_responsable_estacion_id'});
+db.tthh.fextinguisher.inspections.belongsTo(db.tthh.ppersonal, {as: 'registre', foreignKey: 'fk_responsable_registro_id'});
+db.tthh.fextinguisher.inspections.belongsTo(db.tthh.ppersonal, {as: 'sos', foreignKey: 'fk_sos_id'});
+db.tthh.fextinguisher.reviews.belongsTo(db.tthh.staff, {as: 'user', foreignKey: 'fk_personal_id'});
+db.tthh.fextinguisher.reviews.belongsTo(db.tthh.fextinguisher.list, {as: 'fextinguisher', foreignKey: 'fk_extintor_id'});
+db.tthh.fextinguisher.reviews.belongsTo(db.tthh.fextinguisher.inspections, {as: 'inspection', foreignKey: 'fk_inspeccion_id'});
 
 /*
  * PERMISOS DE FUNCIONAMIENTO
@@ -617,6 +650,35 @@ db.administrative.minorMaintenancesTools.belongsTo(db.tthh.staff, {as: 'user', f
 db.administrative.minorMaintenancesTools.belongsTo(db.administrative.minorMaintenances, {as: 'maintenance', foreignKey: 'fk_mantenimiento_id'});
 db.administrative.minorMaintenancesTools.belongsTo(db.administrative.minorTools, {as: 'tool', foreignKey: 'fk_herramienta_id'});
 
+// UNIDADES
+db.administrative.units.unit.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
+db.administrative.units.unit.belongsTo(db.tthh.stations, {as: 'station', foreignKey: 'fk_estacion_id'});
+db.administrative.units.unit.belongsTo(db.resources.vehicles, {as: 'vehicle', foreignKey: 'fk_vehiculo_id'});
+db.administrative.units.unit.belongsTo(db.tthh.ppersonal, {as: 'custodian', foreignKey: 'fk_custodio_id'});
+
+// ORDENES DE MANTENIMIENTO
+db.administrative.maintenances.order.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
+db.administrative.maintenances.order.belongsTo(db.administrative.units.unit, {as: 'unit', foreignKey: 'fk_unidad_id'});
+db.administrative.maintenances.order.belongsTo(db.tthh.ppersonal, {as: 'requested', foreignKey: 'personal_solicita'});
+db.administrative.maintenances.order.belongsTo(db.tthh.ppersonal, {as: 'administrative', foreignKey: 'director_administrativo'});
+db.administrative.maintenances.order.belongsTo(db.tthh.ppersonal, {as: 'gservices', foreignKey: 'tecnico_servicios'});
+
+db.administrative.maintenances.order.hasMany(db.administrative.maintenances.annexxe, {as: 'annexxes', foreignKey: 'fk_orden_id'});
+db.administrative.maintenances.order.hasMany(db.administrative.maintenances.performed, {as: 'performed', foreignKey: 'fk_orden_id'});
+db.administrative.maintenances.order.hasMany(db.administrative.maintenances.suggested, {as: 'suggested', foreignKey: 'fk_orden_id'});
+db.administrative.maintenances.order.hasMany(db.administrative.maintenances.payment, {as: 'payments', foreignKey: 'fk_orden_id'});
+
+db.administrative.maintenances.annexxe.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
+db.administrative.maintenances.annexxe.belongsTo(db.administrative.maintenances.order, {as: 'order', foreignKey: 'fk_orden_id'});
+
+db.administrative.maintenances.performed.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
+db.administrative.maintenances.performed.belongsTo(db.administrative.maintenances.order, {as: 'order', foreignKey: 'fk_orden_id'});
+
+db.administrative.maintenances.suggested.belongsTo(db.admin.users, {as: 'user', foreignKey: 'fk_usuario_id'});
+db.administrative.maintenances.suggested.belongsTo(db.administrative.maintenances.order, {as: 'order', foreignKey: 'fk_orden_id'});
+
+db.administrative.maintenances.payment.belongsTo(db.tthh.staff, {as: 'staff', foreignKey: 'fk_personal_id'});
+db.administrative.maintenances.payment.belongsTo(db.administrative.maintenances.order, {as: 'order', foreignKey: 'fk_orden_id'});
 
 
 // INICIALIZAR SEQUELIZE

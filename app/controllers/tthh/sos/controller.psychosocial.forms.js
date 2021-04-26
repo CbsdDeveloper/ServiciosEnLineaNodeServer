@@ -1,6 +1,6 @@
 'use strict';
 const db = require('../../../models');
-const psychosocialformsModel = db.tthh.psychosocialforms;
+const psychosocialformsModel = db.tthh.psychosocial.forms;
 
 module.exports ={
 

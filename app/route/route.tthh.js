@@ -27,14 +27,25 @@ const tthhCtrl = {
     academic:                   require('../controllers/tthh/controller.academicTraining'),
     medicines:                  require('../controllers/tthh/md/controller.medicines'),
     medicalrestRecipient:       require('../controllers/tthh/md/controller.medicalrest.recipients'),
-    psychosocialforms:          require('../controllers/tthh/sos/controller.psychosocial.forms'),
-    psychosocialsections:       require('../controllers/tthh/sos/controller.psychosocial.sections'),
-    psychosocialevaluations:    require('../controllers/tthh/sos/controller.psychosocial.evaluations'),
-    psychosocialtest:           require('../controllers/tthh/sos/controller.psychosocial.test'),
-    
-    vrescueCategoriesequipment: require('../controllers/tthh/sos/controller.vrescue.categoriesequipments'),
-    vrescueEquipments:          require('../controllers/tthh/sos/controller.vrescue.equipments'),
-    vrescueHistory:             require('../controllers/tthh/sos/controller.vrescue.history'),
+
+    sso: {
+        psychosocial: {
+            forms:              require('../controllers/tthh/sos/controller.psychosocial.forms'),
+            sections:           require('../controllers/tthh/sos/controller.psychosocial.sections'),
+            evaluations:        require('../controllers/tthh/sos/controller.psychosocial.evaluations'),
+            test:               require('../controllers/tthh/sos/controller.psychosocial.test'),
+        },
+        vrescue: {
+            categoriesequipment: require('../controllers/tthh/sos/controller.vrescue.categoriesequipments'),
+            equipments:          require('../controllers/tthh/sos/controller.vrescue.equipments'),
+            history:             require('../controllers/tthh/sos/controller.vrescue.history'),
+        },
+        fextinguisher: {
+            list:               require('../controllers/tthh/sos/controller.fextinguisher.list'),
+            inspections:        require('../controllers/tthh/sos/controller.fextinguisher.inspections'),
+            reviews:            require('../controllers/tthh/sos/controller.fextinguisher.list'),
+        }
+    },
 
     surveysEvaluations:         require('../controllers/tthh/surveys/controller.evaluations'),
     surveysEvaluationsStaff:    require('../controllers/tthh/surveys/controller.staff.evaluations'),
@@ -68,9 +79,12 @@ router.get('/attendance/absences', tthhCtrl.absences.paginationEntity);
 // DEP. MEDICO
 router.get('/md/medicalrest/recipients/list', tthhCtrl.medicalrestRecipient.paginationEntity);
 // RECATE VERTICAL
-router.get('/sos/vrescue/categories/equipments/list', tthhCtrl.vrescueCategoriesequipment.paginationEntity);
-router.get('/sos/vrescue/equipments/list', tthhCtrl.vrescueEquipments.paginationEntity);
-router.get('/sos/vrescue/history/list', tthhCtrl.vrescueHistory.paginationEntity);
+router.get('/sos/vrescue/categories/equipments/list', tthhCtrl.sso.vrescue.categoriesequipment.paginationEntity);
+router.get('/sos/vrescue/equipments/list', tthhCtrl.sso.vrescue.equipments.paginationEntity);
+router.get('/sos/vrescue/history/list', tthhCtrl.sso.vrescue.history.paginationEntity);
+// INSPECCION DE EXTINTORES
+router.get('/sos/fextinguisher/extinguishers/list', tthhCtrl.sso.fextinguisher.list.paginationEntity);
+router.get('/sos/fextinguisher/extinguishers/inspections/list', tthhCtrl.sso.fextinguisher.inspections.paginationEntity);
 
 /*
 * CONTROLLERS DE MODELOS
@@ -113,22 +127,25 @@ router.get('/md/pharmacy/supplies/stock', tthhCtrl.medicines.findStock);
 router.post('/md/medicalrest/recipients/new', tthhCtrl.medicalrestRecipient.newRecipient);
 router.delete('/md/medicalrest/recipients/remove', tthhCtrl.medicalrestRecipient.removeRecipientById);
 // RIESGO PSICOSOCIAL
-router.get('/sos/psychosocial/forms/list', tthhCtrl.psychosocialforms.findAll);
-router.get('/sos/psychosocial/forms/list/active', tthhCtrl.psychosocialforms.findAllActive);
-router.post('/sos/psychosocial/forms/entityById', tthhCtrl.psychosocialforms.findById);
-router.post('/sos/psychosocial/forms/sections/entityById', tthhCtrl.psychosocialsections.findById);
-router.post('/sos/psychosocial/evaluations/entityById', tthhCtrl.psychosocialevaluations.findById);
-router.post('/sos/psychosocial/evaluation/questions/list', tthhCtrl.psychosocialevaluations.questionsByEvaluation);
-router.post('/sos/psychosocial/evaluation/questions/selected', tthhCtrl.psychosocialevaluations.selectedQuestionsByEvaluation);
-router.post('/sos/psychosocial/evaluation/questions', tthhCtrl.psychosocialevaluations.setQuestionsForEvaluation);
-router.post('/sos/psychosocial/questionnaire/questions', tthhCtrl.psychosocialevaluations.questionnaireByEvaluation);
-router.post('/sos/psychosocial/test', tthhCtrl.psychosocialtest.insertPsychosocialTest);
+router.get('/sos/psychosocial/forms/list', tthhCtrl.sso.psychosocial.forms.findAll);
+router.get('/sos/psychosocial/forms/list/active', tthhCtrl.sso.psychosocial.forms.findAllActive);
+router.post('/sos/psychosocial/forms/entityById', tthhCtrl.sso.psychosocial.forms.findById);
+router.post('/sos/psychosocial/forms/sections/entityById', tthhCtrl.sso.psychosocial.sections.findById);
+router.post('/sos/psychosocial/evaluations/entityById', tthhCtrl.sso.psychosocial.evaluations.findById);
+router.post('/sos/psychosocial/evaluation/questions/list', tthhCtrl.sso.psychosocial.evaluations.questionsByEvaluation);
+router.post('/sos/psychosocial/evaluation/questions/selected', tthhCtrl.sso.psychosocial.evaluations.selectedQuestionsByEvaluation);
+router.post('/sos/psychosocial/evaluation/questions', tthhCtrl.sso.psychosocial.evaluations.setQuestionsForEvaluation);
+router.post('/sos/psychosocial/questionnaire/questions', tthhCtrl.sso.psychosocial.evaluations.questionnaireByEvaluation);
+router.post('/sos/psychosocial/test', tthhCtrl.sso.psychosocial.test.insertPsychosocialTest);
 // RESCATE VERTICAL
-router.get('/sos/vrescue/categories/equipments/list/active', tthhCtrl.vrescueCategoriesequipment.findAll);
-router.post('/sos/vrescue/equipments/formByEquipment', tthhCtrl.vrescueEquipments.formByEquipment);
-router.post('/sos/vrescue/equipments/detailById', tthhCtrl.vrescueEquipments.detailById);
-router.post('/sos/vrescue/equipments/usage/formByHistoryId', tthhCtrl.vrescueHistory.formByHistoryId);
-router.post('/sos/vrescue/equipments/usage/byEquipmentId/list', tthhCtrl.vrescueHistory.historyByEquipmentId);
+router.get('/sos/vrescue/categories/equipments/list/active', tthhCtrl.sso.vrescue.categoriesequipment.findAll);
+router.post('/sos/vrescue/equipments/formByEquipment', tthhCtrl.sso.vrescue.equipments.formByEquipment);
+router.post('/sos/vrescue/equipments/detailById', tthhCtrl.sso.vrescue.equipments.detailById);
+router.post('/sos/vrescue/equipments/usage/formByHistoryId', tthhCtrl.sso.vrescue.history.formByHistoryId);
+router.post('/sos/vrescue/equipments/usage/byEquipmentId/list', tthhCtrl.sso.vrescue.history.historyByEquipmentId);
+// INSPECCION DE EXTINTORES
+router.post('/sos/fextinguisher/list/stationId', tthhCtrl.sso.fextinguisher.list.listByStation);
+router.post('/sos/fextinguisher/inspections/detail/entityId', tthhCtrl.sso.fextinguisher.inspections.detailById);
 
 
 

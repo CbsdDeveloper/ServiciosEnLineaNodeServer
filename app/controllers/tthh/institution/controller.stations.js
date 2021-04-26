@@ -1,9 +1,12 @@
 'use strict';
 const db = require('../../../models');
 const seq = db.sequelize;
+const { Op } = db.Sequelize;
 const { calculateLimitAndOffset, paginate } = require('../../../config/pagination');
 
 const model = db.tthh.stations;
+
+const unitMdl = db.administrative.units.unit;
 
 const userMdl = db.admin.users;
 
@@ -33,23 +36,44 @@ module.exports = {
 		try {
 			const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
-			const where = seq.or(
-				{ estacion_nombre: seq.where(seq.fn('LOWER', seq.col('estacion_nombre')), 'LIKE', '%' + filter + '%') },
-				{ estacion_nombre_alterno: seq.where(seq.fn('LOWER', seq.col('estacion_nombre_alterno')), 'LIKE', '%' + filter + '%') }
-			);
-			const { rows, count } = await model.findAndCountAll(
-				{
-					offset: offset,
-					limit: limit,
-					where: (filter != '')?where:{},
-					order: [ sort ],
+			const where = {
+				[Op.or]: [
+					{ estacion_nombre: { [Op.iLike]: '%' + filter + '%'} },
+					{ estacion_nombre_alterno: { [Op.iLike]: '%' + filter + '%'} }
+				]
+			};
+				
+			const count = await model.count({ where: where });
+
+			const rows = await model.findAll({
+				offset: offset,
+				limit: limit,
+				where: where,
+				order: [ sort ],
+				attributes: {
 					include: [
-						{
-							model: userMdl, as: 'user',
-							attributes: [ ['usuario_login','usuario'] ]
-						}
+						[
+							seq.literal('(SELECT COUNT(unidad_id) FROM logistica.tb_unidades WHERE fk_estacion_id = "tb_estaciones"."estacion_id")'), 'unidades'
+						],
+						[
+							seq.literal('(SELECT personal_nombre FROM tthh.vw_encargado_estacion WHERE estacion_id = "tb_estaciones"."estacion_id" AND tropa_estado=\'ACTIVO\' LIMIT 1)'), 'encargadoestacion'
+						],
+						[
+							seq.literal('(SELECT COUNT(*) FROM tthh.vw_relations_personal WHERE estacion_id = "tb_estaciones"."estacion_id" AND puesto_modalidad=\'ADMINISTRATIVO\' AND personal_estado=\'EN FUNCIONES\')'), 'administrativo'
+						],
+						[
+							seq.literal('(SELECT COUNT(*) FROM tthh.vw_relations_personal WHERE estacion_id = "tb_estaciones"."estacion_id" AND puesto_modalidad=\'OPERATIVO\' AND personal_estado=\'EN FUNCIONES\')'), 'operativo'
+						]
 					]
-				});
+				},
+				include: [
+					{
+						model: userMdl, as: 'user',
+						attributes: [ ['usuario_login','usuario'] ]
+					}
+				]
+			});
+
 			const meta = paginate(currentPage, count, rows, pageLimit);
 			db.setDataTable(res,{ rows, meta },'TTHH - LISTADO DE DIRECCIONES');
 
