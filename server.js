@@ -34,4 +34,6 @@ var server = app.listen((process.env.PORT || 81), function () {
   console.log("\n App listening at http://%s:%s", host, port);
   
   // pm2 start server --env production
+  // COMANDO PARA INICAR SERVICIO
+  // PORT=8081 NODE_ENV=production pm2 start server.js
 });

@@ -23,7 +23,7 @@ module.exports = {
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
 			const where = {
 				[Op.and]: [
-					{ formulario_tipo: 'EVALUACIÓN COVID19' },
+					//{ formulario_tipo: 'EVALUACIÓN COVID19' },
 					{ formulario_nombre: { [Op.iLike]: '%' + filter + '%'} }
 				]
 			};

@@ -23,6 +23,7 @@ module.exports = {
 	 * @returns {Object} - custom response
 	*/
 	async paginationEntity(req, res){
+		console.log('paginacion')
 		try {
 			const { query: { currentPage, pageLimit, textFilter, sortData } } = req;
 			const { limit, offset, filter, sort } = calculateLimitAndOffset(currentPage, pageLimit, textFilter, sortData);
